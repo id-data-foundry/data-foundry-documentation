@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 8</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 8: translation</h1>
+
+            <p>
+                Just ask the LLM to translate some text from Dutch to English:
+            </p>
+
+            <textarea id="prompt" rows="10">
+Het tweede woorddeel kan slaan op Hof (omheind stuk grond, tuin, aarde) of op Hoeve (hofstede). De oorsprong van beide woorden is verschillend, maar later zijn deze in hun gebruik ongeveer samengevallen en kregen ze de betekenis die we nu kennen: een gebouw met omliggende gronden ten behoeve van de exploitatie. De herkomst van het eerste woorddeel is veel minder duidelijk. Vermoedelijk werd met Eind de grens bedoeld tussen de cultuurgrond van een nederzetting en de woeste grond daarbuiten. De plaatsnaam kan dus geïnterpreteerd worden als 'het hof of de hoeve aan de grens tussen cultuurgrond en woeste grond'.
+    </textarea
+            >
+
+            <button id="submitBtn">Submit</button>
+
+            <hr />
+            <br />
+
+            <p id="result"></p>
+
+            <script type="text/javascript">
+                // listen to button clicks and handle them
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        // prevent double submission and set loading indicator
+                        document
+                            .querySelector("#submitBtn")
+                            .setAttribute("disabled", true);
+                        // remove previous result
+                        document.querySelector("#result").innerText = "";
+
+                        // retrieve prompt
+                        let prompt =
+                            "Translate the following text from Dutch to English, keep it brief and neutral: " +
+                            document.querySelector("#prompt").value;
+
+                        // send request
+                        await foundry.textToText({
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "hermes-2-pro-llama-3-8b",
+                            // submit the prompt as a user message
+                            messages: [{ role: "user", content: prompt }],
+                            // submit the temperature of the model
+                            temperature: 0.2,
+                            // fill results in the HTML element with the id "result"
+                            resultElementSelector: "#result",
+                            // loading indicator in result element
+                            loadingElementSelector: "#result",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        // enable submit button again
+                        document
+                            .querySelector("#submitBtn")
+                            .removeAttribute("disabled");
+                    });
+            </script>
+        </main>
+    </body>
+</html>

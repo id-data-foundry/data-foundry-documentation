@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+
+  </head>
+  <body>
+    <main>
+    </main>
+    <script>
+      /*
+By Okazz
+Modified by Diede
+Further modified to reduce flashing
+*/
+// Setup Data Foundry Colours
+let colors = ['#000000', '#4CAF50', '#ffffff'];
+let ctx;
+let centerX, centerY;
+let shapes = [];
+let rects = [];
+let timer = 0;
+let backgroundColor = '#272727';
+
+function setup() {
+  // Setup Canvas
+	createCanvas(900, 900);
+	rectMode(CENTER);
+	colorMode(HSB, 360, 100, 100, 100);
+	ctx = drawingContext;
+	centerX = width / 2;
+	centerY = height / 2;
+	initialised();
+}
+
+function draw() {
+	background(backgroundColor);
+	for (let s of shapes) {
+		s.run();
+	}
+	for (let r of rects) {
+		r.run();
+	}
+	let start = 240;
+	let span = 5;
+	if ((start < timer) && (timer <= (start + span))) {
+		let clr = colors[timer % colors.length];
+		if (timer == (start + span)) {
+			clr = backgroundColor;
+		}
+		rects.push(new MovingRect(clr));
+	}
+	if (timer == 300) {
+		initialised();
+	}
+	timer++;
+}
+
+function initialised() {
+	shapes = [];
+	rects = [];
+	timer = 0;
+  // Randomize colors
+	shuffle(colors, true);
+  // Create a 6x6 grid
+	let cellCount = 6;
+	let gridArea = width * 0.8;
+	let cellSize = gridArea / cellCount;
+	for (let j = 0; j < cellCount; j++) {
+		for (let i = 0; i < cellCount; i++) {
+			let x = i * cellSize + (cellSize / 2) + (width - gridArea) / 2;
+			let y = j * cellSize + (cellSize / 2) + (height - gridArea) / 2;
+			form(x, y, cellSize * 0.75);
+		}
+	}
+}
+
+function form(x, y, w) {
+  // Assign 4 randomly sized and coloured blocks per grid
+	let cellCount = 4;
+	let cellSize = w / cellCount;
+	for (let i = 0; i < 6; i++) {
+		let num1 = int(random(cellCount - 1) + 1);
+		let num2 = int(random(cellCount - 1) + 1);
+		let ww = num1 * cellSize;
+		let hh = num2 * cellSize;
+		let xx = x - (w / 2) + (ww / 2) + int(random(cellCount - num1 + 1)) * cellSize;
+		let yy = y - (w / 2) + (hh / 2) + int(random(cellCount - num2 + 1)) * cellSize;
+		let clr = random(colors);
+		let t = -int(random(140))
+		shapes.push(new Shape(xx, yy, ww, hh, clr, t));
+	}
+}
+
+function easeInOutExpo(x) {
+	return x === 0
+		? 0
+		: x === 1
+			? 1
+			: x < 0.5 ? Math.pow(2, 20 * x - 10) / 2
+				: (2 - Math.pow(2, -20 * x + 10)) / 2;
+}
+
+class Shape {
+    // Build random sized shapes based on all sizes
+	constructor(x, y, w, h, clr, t) {
+		this.w0 = 0;
+		this.w1 = w;
+		this.h0 = 0;
+		this.h1 = h;
+		let a = int(random(4)) * (TAU / 4);
+		this.x0 = x + w * 3 * cos(a);
+		this.x1 = x;
+		this.y0 = y + h * 3 * sin(a);
+		this.y1 = y;
+		this.x = this.x0;
+		this.y = this.y0;
+		this.w = this.w0;
+		this.h = this.h0;
+		this.timer = t;
+		this.timings = [0, 20, 40, 60];
+		this.exist = true;
+		this.clr = clr;
+		this.opacity = 1.0; // Add opacity control
+	}
+	
+	show() {
+		push();
+		translate(this.x, this.y);
+		noStroke();
+		if (this.exist) {
+			// Apply opacity to reduce harsh transitions
+			let c = color(this.clr);
+			c = color(hue(c), saturation(c), brightness(c), this.opacity * 100);
+			fill(c);
+			rect(0, 0, this.w, this.h);
+		}
+		pop();
+	}
+	
+	update() {
+		this.timer++;
+		for (let i = 0; i < this.timings.length - 1; i++) {
+			let t1 = this.timings[i];
+			let t2 = this.timings[i + 1];
+			if (t1 < this.timer && this.timer < t2) {
+				let n = norm(this.timer, t1, t2 - 1);
+				if (i == 0) {
+					this.w = lerp(this.w0, this.w1, easeInOutExpo(n));
+					this.h = lerp(this.h0, this.h1, easeInOutExpo(n));
+					// Remove the flashing effect - keep shapes visible
+					this.exist = true;
+					// Optional: add subtle opacity variation instead of flashing
+					this.opacity = 0.8 + 0.2 * sin(n * TAU * 2);
+				} else if (i == 2) {
+					this.x = lerp(this.x0, this.x1, easeInOutExpo(n));
+					this.y = lerp(this.y0, this.y1, easeInOutExpo(n));
+					// Remove the flashing effect here too
+					this.exist = true;
+					// Optional: add subtle opacity variation
+					this.opacity = 0.8 + 0.2 * sin(n * TAU * 2);
+				} else {
+					// Reset opacity to full during other phases
+					this.opacity = 1.0;
+				}
+			}
+		}
+	}
+	run() {
+		this.show();
+		this.update();
+	}
+}
+
+class MovingRect {
+	constructor(clr) {
+		this.w = 0;
+		this.timer = 0;
+		this.span = 70;
+		this.clr = clr;
+	}
+	
+	show() {
+		noStroke();
+		fill(this.clr);
+		rect(centerX, centerY, this.w, this.w);
+	}
+	
+	update() {
+		if (0 < this.timer && this.timer < this.span) {
+			let n = norm(this.timer, 0, this.span - 1);
+			this.w = lerp(0, width, easeInOutExpo(n));
+		}
+		this.timer++;
+	}
+	
+	run() {
+		this.show();
+		this.update();
+	}
+}
+    </script>
+  </body>
+</html>

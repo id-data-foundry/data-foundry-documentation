@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 12</title>
+        <link rel="stylesheet" href="/assets/stylesheets/picoCSS/pico.jade.min.css" />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <style>
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            fieldset {
+                margin-top: 1rem;
+            }
+            table {
+                table-layout: fixed;
+                width: 100%;
+            }
+            td {
+                word-wrap: break-word;
+                vertical-align: top;
+            }
+            table th:first-child,
+            table td:first-child {
+                width: 80px;
+            }
+            table th:not(:first-child),
+            table td:not(:first-child) {
+                width: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 12: Benchmarking Tool</h1>
+
+            <p>
+                This tool allows you to run a system and user prompt through multiple AI models for a set number of iterations. The results are displayed in a table for easy comparison of model outputs.
+            </p>
+
+            <div class="grid">
+                <div>
+                    <label for="systemPrompt">System Prompt</label>
+                    <textarea id="systemPrompt" rows="6">You are a helpful assistant.</textarea>
+                </div>
+                <div>
+                    <label for="userPrompt">User Prompt</label>
+                    <textarea id="userPrompt" rows="6">What are the top 3 benefits of using a design system?</textarea>
+                </div>
+            </div>
+
+            <fieldset>
+                <legend>Select Models</legend>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div>
+                        <input type="checkbox" name="model" value="phi-2-chat" id="phi-2-chat" checked>
+                        <label for="phi-2-chat">Phi-2</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="model" value="dolphin-2.9.2-phi-3-Medium-abliterated" id="phi-3-medium">
+                        <label for="phi-3-medium">Phi-3 Medium</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="model" value="LocalAI-functioncall-phi-4-v0.3" id="phi-4">
+                        <label for="phi-4">Phi-4</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="model" value="hermes-2-pro-llama-3-8b" id="hermes-2-pro" checked>
+                        <label for="hermes-2-pro">Hermes 2 Pro Llama 3</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="model" value="fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo" id="llama-3-2">
+                        <label for="llama-3-2">Meta Llama 3.2</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="grid">
+                 <div>
+                    <label for="iterations">Iterations</label>
+                    <input type="number" id="iterations" name="iterations" value="5" min="1" max="10">
+                </div>
+                <div>
+                    <label>&nbsp;</label>
+                    <button id="runBenchmarkBtn">Run Benchmark</button>
+                </div>
+            </div>
+
+            <hr />
+
+            <div id="resultsContainer"></div>
+
+            <script type="module">
+                // on page load, populate the models
+                (async () => {
+                    const modelsGrid = document.querySelector('fieldset .grid');
+                    const originalContent = modelsGrid.innerHTML;
+                    modelsGrid.innerHTML = '<div><p>Loading models...</p></div>';
+
+                    try {
+                        const models = await foundry.models("YOUR_API_KEY");
+                            console.log(models)
+
+                        if (models && models.length > 0) {
+                            modelsGrid.innerHTML = '';
+                            const defaultChecked = [];
+                            models.forEach(model => {
+                                const div = document.createElement('div');
+                                const input = document.createElement('input');
+                                input.type = 'checkbox';
+                                input.name = 'model';
+                                input.value = model.id;
+                                const sanitizedId = "model-" + model.id.replace(/[^a-zA-Z0-9-_]/g, '');
+                                input.id = sanitizedId;
+                                if (defaultChecked.includes(model.id)) {
+                                    input.checked = true;
+                                }
+
+                                const label = document.createElement('label');
+                                label.htmlFor = sanitizedId;
+                                label.textContent = model.id;
+
+                                div.appendChild(input);
+                                div.appendChild(label);
+                                modelsGrid.appendChild(div);
+                            });
+                        } else {
+                            modelsGrid.innerHTML = originalContent;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching models:', error);
+                        modelsGrid.innerHTML = originalContent;
+                    }
+                })();
+            </script>
+
+            <script type="text/javascript">
+                document.getElementById('runBenchmarkBtn').addEventListener('click', async () => {
+                    const btn = document.getElementById('runBenchmarkBtn');
+                    const resultsContainer = document.getElementById('resultsContainer');
+                    
+                    // 1. Get inputs
+                    const systemPrompt = document.getElementById('systemPrompt').value;
+                    const userPrompt = document.getElementById('userPrompt').value;
+                    const iterations = parseInt(document.getElementById('iterations').value, 10);
+                    const selectedModels = Array.from(document.querySelectorAll('input[name="model"]:checked'))
+                                                .map(cb => ({ value: cb.value, label: cb.nextElementSibling.textContent }));
+
+                    if (selectedModels.length === 0) {
+                        resultsContainer.innerHTML = '<p><mark>Please select at least one model.</mark></p>';
+                        return;
+                    }
+
+                    // 2. Prepare UI
+                    btn.setAttribute('disabled', true);
+                    btn.setAttribute('aria-busy', true);
+                    resultsContainer.innerHTML = '';
+
+                    // 3. Create table structure
+                    const table = document.createElement('table');
+                    const thead = table.createTHead();
+                    const headerRow = thead.insertRow();
+                    headerRow.insertCell().textContent = 'Iteration';
+                    selectedModels.forEach(model => {
+                        headerRow.insertCell().textContent = model.label;
+                    });
+
+                    const tbody = table.createTBody();
+                    resultsContainer.appendChild(table);
+
+                    // 4. Execute requests
+                    const promises = [];
+                    for (let i = 1; i <= iterations; i++) {
+                        const row = tbody.insertRow();
+                        row.insertCell().textContent = i;
+
+                        for (const model of selectedModels) {
+                            const cell = row.insertCell();
+                            const cellId = `result-cell-${i}-${model.value.replace(/[^a-zA-Z0-9]/g, "")}`;
+                            cell.id = cellId;
+
+                            const requestPromise = foundry.textToText({
+                                server: "",
+                                api_token: "YOUR_API_KEY",
+                                model: model.value,
+                                messages: [
+                                    { role: "system", content: systemPrompt },
+                                    { role: "user", content: userPrompt }
+                                ],
+                                resultElementSelector: `#${cellId}`,
+                                loadingElementSelector: `#${cellId}`,
+                                logging: false
+                            }).catch(error => {
+                                console.error(`Error with model ${model.value} on iteration ${i}:`, error);
+                                document.getElementById(cellId).innerHTML = `<span style="color:red;">Error</span>`;
+                            });
+                            promises.push(requestPromise);
+                        }
+                    }
+
+                    // 5. Wait for all to complete and re-enable button
+                    await Promise.all(promises);
+                    btn.removeAttribute('disabled');
+                    btn.removeAttribute('aria-busy');
+                });
+            </script>
+        </main>
+    </body>
+</html>

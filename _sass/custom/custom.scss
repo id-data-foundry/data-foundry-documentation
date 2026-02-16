@@ -1,0 +1,51 @@
+// _sass/custom/setup.scss
+
+// Font variables
+$font-family-base: 'Rubik', sans-serif;
+$font-weight-normal: 400;
+$font-weight-medium: 600;
+
+// Font face definition
+@font-face {
+  font-family: 'Rubik';
+  src: url('../../assets/fonts/rubik/Rubik-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 600;
+  font-style: normal;
+}
+
+// Heading styles
+h1 {
+  font-family: 'Rubik';
+  font-weight: $font-weight-normal;
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: 'Rubik';
+  font-weight: $font-weight-normal;
+}
+
+// Text elements
+a {
+  font-weight: $font-weight-normal;
+}
+
+p {
+  font-weight: $font-weight-normal;
+}
+
+strong {
+  font-weight: $font-weight-medium;
+}
+
+// Override docs font
+body,
+.site-header,
+.site-footer,
+.main-content {
+  font-family: $font-family-base;
+}
+
+// UI elements
+.btn-green {
+  @include btn-color($white, #66BB6A);
+}

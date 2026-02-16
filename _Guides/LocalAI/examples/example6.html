@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 6</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 6: prompt to image</h1>
+
+            <p>
+                Let's try to generate an image with a prompt. Edit the prompt
+                below.
+            </p>
+
+            <textarea id="prompt" rows="5">
+a dolphin with a pineapple milkshake, realistic, happy, artstation</textarea
+            >
+            <button id="submitBtn">Submit</button>
+
+            <hr />
+            <br />
+
+            <p>
+                <img id="result" src="" alt="Result image from AI request" />
+            </p>
+
+            <script type="text/javascript">
+                // submit phot and prompt
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        // prevent double submission and set loading indicator
+                        document
+                            .querySelector("#submitBtn")
+                            .setAttribute("disabled", true);
+
+                        const prompt = document.querySelector("#prompt").value;
+
+                        // send request
+                        await foundry.textToImage({
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "kokoro",
+                            // prompt
+                            prompt: prompt,
+                            // negative prompt
+                            negativeprompt:
+                                "abstract art, frame, ugly, multiple images",
+                            // processing step (more --> slower, better quality)
+                            steps: 20,
+                            // image size
+                            width: 512,
+                            height: 512,
+                            // fill results in the HTML element with the id "result"
+                            resultElementSelector: "#result",
+                            // loading indicator in result element
+                            loadingElementSelector: "#result",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        document
+                            .querySelector("#submitBtn")
+                            .removeAttribute("disabled");
+                    });
+            </script>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,135 @@
+title: DATA FOUNDRY
+logo: "assets/images/LogoDarkDFTransparent.png"
+description: The official Data Foundry documentation site.
+theme: just-the-docs
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-redirect-from
+
+color_scheme: df
+url: https://data-foundry.net
+
+# this is the output directory for the internal build
+destination: _site
+strict_front_matter: true
+
+collections:
+  Tutorials:
+    output: true
+  Reference:
+    output: true
+  Guides:
+    output: true
+  Setup:
+    output: true
+  Learning:
+    output: true
+
+just_the_docs:
+  collections:
+    Tutorials:
+      name: "Tutorials"
+      nav_fold: false
+    Guides:
+      name: "How-To guides"
+      nav_fold: false
+    Learning:
+      name: "Learning"
+      nav_fold: false
+    Reference:
+      name: "Reference"
+      nav_fold: true
+    Setup:
+      name: "Setup"
+      nav_fold: true
+      
+  # For copy button on code
+  enable_copy_code_button: true
+  custom_css:
+    - "assets/css/custom.css"
+
+# Enable or disable the site search
+# Supports true (default) or false
+search_enabled: true
+
+search:
+  # Split pages into sections that can be searched individually
+  # Supports 1 - 6, default: 2
+  heading_level: 2
+  # Maximum amount of previews per search result
+  # Default: 3
+  previews: 2
+  # Maximum amount of words to display before a matched word in the preview
+  # Default: 5
+  preview_words_before: 3
+  # Maximum amount of words to display after a matched word in the preview
+  # Default: 10
+  preview_words_after: 3
+  # Set the search token separator
+  # Default: /[\s\-/]+/
+  # Example: enable support for hyphenated search words
+  tokenizer_separator: /[\s/]+/
+  # Display the relative url in search results
+  # Supports true (default) or false
+  rel_url: true
+  # Enable or disable the search button that appears in the bottom right corner of every page
+  # Supports true or false (default)
+  button: false
+
+# Enable or disable heading anchors
+heading_anchors: true
+
+permalink: /:slugified_categories/:title:output_ext
+
+aux_links:
+  DF on GitHub: https://github.com/id-data-foundry/data-foundry
+
+exclude:
+    - "shell.nix"
+    - "launch.sh"
+    - "README.md"
+    - "Dockerfile"
+    - "pipelines"
+
+callouts:
+  info:
+    title: Info
+    color: green
+
+  warning:
+    title: ⚠️ Warning
+    color: yellow
+
+  todo:
+    title: To-Do
+    color: purple
+
+# Header content
+
+baseurl: ""
+
+external_base_urls:
+  # If datafoundry url is left empty; the DF instance switcher is enabled
+  datafoundry:
+  oocsi:
+  docs: "https://example.com/docs"
+
+custom_js:
+  - /assets/js/data-foundry-selector.js
+
+head_custom: |
+  <script src="{{ '/assets/js/data-foundry-selector.js' | relative_url }}"></script>
+
+# Footer content
+
+footer_content: "Copyright &copy; 2019-2026 Industrial Design, TU/e"
+
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  startings: []
+  blanklines: false
+  profile: false
+  # ignore:

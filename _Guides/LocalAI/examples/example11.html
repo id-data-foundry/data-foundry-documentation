@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 11</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 11: system prompt</h1>
+
+            <p>
+                In addition to the normal prompt, you can also specify a system
+                prompt. This extra prompt guide the LLM in terms of general
+                response style and might be interesting to get certain responses
+                from the model.
+            </p>
+
+            <div class="grid">
+                <textarea id="systemPrompt" rows="6">
+You are a helpful agent with a tendency to turn everything into a joke. You will inserts puns and off-hand remarks everywhere.</textarea
+                >
+                <textarea id="prompt" rows="6">
+What is the culturally-appropriate choice if you can only pick one ice-cream flavor?</textarea
+                >
+            </div>
+
+            <p>
+                <button id="submitBtn">Submit</button>
+            </p>
+
+            <p id="result"></p>
+
+            <script type="text/javascript">
+                // listen to button clicks and handle them
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        // prevent double submission and set loading indicator
+                        document
+                            .querySelector("#submitBtn")
+                            .setAttribute("disabled", true);
+                        // remove previous result
+                        document.querySelector("#result").innerText = "";
+
+                        // retrieve system prompt
+                        const systemPrompt =
+                            document.querySelector("#systemPrompt").value;
+                        // retrieve prompt
+                        const prompt = document.querySelector("#prompt").value;
+
+                        // send request
+                        await foundry.textToText({
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "hermes-2-pro-llama-3-8b",
+                            // preset temperature
+                            temperature: 0.8,
+                            // tweak the max tokens
+                            maxTokens: 1000,
+                            // submit both system prompt and normal prompt a message array
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                { role: "user", content: prompt },
+                            ],
+                            // fill results in the HTML element with the id "result"
+                            resultElementSelector: "#result",
+                            // loading indicator in result element
+                            loadingElementSelector: "#result",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        // enable submit button again
+                        document
+                            .querySelector("#submitBtn")
+                            .removeAttribute("disabled");
+                    });
+            </script>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 3</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <style>
+            textarea[disabled],
+            div.output {
+                background: #70fcba;
+                color: black;
+                padding: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 3: data + prompt chain</h1>
+
+            <p>
+                Let's try to combine data with a prompt chain. Then we let the
+                LLM do three steps on the data to turn the data into something
+                more fun. Think step-by-step, think of small steps that are easy
+                for an LLM to get right.
+            </p>
+
+            <h2>Step 1</h2>
+
+            <div class="grid">
+                <div>
+                    <p>
+                        Paste some data (nothing personal or secret, please!)
+                        below:
+                    </p>
+                    <!-- vanilla, chocolate, mango, blueberry, cinnamon -->
+                    <textarea id="data1" rows="6"></textarea>
+                </div>
+                <div>
+                    <p>The first prompt goes here...</p>
+                    <!-- take this list and add 10 more similar items to it -->
+                    <textarea id="prompt1" rows="6"></textarea>
+                </div>
+            </div>
+
+            <hr />
+            <br />
+
+            <h2>Step 2</h2>
+
+            <div class="grid">
+                <div>
+                    <p>Output of second step</p>
+                    <div class="output" id="data2"></div>
+                </div>
+                <div>
+                    <p>The second prompt goes here...</p>
+                    <!-- take this list and generate matching colors for each of the items -->
+                    <textarea id="prompt2" rows="6"></textarea>
+                </div>
+            </div>
+
+            <hr />
+            <br />
+
+            <h2>Step 3</h2>
+
+            <div class="grid">
+                <div>
+                    <p>Output of second step</p>
+                    <div class="output" id="data3"></div>
+                </div>
+                <div>
+                    <p>The third prompt goes here...</p>
+                    <!-- turn the colors into CSS RGB color values like #ffeeba or #10F4bc formatted in a JSON array -->
+                    <textarea id="prompt3" rows="6"></textarea>
+                </div>
+            </div>
+
+            <button id="submitBtn">Start chain</button>
+
+            <hr />
+            <br />
+
+            <div class="output" id="result"></div>
+
+            <script type="text/javascript">
+                // set global temperature
+                const temperature = 0.3;
+
+                // listen to button clicks and handle them
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        // prevent double submission and set loading indicator
+                        document
+                            .querySelector("#submitBtn")
+                            .setAttribute("disabled", true);
+                        // remove previous result
+                        document.querySelector("#data2").innerText = "";
+                        document.querySelector("#data3").innerText = "";
+                        document.querySelector("#result").innerText = "";
+
+                        // retrieve first data and prompt
+                        let input1 =
+                            document.querySelector("#data1").value +
+                            "\n" +
+                            document.querySelector("#prompt1").value;
+
+                        // send request
+                        await foundry.textToText({
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "hermes-2-pro-llama-3-8b",
+                            // submit data and the prompt as a user message
+                            messages: [{ role: "user", content: input1 }],
+                            // submit the temperature of the model
+                            temperature: temperature,
+                            // fill results in the HTML element with the id "data2"
+                            resultElementSelector: "#data2",
+                            // loading indicator in next result element
+                            loadingElementSelector: "#data2",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        // retrieve second data and prompt
+                        let input2 =
+                            document.querySelector("#data2").value +
+                            "\n" +
+                            document.querySelector("#prompt2").value;
+
+                        // send request
+                        await foundry.textToText({
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "hermes-2-pro-llama-3-8b",
+                            // submit data and the prompt as a user message
+                            messages: [{ role: "user", content: input2 }],
+                            // submit the temperature of the model
+                            temperature: temperature,
+                            // fill results in the HTML element with the id "data2"
+                            resultElementSelector: "#data3",
+                            // loading indicator in next result element
+                            loadingElementSelector: "#data3",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        // retrieve second data and prompt
+                        let input3 =
+                            document.querySelector("#data3").value +
+                            "\n" +
+                            document.querySelector("#prompt3").value;
+
+                        // send request
+                        await foundry.textToText({
+                            // optional: server (ex. "https://data-foundry.netl")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "hermes-2-pro-llama-3-8b",
+                            // submit data and the prompt as a user message
+                            messages: [{ role: "user", content: input3 }],
+                            // submit the temperature of the model
+                            temperature: temperature,
+                            // fill results in the HTML element with the id "data2"
+                            resultElementSelector: "#result",
+                            // loading indicator in result element
+                            loadingElementSelector: "#result",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        // enable submit button again
+                        document
+                            .querySelector("#submitBtn")
+                            .removeAttribute("disabled");
+                    });
+            </script>
+        </main>
+    </body>
+</html>

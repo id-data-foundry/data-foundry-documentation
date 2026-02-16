@@ -1,0 +1,203 @@
+<!doctype html>
+<html class="sbqkuq xihxij">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>WS P10</title>
+        <link rel="stylesheet" href="/assets/stylesheets/pico.min.css" />
+        <script src="/assets/javascripts/htmx.min.js"></script>
+        <script src="/assets/javascripts/local-ai/latest/local-ai.js"></script>
+        <style>
+            .htmx-indicator {
+                opacity: 0;
+            }
+            .htmx-request .htmx-indicator {
+                opacity: 1;
+                transition: opacity 200ms ease-in;
+            }
+            .htmx-request.htmx-indicator {
+                opacity: 1;
+                transition: opacity 200ms ease-in;
+            }
+        </style>
+    </head>
+    <body class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a
+                        href="https://data.id.tue.nl/documentation/v2/local-ai/"
+                        class="contrast"
+                        ><strong>Data Foundry: Local AI</strong></a
+                    >
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <a
+                        href="https://data.id.tue.nl/documentation/v2/local-ai/reference.html"
+                        target="_blank"
+                        >Reference</a
+                    >
+                </li>
+            </ul>
+        </nav>
+
+        <!--
+   <header>
+    HEADER
+  </header>
+ -->
+
+        <main class="">
+            <main class="container">
+                <h1>Tutorial website: explore different models</h1>
+
+                <p>
+                    Just ask the LLM something. Anything. Then change the model
+                    to see what happens. All available models are in the menu,
+                    and they are uncensored. Note that the models show different
+                    characteristics such as speed, output quality, versatility
+                    in responding to prompts, training cut-off etc.
+                </p>
+
+                <textarea id="prompt" rows="6">
+What is the culturally-appropriate
+choice if you can only pick one ice-cream flavor? Give me an argument
+following one of the following schools of philosophy: Logical
+Positivism, Existentialism, Phenomenology, Structuralism, Political
+Philosophy, Environmental Philosophy, Feminist Philosophy, Critical
+Theory, Post-Structuralism, and Social and Political Philosophy.</textarea
+                >
+
+                <div class="grid">
+                    <p>
+                        <button id="submitBtn">Submit</button>
+                    </p>
+                    <div>
+                        <p>
+                            <label>Choose model:</label>
+                            <select name="model">
+                                <option value="phi-2-chat">Phi-2</option>
+                                <option
+                                    value="dolphin-2.9.2-phi-3-Medium-abliterated"
+                                >
+                                    Phi-3 Medium
+                                </option>
+                                <option value="LocalAI-functioncall-phi-4-v0.3">
+                                    Phi-4
+                                </option>
+                                <option value="hermes-2-pro-llama-3-8b">
+                                    Hermes 2 Pro Llama 3 8b
+                                </option>
+                                <option
+                                    value="fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo"
+                                >
+                                    Meta Llama 3.2 8b
+                                </option>
+                                <option
+                                    value="deepseek-r1-distill-llama-8b"
+                                    selected="selected"
+                                >
+                                    Deepseek R1 8b
+                                </option>
+                            </select>
+                        </p>
+                        <details open="">
+                            <summary>Extra settings</summary>
+                            <p>
+                                <label>System prompt:</label>
+                                <textarea id="systemPrompt"></textarea>
+                            </p>
+                            <p>
+                                <label>Temperature:</label>
+                                <input
+                                    type="range"
+                                    id="temperature"
+                                    min="0.0"
+                                    value="0.6"
+                                    max="2.0"
+                                    step="0.1"
+                                />
+                            </p>
+                        </details>
+                    </div>
+                </div>
+
+                <progress id="progressbar" aria-busy="true"></progress>
+                <p id="result"></p>
+
+                <script type="text/javascript">
+                    var ProgressBar = document.getElementById("progressbar");
+                    ProgressBar.style.display = "none";
+
+                    // listen to button clicks and handle them
+                    document
+                        .querySelector("#submitBtn")
+                        .addEventListener("click", async (e) => {
+                            ProgressBar.style.display = "block";
+                            // prevent double submission and set loading indicator
+                            document
+                                .querySelector("#submitBtn")
+                                .setAttribute("disabled", true);
+
+                            // remove previous result
+                            document.querySelector("#result").innerText = "";
+
+                            // retrieve prompt
+                            const prompt =
+                                document.querySelector("#prompt").value;
+                            // retrieve model
+                            const model =
+                                document.querySelector(
+                                    "select[name=model]",
+                                ).value;
+                            // retrieve system prompt
+                            const systemPrompt =
+                                document.querySelector("#systemPrompt").value;
+                            // retrieve temperature
+                            const temperature = parseFloat(
+                                document.querySelector("#temperature").value,
+                            );
+
+                            // send request
+                            await foundry.textToText({
+                                // optional: server
+                                server: "https://data-foundry.net",
+                                // generate your own API token on Data Foundry
+                                api_token: "<YOUR-API-TOKEN>",
+                                // select the model
+                                model: model,
+                                // preset temperature
+                                temperature: temperature,
+                                // tweak the max tokens
+                                maxTokens: 1000,
+                                // submit the prompt as a user message
+                                messages: [
+                                    { role: "system", content: systemPrompt },
+                                    { role: "user", content: prompt },
+                                ],
+                                // fill results in the HTML element with the id "result"
+                                resultElementSelector: "#result",
+                                // loading indicator element
+                                loadingElementSelector: "progress",
+                                // no logging on console needed
+                                logging: false,
+                            });
+
+                            // enable submit button again
+                            document
+                                .querySelector("#submitBtn")
+                                .removeAttribute("disabled");
+                            ProgressBar.style.display = "none";
+                        });
+                </script>
+            </main>
+        </main>
+
+        <!-- <footer>
+    This is a mini site for the Data Foundry Local AI infrastructure.
+  </footer> -->
+    </body>
+</html>

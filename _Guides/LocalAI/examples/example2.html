@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 2</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 2: data + prompt</h1>
+
+            <p>
+                Let's try to combine data with a prompt. Paste some data
+                (nothing personal or secret, please!) below:
+            </p>
+
+            <textarea id="data" rows="6">one, two, three, four</textarea>
+
+            <p>
+                Now write a prompt to transform this data into something more
+                fun. How about explaining this data to a 5-year old or writing a
+                short oem about it? Turning it into a lunch bowl recipe or a
+                haircut?
+            </p>
+
+            <textarea id="prompt" rows="4">
+translate the four numbers to Spanish, then add 10 to each number, and translate the resulting sums to spanish, just give me the eight numbers in spanish, no explanations please</textarea
+            >
+
+            <div class="grid">
+                <p>
+                    <button id="submitBtn">Submit</button>
+                </p>
+                <details>
+                    <summary>Extra settings</summary>
+                    <p>
+                        <label>Temperature:</label>
+                        <input
+                            type="range"
+                            id="temperature"
+                            min="0.0"
+                            value="0.9"
+                            max="2.0"
+                            step="0.1"
+                        />
+                    </p>
+                </details>
+            </div>
+
+            <p id="result"></p>
+
+            <script type="text/javascript">
+                // listen to button clicks and handle them
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        // prevent double submission and set loading indicator
+                        document
+                            .querySelector("#submitBtn")
+                            .setAttribute("disabled", true);
+                        // remove previous result
+                        document.querySelector("#result").innerText = "";
+
+                        // retrieve data
+                        const data = document.querySelector("#data").value;
+                        // retrieve prompt
+                        const prompt = document.querySelector("#prompt").value;
+                        // retrieve temperature
+                        const temperature = parseFloat(
+                            document.querySelector("#temperature").value,
+                        );
+
+                        // send request
+                        await foundry.textToText({
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
+                            // generate your own API token on Data Foundry
+                            api_token: "YOUR_API_KEY",
+                            // select the model
+                            model: "hermes-2-pro-llama-3-8b",
+                            // submit data and the prompt as a user message
+                            messages: [
+                                { role: "user", content: data + "\n" + prompt },
+                            ],
+                            // submit the temperature of the model
+                            temperature: temperature,
+                            // fill results in the HTML element with the id "result"
+                            resultElementSelector: "#result",
+                            // loading indicator in result element
+                            loadingElementSelector: "#result",
+                            // no logging on console needed
+                            logging: false,
+                        });
+
+                        // enable submit button again
+                        document
+                            .querySelector("#submitBtn")
+                            .removeAttribute("disabled");
+                    });
+            </script>
+        </main>
+    </body>
+</html>
