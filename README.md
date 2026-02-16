@@ -10,20 +10,7 @@ Write fluent English prose with bullets where necessary and plenty of links to o
 - All links use Liquid embedding, so we can let Jekyll check broken links automatically. This includes images, too.
 - Unless in code or the platform, it's "Data Foundry", two words, capitalized.
 
-
 --
-
-
-# TO DO
- - Search for "TODO" or "TODO DIEDE" in files and fix issues
- - Check the light-mode / dark-mode switch: it seems to work for the current page but then resets when another page is loaded
- - Check whether the instance switcher can be used in the documentation text_?
- - Check whether we need an OOCSI instance switcher as well. "oocsi.id.tue.nl" needs to be replaced.
- - 
-
-
---
-
 
 # How to build this with Docker
 
