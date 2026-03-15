@@ -8,9 +8,9 @@ has_toc: false
 
 # Local AI
 
-Data Foundry does not only provide tools to store, modify, and collect data; it also hosts its own AI models! Data Foundry is capable of hosting several [Open Weight]({% link _Learning/OpenSourceScience/index.md %}) AI models and providing access to the OpenAI API.
+Data Foundry does not only provide tools to store, modify, and collect data; it also hosts its own AI models! Data Foundry is capable of hosting several [Open Weight]({% link _Learning/OpenSourceScience/index.md %}) AI models and providing access to these through an OpenAI CompatibleAPI.
 
-In addition to hosting models, Data Foundry provides the infrastructure to generate and share API keys and allows for token distribution on a project basis. Students can enable AI functionality for their projects and are given 5,000 tokens by default. Token cost is determined by the specific model used; local models are significantly more cost-effective than OpenAI models.
+In addition to hosting models, Data Foundry provides the infrastructure to generate and share API keys and allows for token distribution on a project basis. Students can enable AI functionality for their projects and are given 5,000 tokens by default. Token cost is determined by the specific model used; local models are significantly more cost-effective than most commercial models.
 
 ## What is Local AI?
 

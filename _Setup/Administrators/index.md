@@ -36,7 +36,7 @@ Add the email addresses of the desired administrators to the `admins` list. Afte
 
 To access the admin portal, authenticated administrators simply append `/admin` to the Data Foundry instance URL:
 
-`https://<YOUR-DF-INSTANCE>/admin`
+`https://{{ site.external_base_urls.datafoundry }}/admin`
 
 {% include df-link.html text="Go to the Admin Portal" path="/admin" %}
 
@@ -49,4 +49,3 @@ The Admin Portal consists of several dashboards for specialized tasks:
 - **[Project Archival]({% link _Setup/Administrators/ProjectsArchival.md %})**: Handle end-of-life projects.
 - **[API Settings]({% link _Setup/Administrators/APISettings.md %})**: Manage AI API keys and token distribution.
 - **[Project Templates]({% link _Setup/Administrators/ProjectTemplates.md %})**: Configure global project templates.
-

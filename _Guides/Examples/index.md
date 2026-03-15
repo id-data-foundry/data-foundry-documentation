@@ -17,11 +17,9 @@ Here you can find examples that showcase various Data Foundry features through d
 - #### Connect a DHT temperature and humidity sensor to Data Foundry.
 [**Raspberry Pi DHT Sensor**]({% link _Guides/Examples/RaspberryPi/RPiDHTSensor.md %}){: .btn }
 - #### Simple analytics for your hosted prototypes.
-[**Website Tracking**]({% link _Guides/Examples/WebsiteTracking/index.md %}){: .btn }
+[**Website Tracking**]({% link _Guides/Examples/Usecases/WebsiteTracking/index.md %}){: .btn }
 - #### Integrating data from wearable devices.
-[**Wearables**]({% link _Guides/Examples/Wearables/index.md %}){: .btn }
-- #### Working with rich data types.
-[**Media and Movement**]({% link _Guides/Examples/Media/mediadata.md %}){: .btn }
+[**Wearables**]({% link _Guides/Examples/Integrations/Wearables/index.md %}){: .btn }
 - #### Collect data through a telegram chatbot.
 [**Collecting data with telegram**]({% link _Guides/Examples/Integrations/telegram.md %}){: .btn }
 - #### Collect data through the piel survey app.

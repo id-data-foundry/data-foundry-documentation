@@ -7,7 +7,7 @@ has_children: true
 
 # Starboard Notebooks Tutorial
 
-Sometimes working with data can be confusing, especially when the data is not cleaned, combined or visualised yet. Whereas we do have plenty of tools to make data visualisation easier, sometimes you need a little control. At those moments modifying this data in a python notebook can help you understand the data you are working with better. Not only do these notebooks help you structure your data workflow, but also help you document your insights, thoughts and archive your data processes.
+Sometimes working with data can be confusing, especially when the data is not cleaned, combined or visualized yet. Whereas we do have plenty of tools to make data visualization easier, sometimes you need a little control. At those moments modifying this data in a python notebook can help you understand the data you are working with better. Not only do these notebooks help you structure your data workflow, but also help you document your insights, thoughts and archive your data processes.
 To make it easier to work with Data Foundry Data in these notebooks, we have an online notebook editor named `starboard`.
 
 ### What is starboard

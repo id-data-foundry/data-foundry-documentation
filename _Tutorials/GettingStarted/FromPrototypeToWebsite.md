@@ -41,7 +41,7 @@ OOCSI oocsi = OOCSI();
 
 void setup() {
   // ... setup code ...
-  oocsi.connect("MyESP32Client", "oocsi.id.tue.nl", "YourWiFi", "YourPassword");
+  oocsi.connect("MyESP32Client", "{{ site.external_base_urls.oocsi }}", "YourWiFi", "YourPassword");
 }
 
 void loop() {
@@ -71,14 +71,14 @@ Now, let's create a simple HTML page that listens to this data. You can host thi
 <head>
     <title>My Connected Prototype</title>
     <!-- Import OOCSI Library -->
-    <script src="https://oocsi.id.tue.nl/assets/js/oocsi-web.min.js"></script>
+    <script src="https://{{ site.external_base_urls.oocsi}}/assets/js/oocsi-web.min.js"></script>
 </head>
 <body>
     <h1>Sensor Value: <span id="valueDisplay">Waiting...</span></h1>
 
     <script>
         // Connect to OOCSI
-        OOCSI.connect("wss://oocsi.id.tue.nl/ws");
+        OOCSI.connect("wss://{{ site.external_base_urls.oocsi }}/ws");
 
         // Subscribe to your channel
         OOCSI.subscribe("YourName/ProjectName/SensorData", function(msg) {
@@ -100,4 +100,3 @@ Now, let's create a simple HTML page that listens to this data. You can host thi
 3.  Watch the value change in real-time as you interact with the sensor!
 
 Congratulations! You have built a full IoT system.
-

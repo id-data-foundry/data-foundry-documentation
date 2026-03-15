@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Designing Custom Chatbots
+title: LLM Chatbots
 parent: Local AI
-nav_order: 2
+nav_order: 1
 ---
 
 # Designing Custom Chatbots

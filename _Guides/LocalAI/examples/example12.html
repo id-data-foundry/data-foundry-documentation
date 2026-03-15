@@ -25,6 +25,7 @@
         <title>Local AI Example 12</title>
         <link rel="stylesheet" href="/assets/stylesheets/picoCSS/pico.jade.min.css" />
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <style>
             .grid {
                 grid-template-columns: 1fr 1fr;
@@ -48,6 +49,11 @@
             table td:not(:first-child) {
                 width: auto;
             }
+            /* Markdown styling adjustments */
+            td > :first-child { margin-top: 0; }
+            td > :last-child { margin-bottom: 0; }
+            pre { white-space: pre-wrap; font-size: 0.95em; padding: 0.5rem; background-color: rgba(0,0,0,0.05); }
+            code { font-size: 0.95em; }
         </style>
     </head>
     <body>
@@ -95,14 +101,21 @@
                 </div>
             </fieldset>
 
-            <div class="grid">
+            <div class="grid" style="grid-template-columns: 1fr 1.5fr 2fr;">
                  <div>
                     <label for="iterations">Iterations</label>
                     <input type="number" id="iterations" name="iterations" value="5" min="1" max="10">
                 </div>
                 <div>
+                    <label for="fontSizeSlider">Font Size: <span id="fontSizeVal">0.85rem</span></label>
+                    <input type="range" id="fontSizeSlider" min="0.4" max="1.1" step="0.05" value="0.85">
+                </div>
+                <div>
                     <label>&nbsp;</label>
-                    <button id="runBenchmarkBtn">Run Benchmark</button>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <button id="runBenchmarkBtn">Run Benchmark</button>
+                        <button id="downloadMdBtn" class="secondary" disabled>Download Markdown</button>
+                    </div>
                 </div>
             </div>
 
@@ -118,8 +131,11 @@
                     modelsGrid.innerHTML = '<div><p>Loading models...</p></div>';
 
                     try {
-                        const models = await foundry.models("YOUR_API_KEY");
-                            console.log(models)
+                        const rawModels = await foundry.models("YOUR_API_KEY");
+                        console.log(rawModels)
+
+                        // Filter to only include models with the "📄" emoji in their type attribute
+                        const models = (rawModels || []).filter(model => model.type && model.type.includes("📄"));
 
                         if (models && models.length > 0) {
                             modelsGrid.innerHTML = '';
@@ -152,11 +168,52 @@
                         modelsGrid.innerHTML = originalContent;
                     }
                 })();
-            </script>
 
-            <script type="text/javascript">
+                let benchmarkData = []; // To store raw results
+
+                // Font size slider logic
+                document.getElementById('fontSizeSlider').addEventListener('input', (e) => {
+                    const val = e.target.value + 'rem';
+                    document.querySelector('#resultsContainer').style.fontSize = val;
+                    document.getElementById('fontSizeVal').textContent = 100*e.target.value + "%";
+                });
+
+                document.getElementById('downloadMdBtn').addEventListener('click', () => {
+                    if (benchmarkData.length === 0) return;
+
+                    const systemPrompt = document.getElementById('systemPrompt').value;
+                    const userPrompt = document.getElementById('userPrompt').value;
+                    
+                    const selectedModels = Array.from(document.querySelectorAll('input[name="model"]:checked'))
+                                                .map(cb => cb.nextElementSibling.textContent);
+
+                    let mdContent = "# Benchmark Results\n\n";
+                    mdContent += `**System Prompt:**\n${systemPrompt}\n\n`;
+                    mdContent += `**User Prompt:**\n${userPrompt}\n\n`;
+                    mdContent += "**Selected Models:**\n" + selectedModels.map(m => `- ${m}`).join("\n") + "\n\n";
+
+                    benchmarkData.forEach((row, index) => {
+                        mdContent += `===============\nIteration ${index + 1}\n===============\n\n`;
+                        selectedModels.forEach(modelLabel => {
+                            mdContent += `## ${modelLabel}\n---------------\n${row[modelLabel] || "No output"}\n\n`;
+                        });
+                        mdContent += "\n";
+                    });
+
+                    const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+                    const link = document.createElement("a");
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", `benchmark_results_${new Date().getTime()}.md`);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+
                 document.getElementById('runBenchmarkBtn').addEventListener('click', async () => {
                     const btn = document.getElementById('runBenchmarkBtn');
+                    const downloadBtn = document.getElementById('downloadMdBtn');
                     const resultsContainer = document.getElementById('resultsContainer');
                     
                     // 1. Get inputs
@@ -174,7 +231,9 @@
                     // 2. Prepare UI
                     btn.setAttribute('disabled', true);
                     btn.setAttribute('aria-busy', true);
+                    downloadBtn.setAttribute('disabled', true);
                     resultsContainer.innerHTML = '';
+                    benchmarkData = Array.from({ length: iterations }, () => ({}));
 
                     // 3. Create table structure
                     const table = document.createElement('table');
@@ -210,9 +269,20 @@
                                 resultElementSelector: `#${cellId}`,
                                 loadingElementSelector: `#${cellId}`,
                                 logging: false
+                            }).then(() => {
+                                // Once request finishes, render markdown and store data
+                                const cellElem = document.getElementById(cellId);
+                                const rawText = cellElem.textContent;
+                                benchmarkData[i-1][model.label] = rawText;
+                                cellElem.innerHTML = marked.parse(rawText);
+                                // Enable download button as soon as we have some data
+                                downloadBtn.removeAttribute('disabled');
                             }).catch(error => {
                                 console.error(`Error with model ${model.value} on iteration ${i}:`, error);
-                                document.getElementById(cellId).innerHTML = `<span style="color:red;">Error</span>`;
+                                const cellElem = document.getElementById(cellId);
+                                cellElem.innerHTML = `<span style="color:red;">Error</span>`;
+                                benchmarkData[i-1][model.label] = "Error";
+                                downloadBtn.removeAttribute('disabled');
                             });
                             promises.push(requestPromise);
                         }

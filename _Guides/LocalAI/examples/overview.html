@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI Examples Overview
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Examples Overview</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+
+        <!-- Libraries used in examples -->
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <script src="/assets/javascripts/htmx.min.js"></script>
+        <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
+        <!-- Required for Example 5 -->
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <!-- Required for Example 12 -->
+        <style>
+            /* Custom styles for the navbar */
+            nav {
+                border-bottom: 1px solid var(--muted-border-color);
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            /* Styles from Example 3 */
+            textarea[disabled],
+            div.output {
+                background: #70fcba;
+                color: black;
+                padding: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <nav>
+                <ul>
+                    <li><strong>Local AI Examples</strong></li>
+                </ul>
+                <ul>
+                    <li>
+                        <select id="exampleSelector">
+                            <option value="" disabled selected>
+                                Select an example
+                            </option>
+                            <option value="example1.html">
+                                Example 1: Prompt 101
+                            </option>
+                            <option value="example2.html">
+                                Example 2: Data + Prompt
+                            </option>
+                            <option value="example3.html">
+                                Example 3: Data + Prompt Chain
+                            </option>
+                            <option value="example4.html">
+                                Example 4: Photo + Prompt
+                            </option>
+                            <option value="example5.html">
+                                Example 5: Audio to Text
+                            </option>
+                            <option value="example6.html">
+                                Example 6: Prompt to Image
+                            </option>
+                            <option value="example7.html">
+                                Example 7: Text to Speech
+                            </option>
+                            <option value="example8.html">
+                                Example 8: Translation
+                            </option>
+                            <option value="example9.html">
+                                Example 9: Translate and Speak
+                            </option>
+                            <option value="example10.html">
+                                Example 10: Explore Models
+                            </option>
+                            <option value="example11.html">
+                                Example 11: System Prompt
+                            </option>
+                            <option value="example12.html">
+                                Example 12: Benchmarking Tool
+                            </option>
+                        </select>
+                    </li>
+                    <li>
+                        <a href="#" id="downloadSource" class="secondary"
+                            >Download Source</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="../../../Reference/LocalAI/JSAPI.html"
+                            class="secondary"
+                            target="_blank"
+                            >JS API Reference</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+
+            <div id="example-container">
+                <!-- Content will be loaded here -->
+                <p>Please select an example from the dropdown menu.</p>
+            </div>
+
+            <!-- Hidden trigger for HTMX -->
+            <button
+                id="htmx-trigger"
+                hidden
+                hx-get=""
+                hx-target="#example-container"
+                hx-select="main"
+                hx-swap="innerHTML"
+            ></button>
+        </main>
+
+        <script type="module">
+            document.addEventListener("DOMContentLoaded", () => {
+                const selector = document.getElementById("exampleSelector");
+                const trigger = document.getElementById("htmx-trigger");
+                const downloadLink = document.getElementById("downloadSource");
+
+                function loadExample(filename) {
+                    if (!filename) return;
+
+                    // Sync selector if loaded from hash
+                    if (selector.value !== filename) {
+                        selector.value = filename;
+                    }
+
+                    // Update HTMX trigger and click it
+                    trigger.setAttribute("hx-get", filename);
+                    htmx.process(trigger);
+                    trigger.click();
+
+                    // Update download link
+                    if (downloadLink) {
+                        downloadLink.href = filename;
+                        downloadLink.setAttribute("download", filename);
+                    }
+                }
+
+                // Handle selector change
+                selector.addEventListener("change", (e) => {
+                    const filename = e.target.value;
+                    window.location.hash = filename;
+                    loadExample(filename);
+                });
+
+                // Handle Hash Change
+                window.addEventListener("hashchange", () => {
+                    const hash = window.location.hash.substring(1);
+                    if (hash) {
+                        loadExample(hash);
+                    }
+                });
+
+                // Initial check
+                const hash = window.location.hash.substring(1);
+                if (hash) {
+                    loadExample(hash);
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -38,7 +38,7 @@ After having imported the Data Foundry library, we can set up the code to send n
 
 ```java
 // fill in the Data Foundry server URL, just the domain (add port if needed)
-DataFoundry df = new DataFoundry("server.url.com");
+DataFoundry df = new DataFoundry("{{ site.external_base_urls.datafoundry }}");
 // create dataset access
 DFDataset iot = df.dataset("<Dataset ID>", "<Token>");
 // log activity to IoT dataset
@@ -79,7 +79,7 @@ Now, you can just use OOCSI in Processing to send messages to Data Foundry and s
 
 ```java
 // replace CLIENT_HANDLE by a unique name for your prototype or IoT device
-OOCSI oocsi = new OOCSI(this, "CLIENT_HANDLE", "oocsi.id.tue.nl");
+OOCSI oocsi = new OOCSI(this, "CLIENT_HANDLE", "{{ site.external_base_urls.oocsi }}");
 // replace CHANNEL by the channel that you provided above
 oocsi.channel("<YourName/ProjectName/DeviceName>")
 	// replace DEVICE by the refId of any device in this project
@@ -96,4 +96,3 @@ oocsi.channel("<YourName/ProjectName/DeviceName>")
 ## More examples
 
 https://github.com/edenchiang/PlayWithDataFoundry/tree/master/examples/Processing_with_OOCSI
-

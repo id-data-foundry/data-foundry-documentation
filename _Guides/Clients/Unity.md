@@ -55,7 +55,7 @@ Click the play icon in the center of up side
 
 ## Sending OOCSI messages to Unity
 
-1. Open the URL with browser: https://oocsi.id.tue.nl/test/visual
+1. Open the URL with browser: [https://{{ site.external_base_urls.oocsi }}/test/visual](https://{{ site.external_base_urls.oocsi }}/test/visual)
 2. Enter the "Channel_to_receive" of OOCSI channel you have in Unity to the "Channel Name" on the right side.
 ![send-from-OOCSI]({% link _Guides/Clients/images/unity/send-from-OOCSI.png %})
 3. Click "Send"

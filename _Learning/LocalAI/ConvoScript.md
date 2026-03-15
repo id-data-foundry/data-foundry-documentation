@@ -88,4 +88,4 @@ After creating a script, you can easily start the script by loading it into the 
 ```
 This also means you can make 1 ConvoScript function run multiple scripts,. For example by making certain responses trigger other scripts.
 
-Now you know the structure of a ConvoScript, [click here to learn how you can compose your own ConvoScript.]({% link _Guides/LocalAI/convoscript/composing.md %})
+Now you know the structure of a ConvoScript, [click here to learn how you can compose your own ConvoScript.]({% link _Guides/LocalAI/convoscript/index.md %})

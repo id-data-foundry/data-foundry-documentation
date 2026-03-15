@@ -58,7 +58,7 @@ Set up an IoT dataset to store the data into and also configure the HTTP POST op
     // update request content according to the target dataset in Data Foundry
     ajaxreq = new XMLHttpRequest();
     // set specific URL for sending
-    ajaxreq.open("POST","https:/<YOUR-DF-INSTANCE>/datasets/ts/record/929/Q2R4eXlGVHgvdkExTFlYcUJrL01XeklLVEdIKy9BNlZxVTZTc2Z2dWFNTT0=");
+    ajaxreq.open("POST","https://{{ site.external_base_urls.datafoundry }}/datasets/ts/record/929/Q2R4eXlGVHgvdkExTFlYcUJrL01XeklLVEdIKy9BNlZxVTZTc2Z2dWFNTT0=");
     ajaxreq.setRequestHeader("Content-Type" , "application/json");
     ajaxreq.setRequestHeader("mode","cors");
     ajaxreq.setRequestHeader("cache","no-cache");

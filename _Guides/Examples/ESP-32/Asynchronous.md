@@ -59,7 +59,7 @@ After this is setup, you can paste the example code into your existing ESP code 
 
 ```python
 # replace CLIENT_HANDLE by a unique name for this prototype
-oocsi = OOCSI('CLIENT_HANDLE', 'oocsi.id.tue.nl')
+oocsi = OOCSI('CLIENT_HANDLE', '{{ site.external_base_urls.oocsi }}')
 
 # create call with 1.5sec timeout
 # replace SERVICE_NAME by the service name you saved before
@@ -119,4 +119,3 @@ The code snippets for updating, retrieving or deleting an object in the Entity d
 1. As soon as data is sent to the service, the data activity will appear just above the folders in the dataset. Check if the connection is active by sending some test data.
 2. Download the entire dataset by clicking on the download button.
 3. Or use the data export tool which can be found on the sidebar to make a selection out of the data that you want to export, or visualize it. For more info on the data export tool, click here.
-

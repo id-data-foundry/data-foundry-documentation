@@ -9,7 +9,7 @@ has_children: true
 # Add a participant
 
 {: .info}
-The participant setup will only be possible for the project owner and collaborators.
+The participant setup is only available to the project owner and collaborators.
 
 Inside a project that you are the project owner of (you created the project yourself):
 
@@ -24,6 +24,3 @@ Inside a project that you are the project owner of (you created the project your
 5. When the participant receives the email they can either accept or decline the study.
     - When the participant accepts the study, the system sends automatically a response. The participant will now turn green in the manage resources screen.
     - When the participant declines the study, they have officially opted-out and will be shown as red in the manage resources screen.
-
-{: .info}
-Only the project owner and collaborators can add participants.

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Experience Sampling
-parent: Example Projects
+parent: Integration Examples
 nav_order: 2
 has_children: true
 has_toc: false
@@ -60,4 +60,3 @@ Start with the basic setup (register or login, create a new project), then:
 4. Change the color of each data column to your own preference
 5. Use sampling where needed
 6. When you are happy with the result, export the dataset by clicking the export button, or save the visualization as an image by clicking on the button with 3 dots.
-

@@ -46,7 +46,7 @@ In the Data Foundry Tool guides you can learn about how data foundry tools can h
 
 The Activity Logger helps you track various activities within your project, providing a simple interface to log both instantaneous events and continuous states to a Diary Dataset.
 
-[Take me to the Activity Logger guide]({% link _Guides/ActivityLogger.md %}){: .btn }
+[Take me to the Activity Logger guide]({% link _Guides/Tools/ActivityLogger.md %}){: .btn }
 
 
 ### Data Foundry Project Management
@@ -60,4 +60,3 @@ The Data Foundry project section will help you get started with managing your Da
 The Developer Guide serves as a central entry point for technical users, providing a comprehensive overview of APIs, scripting, and development tools available on the platform.
 
 [Take me to the Developer Guide]({% link _Guides/developerGuide.md %}){: .btn}
-

@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Tracking Movement Data
-parent: Example Projects
-nav_order: 2
+title: Movement Dataset
+parent: Datasets
+nav_order: 6
 has_children: true
 ---
 # Working with movement data
 
-![Data Flow]({% link _Guides/Examples/Movement/images/usecase-movement-patterns.png %})
+![Data Flow]({% link _Guides/Datasets/Movement/images/usecase-movement-patterns.png %})
 ## WHAT YOU NEED
 
 - Wearables for your participant that tracks GPS such as a Fitbit.

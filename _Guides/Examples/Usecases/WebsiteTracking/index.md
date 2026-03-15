@@ -1,7 +1,7 @@
 ---
 layout: default
-title: WebsiteTracking
-parent: Example Projects
+title: Website Tracking
+parent: Usecases
 nav_order: 6
 ---
 
@@ -35,14 +35,14 @@ Configure your channel name in the Data Foundry IoT dataset settings. Copy and p
 
 **Add to HTML header:**
 ```html
-<script type="text/javascript" src="https://oocsi.id.tue.nl/assets/js/oocsi-web.min.js"></script>
+<script type="text/javascript" src="https://{{ site.external_base_urls.oocsi }}/assets/js/oocsi-web.min.js"></script>
 ```
 
 **Add to HTML body:**
 ```javascript
 <script type="text/javascript">
 	// Connect to the OOCSI network
-	OOCSI.connect("wss://oocsi.id.tue.nl/ws");
+	OOCSI.connect("wss://{{ site.external_base_urls.oocsi }}/ws");
 
 	// Store identifier of this browser
 	var myname = '';
@@ -69,12 +69,12 @@ In the part that starts with `OOCSI.send("CHANNEL NAME",`, you first need to cha
 
 ## Exporting Data
 
+<!--todo: needs to be updated, we dont have a Data Tool}-->
+
 There are two ways to export your data. If you want a simple export without any preprocessing, visualization or annotation, you can use the download button in the dataset screen. If you want a more advanced export, you can use the Data Tool to export your data.
 
 [Open Data Tool]({% link _Guides/Tools/index.md %}){: .btn .btn-purple }
 
 ## Next Steps
-
-{% include df-link.html text="Take the tour" path="/documentation/data-tool" %}{: .btn }
 
 A useful next step for this application is using data mining and machine learning techniques in order to make actual sense of the data. There are various tools and platforms for doing this, that can connect to Data Foundry to retrieve the data locally. One example is already given in the platform: if you go to a dataset page and open the CSV token link tab under configuration, you will find a code example in Python to download and visualise the dataset contents. You can use similar code to work with the dataset in Python for machine-learning purposes. This will only work if you generate a token link first.

@@ -4,9 +4,9 @@
 <a href="{{ site.external_base_urls.datafoundry }}{{ include.path }}" class="btn{{ include.extra_classes }}">{{ include.text }}</a>
 {% endif %} -->
 
-{% if site.external_base_urls.datafoundry == null %}
+{% if site.external_base_urls.datafoundry == null or site.external_base_urls.datafoundry == "<YOUR-DF-INSTANCE>" %}
 <script src="{{ '/assets/js/data-foundry-selector.js' | relative_url }}"></script>
 [{{ include.text }}](javascript:void(0)){: .df-link data-df-path="{{ include.path }}" .btn}
 {% else %}
-[{{ include.text }}]({{ site.external_base_urls.datafoundry }}{{ include.path }}){:.btn}
+[{{ include.text }}](https://{{ site.external_base_urls.datafoundry }}{{ include.path }}){:.btn}
 {% endif %}

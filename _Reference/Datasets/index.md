@@ -10,6 +10,15 @@ has_toc: false
 
 This page provides technical reference information for the Data Foundry dataset structures, specifically the CSV and JSON export formats for each dataset type.
 
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
+
 ## Entity Dataset
 
 Used for storing generic JSON objects linked to a resource ID.
@@ -129,5 +138,3 @@ Stores data synchronized from Google Fit accounts.
 
 ### JSON Structure
 *   **Fields:** `id`, `wearable_id`, `ts`, `activity`, `calories`, `speed`, `heart_rate`, `step_count`, `distance`, `weight`, `sleep`, `pp1`, `pp2`, `pp3`.
-
-

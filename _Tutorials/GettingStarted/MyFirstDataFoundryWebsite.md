@@ -16,9 +16,7 @@ In the previous tutorial we taught you how to get data from the real world into 
 ## Gather supplies
 To get started you will need a basic HTML website. We have a small example website you can use here. You can download this example using the download button below!
 
-[Download HTML Example](../../../assets/files/MyFirstDFWebsite/index.html){: .btn .btn-green download="index.html"}
+[Download HTML Example]({% link assets/files/MyFirstDFWebsite/index.html %}){: .btn .btn-green download="index.html"}
 
 ## Tour link
 {% include df-link.html text="Take the tour" path="/tour/hosting-tour" %}
-
-

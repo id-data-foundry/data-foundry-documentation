@@ -7,7 +7,7 @@ nav_exclude: true # we don't need this in the navigation, brand icon is enough
 
 # Welcome to Data Foundry
 
-Data Foundry is an open-source data collection and prototyping platform made for design education and research. Data Foundry (DF) is an easy, safe and flexible environment to work with all things data for design prototyping and studies. Data Foundry provides you and your students the tools to collect, manage and share data. There are also various tools to make prototyping, data visualisation, website hosting and collaboration on data design easier. Whether you are building a data logger or creating your own chatbot, you have found the right platform. If Data Foundry does not offer all the tools you need we made sure to make it easy to connect to other platforms, while keeping you data stored in a safe and structured way.
+Data Foundry is an open-source data collection and prototyping platform made for design education and research. Data Foundry (DF) is an easy, safe and flexible environment to work with all things data for design prototyping and studies. Data Foundry provides you and your students the tools to collect, manage and share data. There are also various tools to make prototyping, data visualization, website hosting and collaboration on data design easier. Whether you are building a data logger or creating your own chatbot, you have found the right platform. If Data Foundry does not offer all the tools you need we made sure to make it easy to connect to other platforms, while keeping you data stored in a safe and structured way.
 ![Data Foundry Header]({% link assets/images/DF-header.png %})
 
 
@@ -55,4 +55,3 @@ Data Foundry has been licensed under the **GNU Affero General Public License V3*
 ## Team
 
 Data Foundry was developed by Mathias Funk, Eden Chiang, Eva van der Born and Diede van Marle since 2019, funded and supported by the Industrial Design department at Eindhoven University of Technology. The open-sourcing and finalisation of the platform has been made possible by NWO under the TDDC-NES funding scheme, as the Open Design Data Infrastructure (ODeDaI) project.
-

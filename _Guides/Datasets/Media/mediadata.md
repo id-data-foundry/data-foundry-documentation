@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Media Data Example
-parent: Example Projects
-nav_order: 1
+title: Media Dataset
+parent: Datasets
+nav_order: 5
 has_children: true
 ---
 
@@ -17,6 +17,7 @@ Object Ethnography is describes a process of the observation of objects by means
 ## Example project
 
 An example of Object Ethnography is the Peekaboo project by Yu-Ting Cheng [1]. The Peekaboo is an observational camera for home ecologies concerning privacy. The design enables inhabitants to control their data release actively or passively. The Peekaboo cam is an observational research camera with a coverable lens. The resulting photo streams provide qualitative insights on how things in the everyday home transition and move. Next to that, objects also senses data (quantitative data). Afterwards, Yu-Ting was able to annotate both on the sensor data and on the media files. Participants were also involved, in the sense that they contributed with on the annotation process as well from their side.
+
 ## What you need to get started
 
 1. A prototype with one or multiple sensors and a camera module, that is connected to the deployment internet.
@@ -30,8 +31,7 @@ An example of Object Ethnography is the Peekaboo project by Yu-Ting Cheng [1]. T
 
 ## How to use this example
 
-Complete basic setup
-
+### Complete basic setup
 The basic setup is as follows:
 
 1. Register or login

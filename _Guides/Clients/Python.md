@@ -29,7 +29,7 @@ Open the new IoT dataset and scroll down to the configuration examples. Click on
 # import requests library
 import requests
 # API endpoint
-URL = "https://<YOUR-DF-INSTANCE>/api/v1/datasets/ts/<dataset_id>/<dataset_token>"
+URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/ts/<dataset_id>/<dataset_token>"
 # use dict for parameters to be sent to the API
 DATACONTENT = {'source_id':'DEVICE_ID', 'activity': '<ACTIVITY>', '<data_name>': '<DATA>', '<data_name_2>': '<DATA_2>'}
 # post request
@@ -143,7 +143,7 @@ Now to send the data to the `YourName/ProjectName/Channel` channel we have to se
 from oocsi import OOCSI
 
 # Setup your OOCSI device name and point it towards an OOCSI server only has to happen once
-oocsi = OOCSI('YourName/ProjectName/DeviceName', 'oocsi.example.com')
+oocsi = OOCSI('YourName/ProjectName/DeviceName', '{{ site.external_base_urls.oocsi }}')
 ```
 
 After having OOCSI set up you can then use the following command to send data to an OOCSI channel:

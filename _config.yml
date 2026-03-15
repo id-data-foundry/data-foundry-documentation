@@ -43,7 +43,7 @@ just_the_docs:
     Setup:
       name: "Setup"
       nav_fold: true
-      
+
   # For copy button on code
   enable_copy_code_button: true
   custom_css:
@@ -86,11 +86,12 @@ aux_links:
   DF on GitHub: https://github.com/id-data-foundry/data-foundry
 
 exclude:
-    - "shell.nix"
-    - "launch.sh"
-    - "README.md"
-    - "Dockerfile"
-    - "pipelines"
+  - "shell.nix"
+  - "launch.sh"
+  - "README.md"
+  - "Dockerfile"
+  - "pipelines"
+  - "index.md"
 
 callouts:
   info:
@@ -110,9 +111,13 @@ callouts:
 baseurl: ""
 
 external_base_urls:
-  # If datafoundry url is left empty; the DF instance switcher is enabled
+  # If datafoundry url is left empty, the DF instance switcher is enabled.
+  # URL's can be supplied with {{ site.external_base_urls.datafoundry }}
+  # Users of these variables are responsible for including the protocol https:// or wss://
   datafoundry:
-  oocsi:
+  # Use as  {{ site.external_base_urls.oocsi }}
+  oocsi: "hello.oocsi.net"
+  # static URL to the docs, including protocol
   docs: "https://example.com/docs"
 
 custom_js:
@@ -120,10 +125,6 @@ custom_js:
 
 head_custom: |
   <script src="{{ '/assets/js/data-foundry-selector.js' | relative_url }}"></script>
-
-# Footer content
-
-footer_content: "Copyright &copy; 2019-2026 Industrial Design, TU/e"
 
 compress_html:
   clippings: all

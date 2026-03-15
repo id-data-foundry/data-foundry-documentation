@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Telegram Bot
-parent: Example Projects
+parent: Integration Examples
 nav_order: 2
 has_children: true
 has_toc: false
@@ -75,6 +75,3 @@ After this initial sign-up, you can use Telegram to select the active project: t
 Quick recap: if you want to message just participant 3 of your second project, you would first enter the second project with /project 2, then start the message with /message 3. The list of participants in a project is available from the "manage resources" page.
 
 This functionality is available for both project owners and collaborators, so you take turns in messaging. Also, the "manage resources" page contains a view of all Telegram conversations separated by participant. Good luck!
-
-##### Based on:
-https://data.id.tue.nl/documentation/usecase-telegram

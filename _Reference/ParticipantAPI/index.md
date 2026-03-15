@@ -12,6 +12,15 @@ The Participant API provides a way to read and log data specific to a participan
 
 You can find information on how to practically use the Participant API in the remote study use-case guides.
 
+<details open markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
+
 ## Participation Modes
 
 There are two primary ways to access the API:

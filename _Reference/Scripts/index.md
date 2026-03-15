@@ -10,6 +10,15 @@ has_toc: false
 
 You can use the following functions in Data Foundry scripts to interact with datasets, participants, and external services.
 
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
+
 ## General Functions
 
 ### DF.print()
@@ -179,4 +188,3 @@ DF.telegramParticipant('u12345678abcdef', 'Thanks for the data!');
 // Reply to an incoming message
 DF.telegramReply('Message received, thank you.');
 ```
-

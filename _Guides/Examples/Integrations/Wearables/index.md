@@ -1,10 +1,21 @@
 ---
 layout: default
-parent: "Wearable Examples"
-title: "Retrieving data from Wearables"
+title: Wearables
+parent: Integration Examples
 nav_order: 2
 has_children: true
+has_toc: false
 ---
+
+# Wearable Examples
+
+Data Foundry supports collecting data from consumer wearable devices to track health, movement, and activity metrics. These examples guide you through connecting these devices to your project.
+
+## Supported Devices
+
+*   **Fitbit:** Connect Fitbit accounts to access steps, heart rate, sleep, and activity data.
+*   **Google Fit:** (Note: Legacy support, verify API availability) Connect Android phones and WearOS watches.
+*   **Apple Watch:** Connect via third-party bridges or custom iOS apps.
 
 # What you need for this how-to guide
 
@@ -13,11 +24,11 @@ Users must have a wearable dataset (e.g, Fitbit or Google Fit dataset) and there
 ## Preparation steps:
 
 1. Wearables of Data Foundry need to be added to target project:
-    - Add a new wearable directly with the hyperlink "ADD WEARABLE" inside the tab "WEARABLES" on the "MANAGE RESOURCES" page of your project.
+    - Add a new wearable directly with the hyperlink `"ADD WEARABLE"` inside the tab `"WEARABLES"` on the `"MANAGE RESOURCES"` page of your project.
     - Make sure the wearable and the participant, which are going to link to each other, are added into the same cluster before starting to link. And there must be only one participant in the cluster, then Data foundry will group them together and the participant can see the wearable on participation page.
 2. Connect Data Foundry wearables to physical ones:
-    - Click the "MANAGE RESOURCES" button on the project page and click on "PARTICIPANTS" tab in the right side column of "MANAGE PROJECT RESOURCES" page.
-    - By clicking on a participant on the screen will be redirected to a participant page. Users can use the SEND LINK TO PARTICIPANT button to invite the participant via email.
+    - Click the `"MANAGE RESOURCES"` button on the project page and click on `"PARTICIPANTS"` tab in the right side column of `"MANAGE PROJECT RESOURCES"` page.
+    - By clicking on a participant on the screen will be redirected to a participant page. Users can use the `"SEND LINK TO PARTICIPANT" `button to invite the participant via email.
     - Participants can link wearables on the participation page by clicking the wearables with yellow background. The background of the wearable will turn to green after finishing linking up the Data Foundry wearalbe and physical wearable.
 3. What is important for this linking to work, is that participants should synchronize their data manually everyday. This might be a lot to ask, thus there is a way to this quick and easy: (For Fitbit wearable only)
 

@@ -1,7 +1,7 @@
 ---
 layout: default
+title: ConvoScript
 parent: Local AI
-title: Composing a Convoscript
 nav_order: 2
 has_children: true
 has_toc: true
@@ -38,15 +38,15 @@ Create a new HTML file (e.g., `index.html`) using your text editor of choice (VS
 Convoscript runs on JavaScript, this means the convoscript.js file can be easily imported into any HTML file by including the following snippet into our basic HTML file. We can put this under the `<meta>` tags between the **`<head></head>`** tags.
 ```html
     <!-- ConvoScript Library -->
-    <script src="https://data.id.tue.nl/assets/js/convoscript/latest"></script>
+    <script src="https://{{ site.external_base_urls.datafoundry }}/assets/js/convoscript/latest"></script>
     <!-- AI Foundry Library required to interact with large language models-->
-    <script src="https://data.id.tue.nl/assets/javascripts/local-ai/latest/local-ai.js"></script>
+    <script src="https://{{ site.external_base_urls.datafoundry }}/assets/javascripts/local-ai/latest/local-ai.js"></script>
 ```
 Additionally, we want to add a nice stylesheet to make everything look pretty by posting this underneath.
 ```html
     <!-- PicoCSS stylesheet -->
-    <link rel="stylesheet" href="https://data.id.tue.nl/assets/stylesheets/picoCSS/pico.min.css" />
-    <link rel="stylesheet" href="https://data.id.tue.nl/assets/stylesheets/picoCSS/pico.colors.min.css" />
+    <link rel="stylesheet" href="https://{{ site.external_base_urls.datafoundry }}/assets/stylesheets/picoCSS/pico.min.css" />
+    <link rel="stylesheet" href="https://{{ site.external_base_urls.datafoundry }}/assets/stylesheets/picoCSS/pico.colors.min.css" />
     <!-- ConvoScript specific styling (create this file to add custom styles) -->
     <link rel="stylesheet" href="convoscript.css" />
 ```
@@ -101,7 +101,7 @@ After having set up the AI API keys, we can set up ConvoScript itself. We do thi
 const convoScript = new ConvoScript({
     // SETUP CONNECTION TO DF LLM
     api_token: api_token, //your data foundry api token
-    server: '', // optional: server (ex. "https://<data-foundry.net>")
+    server: 'https://{{ site.external_base_urls.datafoundry }}', // optional: server (ex. "https://<data-foundry.net>")
 
     // CONVOSCRIPT SETTINGS
     delayTime: 500, //A delay after every message that can help distinguish incoming messages
@@ -177,7 +177,7 @@ At last, we can reply to this last message through a Large Language Model (LLM).
 ```
 
 ## Step 5. Trigger the Convoscript
-Starting a convoscript is quite easy; all you have to do is to post the following line after the script (outside of the brackets). You can also trigger the convoscript run in function blocks of another convoscript, making you able to daisy-chain interactions or use different branches for different answers. [Read more about branching here]({% link _Guides/LocalAI/convoscript/branching.md %})
+Starting a convoscript is quite easy; all you have to do is to post the following line after the script (outside of the brackets). You can also trigger the convoscript run in function blocks of another convoscript, making you able to daisy-chain interactions or use different branches for different answers.
 
 ```
     // run the script

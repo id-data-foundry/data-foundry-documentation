@@ -34,7 +34,7 @@ var jsonBody = {
 	source_id: 'DEVICE_ID',
 	data: JSON.stringify(data)
 }
-fetch('https://<YOUR-DF-INSTANCE>/api/v1/datasets/ts/13000/TOKEN', {
+fetch('https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/ts/13000/TOKEN', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -76,7 +76,7 @@ Note that this works only if the page is hosted on Data Foundry.
 To import OOCSI on a website hosted anywhere else you can import it from any public data foundry instance. You can use the following code snippet but make sure to insert the URL of your Data Foundry instance.
 
 ```html
-<script src="https://<LINK-TO-YOUR-DATAFOUNDRY-INSTANCE>/assets/javascripts/oocsi-web.min.js"></script>
+<script src="https://{{ site.external_base_urls.datafoundry }}/assets/javascripts/oocsi-web.min.js"></script>
 ```
 
 #### Option 3: Use `node.js`
@@ -102,7 +102,7 @@ To upload data to Data Foundry you will need to create a new device ID. You get 
 Then use the following code snippit to start sending data to Data Foundry. But before you do make sure to replace the OOCSI channel and the device ID for your own.
 
 ```javascript
-OOCSI.connect('wss://oocsi.id.tue.nl/ws');
+OOCSI.connect('wss://{{ site.external_base_urls.oocsi }}/ws');
 // send data in JSON format
 // replace CHANNEL by the channel that you provided above
 OOCSI.send("<YOUR-OOCSI-CHANNEL>",

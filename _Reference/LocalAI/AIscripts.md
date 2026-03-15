@@ -1,6 +1,6 @@
 # Using the AI APIs in scripts
 
-Currently, we offer two ways to invoke AI functionality in Data Foundry: using a [LocalAI](https://localai.io) installation or using <a href="https://platform.openai.com/docs/introduction" target="_blank">OpenAI</a> services. Both options have pros and cons.
+Currently, we offer AI functionality in Data Foundry using a [LocalAI](https://localai.io) server.
 
 ---
 
@@ -10,28 +10,26 @@ Currently, we offer two ways to invoke AI functionality in Data Foundry: using a
 
 ## Completion example
 
-A *completion* needs a prompt and the API will return a completion of this prompt. [Read more about text completion](https://platform.openai.com/docs/guides/completion) in the official API docs. You will also find useful tips and tricks how to craft a good prompt.
+A *completion* needs a prompt and the API will return a completion of this prompt. [Read more about text completion](https://platform.openai.com/docs/guides/completion) in the OpenAI API docs. You will also find useful tips and tricks how to craft a good prompt.
 
 Let's try a first example with LocalAI. We want to generate a tagline for a flower shop.
 
 ````Javascript
 let result = DF.api("localai", {
-  "api_token": "<API-KEY>", 
-  "task": "completion",
-  "prompt": "Write a tagline for a flower shop."
-})
+  "api_token": "<API-KEY>"", 
+  "task": "chat",
+  "messages": "Write a tagline for a flower shop."
+});
 DF.print(result)
 ````
 
-The output is below:
-
 ````json
-{"text":"\n\nFlowers for a global audience.","finishReason":"stop","cost":18}
+{"role":"assistant","content":"\n\nFlowers for a global audience.","finishReason":"stop","cost":18}
 ````
 
 #### Models
 
-The Data Foundry API offers access to different models on both the LocalAI and OpenAI services. 
+The Data Foundry API offers access to different models on both the LocalAI server.
 
 For **LocalAI**, you can see what models your Data Foundry are running on the `/tools/models` page.
 [Check what models are installed]{% include df-link.html text="Check what models are installed" path="/tools/models" %}
@@ -88,14 +86,15 @@ DF.print(result)
 
 ### API concepts
 
-### Using ChatGPT using your own API key
+### Using AI using your own API key
 
-Instead of using the Data Foundry API key, you can also use your own OpenAI API key. This can be obtained from the OpenAI platform (register first, then generate key). You can use this key in all requests as shown above in the `api_token` field.
+Instead of using the Data Foundry API key, you can also use your own AI server API key, or access a commercial AI service directly, by configuring the right server and API key. You can use this key in all requests as shown above in the `api_token` field.
 
 ### API reference
 
 There are more options available than explained above. We generally follow the OpenAI parameter names.
 
+<!-- todo -->
 All DF API requests follow the structure, with `openai` as the only currently available API: 
 
 ````Javascript

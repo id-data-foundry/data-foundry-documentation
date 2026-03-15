@@ -52,7 +52,7 @@ import matplotlib.pyplot as plt
 import pyodide
 
 # download from this url
-url = "http://DATAFOUNDRYBASEURL/datasets/download/<Dataset_ID>"
+url = "https://{{ site.external_base_urls.datafoundry }}/datasets/download/<Dataset_ID>"
 
 # download and parse CSV into Pandas DataFrame
 df = pd.read_csv(pyodide.open_url(url))

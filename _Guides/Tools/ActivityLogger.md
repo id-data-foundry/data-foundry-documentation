@@ -2,7 +2,7 @@
 layout: default
 title: Activity Logger Guide
 nav_order: 7
-parent: How-To Guides Overview
+parent: Tools
 ---
 
 # Activity Logger Guide

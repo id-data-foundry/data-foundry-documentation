@@ -59,7 +59,7 @@ Analyze and manage your data without leaving the browser.
 
 ### Integrated AI Services
 Harness the power of AI directly within your projects.
-*   **AI API:** Access locally-hosted models (via LocalAI) or external services (like OpenAI) through a unified API.
+*   **AI API:** Access locally-hosted models through a unified API.
 *   **Creative Intelligence:** Utilize Text-to-Speech, Speech-to-Text (Whisper), and Large Language Models (LLMs) for creative and analytical tasks.
 
 ### Server-Side Scripting

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Local AI 101
+parent: Tutorials
 nav_order: 3
 has_children: true
 has_toc: false
@@ -19,17 +20,18 @@ What is a chatbot?
 ![]({% link _Tutorials/LocalAI/images/DFchatbot.png %}){:width="20%"}{: style="float: right"}
 
 
-What is a chatbot on Data Foundry?
+##What is a chatbot on Data Foundry?
 
 How does this chatbot work?
 
 We will guide you through every step, from setting up a simple web interface to connecting it to a local AI model hosted on Data Foundry.
 
-{% include df-link.html text="Take the Interactive Tour" path="/tour/ai-tour" %}
 
-What do I need for the tutorial?
+## What do I need for the tutorial?
 
 [Download HTML File]({$ link /assets/files/MyFirstDFWebsite/index.html %}){: .btn .btn-green download="index.html"}
 
+## Tour link
+{% include df-link.html text="Take the Interactive Tour" path="/tour/ai-tour" %}
 
 ---

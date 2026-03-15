@@ -1,0 +1,36 @@
+<svg width="100%" height="100%" viewBox="0 0 548 1689" version="1.1" xmlns="http://www.w3.org/2000/svg" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="translate(-179.5 -2517.3)">
+        <g transform="translate(0 -2187.4) scale(1 2.48)">
+            <g transform="translate(1859.8 3857.2) scale(-1 -1)">
+                <g transform="translate(-2088.2 -2305.6) scale(20.27 8.16)">
+                    <g opacity="0.21">
+                        <path d="M185.9,439.3L176.9,444.5L176.9,465.2L185.9,459.8L185.9,439.3Z" fill="#4CAF50" opacity="0.95"/>
+                        <path d="M167.9,439.3L158.9,444.5L158.9,465.2L167.9,459.8L167.9,439.3Z" fill="#9dd39e"/>
+                    </g>
+                </g>
+                <g transform="translate(19.3 785.2) scale(1 0.4)">
+                    <g opacity="0.21">
+                        <g transform="translate(-2107.4 -7144.6) scale(20.27)">
+                            <path d="M176.9,433.9L167.9,439.3L167.9,449.7L176.9,444.3L176.9,433.9Z" fill="#4CAF50" opacity="0.95"/>
+                        </g>
+                        <g transform="translate(-2107.4 -6719.6) scale(20.27)">
+                            <path d="M176.9,433.9L167.9,439.3L167.9,449.7L176.9,444.3L176.9,433.9Z" fill="#4CAF50" opacity="0.95"/>
+                        </g>
+                        <g transform="translate(-2107.4 -7144.6) scale(20.27)">
+                            <path d="M185.9,439.3L176.9,444.5L176.9,465.2L185.9,459.8L185.9,439.3Z" fill="#4CAF50" opacity="0.95"/>
+                        </g>
+                        <g transform="translate(-2472.3 -6508.8) scale(20.27)">
+                            <path d="M185.9,439.3L176.9,444.5L176.9,465.2L176.9,460.906L185.9,455.506L185.9,439.3Z" fill="#4CAF50" opacity="0.95"/>
+                        </g>
+                        <g transform="translate(-2107.4 -7144.6) scale(20.27)">
+                            <path d="M167.9,439.3L158.9,444.5L158.9,465.2L167.9,459.8L167.9,439.3Z" fill="#9dd39e"/>
+                        </g>
+                        <g transform="translate(-1742.6 -6508.8) scale(20.27)">
+                            <path d="M167.9,439.3L158.9,444.5L158.9,465.2L167.9,459.8L167.9,439.3Z" fill="#9dd39e"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
