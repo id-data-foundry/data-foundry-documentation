@@ -112,9 +112,12 @@ callouts:
 
 baseurl: "/documentation"
 
+# Disable the instance switcher
+instance_switcher: false
+
 external_base_urls:
-  # If datafoundry url is left empty, the DF instance switcher is enabled.
-  # URL's can be supplied with {{ site.external_base_urls.datafoundry }}
+  # DONT change the Data Foundry Base URL, your Data Foundry instance will do this itself.
+  # URL's can be supplied with {% include df-link-example.html %}
   # Users of these variables are responsible for including the protocol https:// or wss://
   datafoundry: "DATAFOUNDRYBASEURL"
   # Use as  {{ site.external_base_urls.oocsi }}

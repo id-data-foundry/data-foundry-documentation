@@ -1,12 +1,6 @@
-<!-- {% if site.external_base_urls.datafoundry == null %}
-<a href="javascript:void(0)" class="df-link btn{{ include.extra_classes }}" data-df-path="{{ include.path }}">{{ include.text }}</a>
-{% else %}
-<a href="{{ site.external_base_urls.datafoundry }}{{ include.path }}" class="btn{{ include.extra_classes }}">{{ include.text }}</a>
-{% endif %} -->
-
-{% if site.external_base_urls.datafoundry == null or site.external_base_urls.datafoundry == "<YOUR-DF-INSTANCE>" %}
+<!-- This is the Data Foundry instance switcher which allows the user to specify the links themselves-- -->
+{% if site.instance_switcher == true %}
 <script src="{{ '/assets/js/data-foundry-selector.js' | relative_url }}"></script>
-[{{ include.text }}](javascript:void(0)){: .df-link data-df-path="{{ include.path }}" .btn}
-{% else %}
-[{{ include.text }}](https://{{ site.external_base_urls.datafoundry }}{{ include.path }}){:.btn}
-{% endif %}
+[{{ include.text }}](javascript:void(0)){: .df-link data-df-path="{{
+include.path }}" .btn} {% else %} [{{ include.text }}](https://{{
+site.external_base_urls.datafoundry }}{{ include.path }}){:.btn} {% endif %}

@@ -110,11 +110,13 @@ callouts:
 
 baseurl: ""
 
+# Enable the instance switcher
+instance_switcher: true
+
+# Options to customize the URLs displayed and used in examples and links
 external_base_urls:
-  # If datafoundry url is left empty, the DF instance switcher is enabled.
-  # URL's can be supplied with {{ site.external_base_urls.datafoundry }}
-  # Users of these variables are responsible for including the protocol https:// or wss://
-  datafoundry:
+  # Users of these variables are responsible for including the scheme https:// or wss:// in the example itself
+  datafoundry: "example.data-foundry.net"
   # Use as  {{ site.external_base_urls.oocsi }}
   oocsi: "hello.oocsi.net"
   # static URL to the docs, including protocol
