@@ -115,7 +115,7 @@ instance_switcher: true
 
 # Options to customize the URLs displayed and used in examples and links
 external_base_urls:
-  # Users of these variables are responsible for including the scheme https:// or wss:// in the example itself
+  # Users of these variables are responsible for including the scheme https:// or wss:// in the example itself, not here
   datafoundry: "example.data-foundry.net"
   # Use as  {{ site.external_base_urls.oocsi }}
   oocsi: "hello.oocsi.net"

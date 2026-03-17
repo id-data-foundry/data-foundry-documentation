@@ -117,8 +117,8 @@ instance_switcher: false
 
 external_base_urls:
   # DONT change the Data Foundry Base URL, your Data Foundry instance will do this itself.
-  # URL's can be supplied with {% include df-link-example.html %}
-  # Users of these variables are responsible for including the protocol https:// or wss://
+  # URL's can be supplied with {{ site.external_base_urls.datafoundry }}
+  # Users of these variables are responsible for including the protocol https:// or wss:// in the example itself
   datafoundry: "DATAFOUNDRYBASEURL"
   # Use as  {{ site.external_base_urls.oocsi }}
   oocsi: "hello.oocsi.net"
