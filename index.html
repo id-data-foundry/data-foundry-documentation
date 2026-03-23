@@ -1,319 +1,518 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data Foundry</title>
-    <link rel="stylesheet" href="assets/landing/style.css" />
-  </head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Data Foundry</title>
+        <link rel="stylesheet" href="assets/landing/style.css" />
+    </head>
 
-  <body>
-    <!-- Header Component -->
-    <header class="site-header">
-      <div class="site-header__content layout-container">
-        <!-- Logo -->
-        <div class="site-logo">
-          <img
-            src="assets/images/LogoDarkDFTransparent.png"
-            alt="Data Foundry Logo"
-            class="h-12"
-            style="height: 3rem;"
-          />
-        </div>
+    <body>
+        <!-- Header Component -->
+        <header class="site-header">
+            <div class="site-header__content layout-container">
+                <!-- Logo -->
+                <div class="site-logo">
+                    <img
+                        src="assets/images/LogoDarkDFTransparent.png"
+                        alt="Data Foundry Logo"
+                        class="h-12"
+                        style="height: 3rem"
+                    />
+                </div>
 
-        <!-- Navigation Links -->
-        <nav class="nav-links">
-          <a
-            href="https://github.com/id-data-foundry/data-foundry"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn--outline"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-github"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.44-.78-3.46 0 0-1.05-.33-3.45 1.06A5.27 5.27 0 0 0 12 5c-.7 0-1.4.14-2 .46-2.4-1.4-3.45-1.06-3.45-1.06A4.88 4.88 0 0 0 2 7.5c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
-            <span>GitHub</span>
-          </a>
-          <a
-            href="overview.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn--primary"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark-check">
-              <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-              <path d="m9 10 2 2 4-4" />
-            </svg>
-            <span>Docs</span>
-          </a>
-        </nav>
-      </div>
-    </header>
+                <!-- Navigation Links -->
+                <nav class="nav-links">
+                    <a
+                        href="https://github.com/id-data-foundry/data-foundry"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn--outline"
+                    >
+                        <svg
+                            width="16px"
+                            height="16px"
+                            viewBox="0 0 24 24"
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                        >
+                            <title>github_line</title>
+                            <g
+                                stroke="none"
+                                stroke-width="1"
+                                fill="none"
+                                fill-rule="evenodd"
+                            >
+                                <g
+                                    id="Logo"
+                                    transform="translate(-144.000000, -96.000000)"
+                                    fill-rule="nonzero"
+                                >
+                                    <g
+                                        id="github_line"
+                                        transform="translate(144.000000, 96.000000)"
+                                    >
+                                        <path
+                                            d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z"
+                                            fill-rule="nonzero"
+                                        ></path>
+                                        <path
+                                            d="M6.31507,6.17592 C6.06528,5.53804 6.07509,4.80911 6.18645,4.14164 C6.94443,4.3743 7.67583,4.73056 8.30658,5.21261 C8.58532,5.42563 8.95261,5.49547 9.29491,5.39175 C10.1245,5.14037 11.0377,5.00008 12,5.00008 C12.9614,5.00008 13.8737,5.1401 14.7027,5.39103 C15.0449,5.4946 15.4119,5.42479 15.6906,5.21193 C16.3211,4.73024 17.0522,4.37419 17.8098,4.14164 C17.9211,4.80847 17.9309,5.53652 17.682,6.17398 C17.532,6.55795 17.6072,7.00009 17.8898,7.31369 C18.6138,8.11696 19,9.04077 19,10.0001 C19,12.1142 17.0306,14.187 13.8662,14.8182 C13.0738,14.9763 12.7646,15.9726 13.3711,16.544 C13.7596,16.91 14,17.4261 14,18.0001 L14,21.0001 C14,21.5523 14.4477,22.0001 15,22.0001 C15.5523,22.0001 16,21.5523 16,21.0001 L16,18.0001 C16,17.4303 15.8805,16.888 15.6657,16.3972 C18.6831,15.3498 21,12.9925 21,10.0001 C21,8.65251 20.5156,7.41484 19.7128,6.37804 C19.9226,5.55843 19.904,4.73178 19.8242,4.09759 C19.7528,3.53005 19.6535,2.78566 19.2532,2.34211 C18.6586,1.68341 17.6732,2.07099 16.9732,2.31048 C16.3548,2.52075 15.5898,2.85589 14.8487,3.35549 C13.9512,3.12436 12.993,3.00008 12,3.00008 C11.006,3.00008 10.0468,3.12461 9.14859,3.35618 C8.4074,2.85633 7.64217,2.52103 7.02354,2.31066 C6.32363,2.07114 5.33755,1.68338 4.74302,2.34223 C4.33543,2.7939 4.24955,3.47917 4.17668,4.06064 L4.17186,4.09904 C4.09212,4.73386 4.07374,5.56141 4.28443,6.38166 C3.48323,7.41773 3,8.6541 3,10.0001 C3,12.9925 5.3169,15.3498 8.33434,16.3972 C8.12194,16.8823 8.00278,17.4177 8.00005,17.9803 L7.8323,18.0138 C7.11546,18.1126 6.65626,18.0246 6.3437,17.892 C5.58364,17.5696 5.19225,16.7586 4.71319,16.1387 C4.41554,15.7535 3.98203,15.2733 3.31625,15.0514 C2.79231,14.8768 2.22599,15.1599 2.05134,15.6839 C1.8767,16.2078 2.15986,16.7741 2.6838,16.9488 C3.24249,17.135 3.62811,18.0909 3.98181,18.5153 C4.35469,18.9628 4.85081,19.4312 5.5626,19.7332 C6.24412,20.0223 7.0447,20.1258 8,20.0088 L8,21.0001 C8,21.5523 8.44772,22.0001 9,22.0001 C9.55228,22.0001 10,21.5523 10,21.0001 L10,18.0001 C10,17.4261 10.2404,16.91 10.6289,16.544 C11.2355,15.9725 10.926,14.9763 10.1338,14.8182 C6.96942,14.187 5,12.1142 5,10.0001 C5,9.0417 5.38549,8.11879 6.10804,7.31608 C6.39058,7.0022 6.46541,6.55985 6.31507,6.17592 Z"
+                                            fill="#09244B"
+                                        ></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                    <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn--primary"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-bookmark-check"
+                        >
+                            <path
+                                d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"
+                            />
+                            <path d="m9 10 2 2 4-4" />
+                        </svg>
+                        <span>Docs</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
 
-    <!-- HeroSection Component -->
-    <section class="hero-section">
-      <div class="hero-content layout-container">
-        <!-- LEFT — HERO TEXT -->
-        <div class="hero-text">
-          <h1 class="hero-title">
-            <span class="block">Data Foundry makes</span>
-            <span class="hero-dynamic-wrapper">
-              <span id="hero-dynamic-text" class="hero-dynamic-text">
-                Design Data Collection
-              </span>
-            </span>
-            <span class="block">a breeze!</span>
-          </h1>
-        </div>
+        <!-- HeroSection Component -->
+        <section class="hero-section">
+            <div class="hero-content layout-container">
+                <!-- LEFT — HERO TEXT -->
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="block">Data Foundry makes</span>
+                        <span class="hero-dynamic-wrapper">
+                            <span
+                                id="hero-dynamic-text"
+                                class="hero-dynamic-text"
+                            >
+                                Design Data Collection
+                            </span>
+                        </span>
+                        <span class="block">a breeze!</span>
+                    </h1>
+                </div>
 
-        <!-- RIGHT — DYNAMIC MESSY STACK WITH CYCLING TOP CARD -->
-        <div id="hero-image-stack" class="hero-image-stack">
-          <!-- Images will be dynamically managed by script.js -->
-          <img src="assets/landing/platform-screenshot.png" alt="" class="hero-slide" data-index="0" />
-          <img src="assets/landing/project-dash.png" alt="" class="hero-slide" data-index="1" />
-          <img src="assets/landing/coding-showcase.png" alt="" class="hero-slide" data-index="2" />
-          <img src="assets/landing/project-dash.png" alt="" class="hero-slide" data-index="3" />
-          <img src="assets/landing/coding-showcase.png" alt="" class="hero-slide" data-index="4" />
-        </div>
+                <!-- RIGHT — DYNAMIC MESSY STACK WITH CYCLING TOP CARD -->
+                <div id="hero-image-stack" class="hero-image-stack">
+                    <!-- Images will be dynamically managed by script.js -->
+                    <img
+                        src="assets/landing/platform-screenshot.png"
+                        alt=""
+                        class="hero-slide"
+                        data-index="0"
+                    />
+                    <img
+                        src="assets/landing/project-dash.png"
+                        alt=""
+                        class="hero-slide"
+                        data-index="1"
+                    />
+                    <img
+                        src="assets/landing/coding-showcase.png"
+                        alt=""
+                        class="hero-slide"
+                        data-index="2"
+                    />
+                    <img
+                        src="assets/landing/project-dash.png"
+                        alt=""
+                        class="hero-slide"
+                        data-index="3"
+                    />
+                    <img
+                        src="assets/landing/coding-showcase.png"
+                        alt=""
+                        class="hero-slide"
+                        data-index="4"
+                    />
+                </div>
 
-        <!-- Decorative Shapes -->
-        <div class="hero-bg-shapes">
-          <img src="assets/landing/background.svg" alt="DF Background">
-        </div>
-      </div>
-    </section>
+                <!-- Decorative Shapes -->
+                <div class="hero-bg-shapes">
+                    <img
+                        src="assets/landing/background.svg"
+                        alt="DF Background"
+                    />
+                </div>
+            </div>
+        </section>
 
-    <!-- Mid-page Banner -->
-    <div class="promo-banner">
-      <p>
-        Find out how you can use Data Foundry in your <a href="Tutorials/index.html">design process or
-        education</a> below!
-      </p>
-    </div>
-
-    <!-- Feature Sections -->
-    <div class="features-grid layout-container">
-      
-      <!-- Feature Section: What is Data Foundry? -->
-      <section class="feature-media-section">
-        <div class="feature-media-content">
-          <!-- Decorative Geometric Shapes -->
-          <div class="feature-bg-decoration">
-            <img src="assets/landing/partly.svg" alt="Decorative geometric shapes">
-          </div>
-          <!-- Text Content -->
-          <div class="feature-card feature-card--text-only">
-            <h2 class="feature-title">What is Data Foundry?</h2>
-            <p class="feature-description">
-              Data Foundry is an open-source data collection and prototyping
-              platform made for design education and research. Data Foundry
-              (DF) is an easy, safe, and flexible environment to work with all
-              things <a href="Learning/Projects/index.html">data for design prototyping</a> and studies. Data Foundry
-              provides you and your students the tools to collect, manage, and
-              share data. There are also various tools to make prototyping,
-              data visualization, website hosting, and collaboration on data
-              design easier. Whether you are building a <a href="Tutorials/GettingStarted/MyFirstDataLogger.html">data logger</a> or
-              creating your own <a href="Guides/LocalAI/index.html">chatbot</a>, you have found the right platform. If
-              Data Foundry does not offer all the tools you need for your
-              use case, we made sure to make it easy to connect to other
-              platforms while keeping your data stored in a safe and
-              structured way. Data Foundry has been battle-tested for 7 years
-              in our own design education and research, and is now freely
-              accessible to you too!
+        <!-- Mid-page Banner -->
+        <div class="promo-banner">
+            <p>
+                Find out how you can use Data Foundry in your
+                <a href="Tutorials/index.html">design process or education</a>
+                below!
             </p>
-          </div>
         </div>
-      </section>
 
-      <!-- Feature Section: Data Collection -->
-      <section class="feature-media-section">
-        <div class="feature-media-content">
-          <div class="feature-bg-decoration">
-            <img src="assets/landing/partly.svg" alt="Decorative geometric shapes">
-          </div>
-          <div class="feature-card">
-            <h2 class="feature-title">Data Collection</h2>
-            <p class="feature-description">
-              Collect data from <a href="Tutorials/GettingStarted/index.html">prototypes</a>, wireframes, or the people you
-              design for and store it in a structured format that is
-              easy to manage and analyze. Everything is on-premise and in compliance
-              with <a href="Learning/DataFoundry/DataProtection.html">GDPR</a>. 
-              We provide various <a href="Guides/Tools/index.html">data collection tools</a> and also
-              offer the resources to build your own!
-            </p>
-          </div>
-          <!-- Image Container -->
-          <div class="feature-image-container">
-            <img
-              src="https://betterimagesofai.org/images/downloads?url=%2FImagesAI%2Fdata-processing_3913x2201.png&size=small"
-              alt="Data Collection Illustration"
-              class="feature-image"
-            />
-            <p class="feature-image-caption">
-              <a href="https://yasmine-boudiaf.com/">Yasmine Boudiaf</a> &amp;
-              <a href="https://loti.london/">LOTI</a> /
-              <a href="https://betterimagesofai.org/images?artist=YasmineBoudiaf&title=DataProcessing">Data Processing</a> /
-              <a href="https://creativecommons.org/licenses/by/4.0/">Licensed by CC-BY 4.0</a>
-            </p>
-          </div>
+        <!-- Feature Sections -->
+        <div class="features-grid layout-container">
+            <!-- Feature Section: What is Data Foundry? -->
+            <section class="feature-media-section">
+                <div class="feature-media-content">
+                    <!-- Decorative Geometric Shapes -->
+                    <div class="feature-bg-decoration">
+                        <img
+                            src="assets/landing/partly.svg"
+                            alt="Decorative geometric shapes"
+                        />
+                    </div>
+                    <!-- Text Content -->
+                    <div class="feature-card feature-card--text-only">
+                        <h2 class="feature-title">What is Data Foundry?</h2>
+                        <p class="feature-description">
+                            Data Foundry is an open-source data collection and
+                            prototyping platform made for design education and
+                            research. Data Foundry (DF) is an easy, safe, and
+                            flexible environment to work with all things
+                            <a href="Learning/Projects/index.html"
+                                >data for design prototyping</a
+                            >
+                            and studies. Data Foundry provides you and your
+                            students the tools to collect, manage, and share
+                            data. There are also various tools to make
+                            prototyping, data visualization, website hosting,
+                            and collaboration on data design easier. Whether you
+                            are building a
+                            <a
+                                href="Tutorials/GettingStarted/MyFirstDataLogger.html"
+                                >data logger</a
+                            >
+                            or creating your own
+                            <a href="Guides/LocalAI/index.html">chatbot</a>, you
+                            have found the right platform. If Data Foundry does
+                            not offer all the tools you need for your use case,
+                            we made sure to make it easy to connect to other
+                            platforms while keeping your data stored in a safe
+                            and structured way. Data Foundry has been
+                            battle-tested for 7 years in our own design
+                            education and research, and is now freely accessible
+                            to you too!
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Section: Data Collection -->
+            <section class="feature-media-section">
+                <div class="feature-media-content">
+                    <div class="feature-bg-decoration">
+                        <img
+                            src="assets/landing/partly.svg"
+                            alt="Decorative geometric shapes"
+                        />
+                    </div>
+                    <div class="feature-card">
+                        <h2 class="feature-title">Data Collection</h2>
+                        <p class="feature-description">
+                            Collect data from
+                            <a href="Tutorials/GettingStarted/index.html"
+                                >prototypes</a
+                            >, wireframes, or the people you design for and
+                            store it in a structured format that is easy to
+                            manage and analyze. Everything is on-premise and in
+                            compliance with
+                            <a href="Learning/DataFoundry/DataProtection.html"
+                                >GDPR</a
+                            >. We provide various
+                            <a href="Guides/Tools/index.html"
+                                >data collection tools</a
+                            >
+                            and also offer the resources to build your own!
+                        </p>
+                    </div>
+                    <!-- Image Container -->
+                    <div class="feature-image-container">
+                        <img
+                            src="https://betterimagesofai.org/images/downloads?url=%2FImagesAI%2Fdata-processing_3913x2201.png&size=small"
+                            alt="Data Collection Illustration"
+                            class="feature-image"
+                        />
+                        <p class="feature-image-caption">
+                            <a href="https://yasmine-boudiaf.com/"
+                                >Yasmine Boudiaf</a
+                            >
+                            &amp; <a href="https://loti.london/">LOTI</a> /
+                            <a
+                                href="https://betterimagesofai.org/images?artist=YasmineBoudiaf&title=DataProcessing"
+                                >Data Processing</a
+                            >
+                            /
+                            <a
+                                href="https://creativecommons.org/licenses/by/4.0/"
+                                >Licensed by CC-BY 4.0</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Section: Data Prototyping -->
+            <section
+                class="feature-media-section feature-media-section--reverse"
+            >
+                <div class="feature-media-content">
+                    <div class="feature-bg-decoration">
+                        <img
+                            src="assets/landing/partly.svg"
+                            alt="Decorative geometric shapes"
+                        />
+                    </div>
+                    <div class="feature-card">
+                        <h2 class="feature-title">Data Prototyping</h2>
+                        <p class="feature-description">
+                            Use the
+                            <a href="Reference/DFapi.html">Data Foundry API</a>
+                            to design and prototype connected applications that
+                            can access
+                            <a href="Guides/LocalAI/index.html"
+                                >machine-learning models</a
+                            >
+                            and speech APIs. This makes it easier to get your
+                            data from A to B. We support a wide range of
+                            <a href="Guides/Clients/index.html"
+                                >programming languages</a
+                            >
+                            and even have several libraries for
+                            <a href="Guides/Examples/index.html"
+                                >embedded devices</a
+                            >!
+                        </p>
+                    </div>
+                    <div class="feature-image-container">
+                        <img
+                            src="https://betterimagesofai.org/images/downloads?url=%2FImagesAI%2Fthe-omnipresent-tapestry_joudy-bourghli_the-bigger-picture_16535x23385.png&size=small"
+                            alt="Data Prototyping Illustration"
+                            class="feature-image"
+                        />
+                        <p class="feature-image-caption">
+                            <a
+                                href="https://www.linkedin.com/in/joudy-bourghli-54117673/"
+                                >Joudy Bourghli</a
+                            >
+                            &amp;
+                            <a
+                                href="https://www.adaptcentre.ie/discussai/bigger-picture/"
+                                >The Bigger Picture</a
+                            >
+                            /
+                            <a
+                                href="https://betterimagesofai.org/images?artist=JoudyBourghli&title=TheOmnipresentTapestry"
+                                >The Omnipresent Tapestry</a
+                            >
+                            /
+                            <a
+                                href="https://creativecommons.org/licenses/by/4.0/"
+                                >Licensed by CC-BY 4.0</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Section: Design Research -->
+            <section class="feature-media-section">
+                <div class="feature-media-content">
+                    <div class="feature-bg-decoration">
+                        <img
+                            src="assets/landing/partly.svg"
+                            alt="Decorative geometric shapes"
+                        />
+                    </div>
+                    <div class="feature-card">
+                        <h2 class="feature-title">Design Research</h2>
+                        <p class="feature-description">
+                            Data Foundry contains the tools necessary for
+                            data-related methods such as
+                            <a href="Guides/Tools/ActivityLogger.html"
+                                >narrative surveys</a
+                            >
+                            and object ethnography. It offers the means to
+                            <a href="Reference/Datasets/index.html"
+                                >export data</a
+                            >
+                            in numerous formats and collect rich quantitative
+                            and qualitative data. From surveys to diary studies
+                            and data annotations, we have the tools to structure
+                            your research in a
+                            <a href="Learning/OpenSourceScience/index.html"
+                                >FAIR way</a
+                            >!
+                        </p>
+                    </div>
+                    <div class="feature-image-container">
+                        <img
+                            src="https://betterimagesofai.org/images/downloads?url=%2FImagesAI%2Fyasmin-dwiputri_data-hazards-project_safety-precautions_2560x1440.png&size=small"
+                            alt="Design Research Illustration"
+                            class="feature-image"
+                        />
+                        <p class="feature-image-caption">
+                            <a href="http://yasmindwiputri.com/"
+                                >Yasmin Dwiputri</a
+                            >
+                            &amp;
+                            <a href="datahazards.com/">Data Hazards Project</a>
+                            /
+                            <a
+                                href="https://betterimagesofai.org/images?artist=YasminDwiputri&title=SafetyPrecautions"
+                                >Safety Precautions</a
+                            >
+                            /
+                            <a
+                                href="https://creativecommons.org/licenses/by/4.0/"
+                                >Licensed by CC-BY 4.0</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Section: Interested? -->
+            <section class="feature-media-section">
+                <div class="feature-media-content">
+                    <div class="feature-bg-decoration">
+                        <img
+                            src="assets/landing/partly.svg"
+                            alt="Decorative geometric shapes"
+                        />
+                    </div>
+                    <div class="feature-card feature-card--text-only">
+                        <h2 class="feature-title">Interested?</h2>
+                        <p class="feature-description">
+                            Data Foundry is open-source and easy to get started
+                            with! For more information, check out our
+                            <a href="overview.html">documentation</a> where you
+                            will find numerous
+                            <a href="Guides/Examples/index.html">examples</a> of
+                            what the platform can be used for. Do you have
+                            specific needs?
+                            <a href="mailto:info@data-foundry.net"
+                                >Get in touch</a
+                            >
+                            with us and we can see how we can make Data Foundry
+                            fit your curriculum.
+                        </p>
+                    </div>
+                </div>
+            </section>
         </div>
-      </section>
 
-      <!-- Feature Section: Data Prototyping -->
-      <section class="feature-media-section feature-media-section--reverse">
-        <div class="feature-media-content">
-          <div class="feature-bg-decoration">
-            <img src="assets/landing/partly.svg" alt="Decorative geometric shapes">
-          </div>
-          <div class="feature-card">
-            <h2 class="feature-title">Data Prototyping</h2>
-            <p class="feature-description">
-              Use the <a href="Reference/DFapi.html">Data Foundry API</a> to design and prototype connected
-              applications that can access <a href="Guides/LocalAI/index.html">machine-learning models</a> and speech
-              APIs. This makes it easier to get your data from A to
-              B. We support a wide range of <a href="Guides/Clients/index.html">programming languages</a> and even have
-              several libraries for <a href="Guides/Examples/index.html">embedded devices</a>!
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p>
+                Department of Industrial Design at Eindhoven University of
+                Technology (© 2019-2026)
             </p>
-          </div>
-          <div class="feature-image-container">
-            <img
-              src="https://betterimagesofai.org/images/downloads?url=%2FImagesAI%2Fthe-omnipresent-tapestry_joudy-bourghli_the-bigger-picture_16535x23385.png&size=small"
-              alt="Data Prototyping Illustration"
-              class="feature-image"
-            />
-            <p class="feature-image-caption">
-              <a href="https://www.linkedin.com/in/joudy-bourghli-54117673/">Joudy Bourghli</a> &amp;
-              <a href="https://www.adaptcentre.ie/discussai/bigger-picture/">The Bigger Picture</a> /
-              <a href="https://betterimagesofai.org/images?artist=JoudyBourghli&title=TheOmnipresentTapestry">The Omnipresent Tapestry</a> /
-              <a href="https://creativecommons.org/licenses/by/4.0/">Licensed by CC-BY 4.0</a>
-            </p>
-          </div>
-        </div>
-      </section>
+        </footer>
 
-      <!-- Feature Section: Design Research -->
-      <section class="feature-media-section">
-        <div class="feature-media-content">
-          <div class="feature-bg-decoration">
-            <img src="assets/landing/partly.svg" alt="Decorative geometric shapes">
-          </div>
-          <div class="feature-card">
-            <h2 class="feature-title">Design Research</h2>
-            <p class="feature-description">
-              Data Foundry contains the tools necessary for data-related
-              methods such as <a href="Guides/Tools/ActivityLogger.html">narrative surveys</a> and object ethnography.
-              It offers the means to <a href="Reference/Datasets/index.html">export data</a> in numerous formats and
-              collect rich quantitative and qualitative data. From surveys to diary
-              studies and data annotations, we have the tools to structure your research in a
-              <a href="Learning/OpenSourceScience/index.html">FAIR way</a>!
-            </p>
-          </div>
-          <div class="feature-image-container">
-            <img
-              src="https://betterimagesofai.org/images/downloads?url=%2FImagesAI%2Fyasmin-dwiputri_data-hazards-project_safety-precautions_2560x1440.png&size=small"
-              alt="Design Research Illustration"
-              class="feature-image"
-            />
-            <p class="feature-image-caption">
-              <a href="http://yasmindwiputri.com/">Yasmin Dwiputri</a> &amp;
-              <a href="datahazards.com/">Data Hazards Project</a> /
-              <a href="https://betterimagesofai.org/images?artist=YasminDwiputri&title=SafetyPrecautions">Safety Precautions</a> /
-              <a href="https://creativecommons.org/licenses/by/4.0/">Licensed by CC-BY 4.0</a>
-            </p>
-          </div>
-        </div>
-      </section>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const slides = [
+                    {
+                        text: "Design Data Collection ",
+                        image: "assets/landing/platform-screenshot.png",
+                    },
+                    {
+                        text: "User Research ",
+                        image: "assets/landing/project-dash.png",
+                    },
+                    {
+                        text: "Gathering Feedback ",
+                        image: "assets/landing/coding-showcase.png",
+                    },
+                    {
+                        text: "Data Analysis ",
+                        image: "assets/landing/project-dash.png",
+                    },
+                    {
+                        text: "Connected Prototyping ",
+                        image: "assets/landing/coding-showcase.png",
+                    },
+                ];
 
-      <!-- Feature Section: Interested? -->
-      <section class="feature-media-section">
-        <div class="feature-media-content">
-          <div class="feature-bg-decoration">
-            <img src="assets/landing/partly.svg" alt="Decorative geometric shapes">
-          </div>
-          <div class="feature-card feature-card--text-only">
-            <h2 class="feature-title">Interested?</h2>
-            <p class="feature-description">
-              Data Foundry is open-source and easy to get started with! For
-              more information, check out our <a href="overview.html">documentation</a> where you will find
-              numerous <a href="Guides/Examples/index.html">examples</a> of what the platform can be used for. Do you
-              have specific needs? <a href="mailto:info@data-foundry.net">Get in touch</a> with us and we can see how we
-              can make Data Foundry fit your curriculum.
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
+                const cardRotations = [-8, 4, -6, 3, -5];
+                let currentIndex = 0;
+                let isAnimating = false;
 
-    <!-- Footer -->
-    <footer class="site-footer">
-      <p>
-        Department of Industrial Design at Eindhoven University of Technology
-        (© 2019-2026)
-      </p>
-    </footer>
+                const heroDynamicText =
+                    document.getElementById("hero-dynamic-text");
+                const heroImageStack =
+                    document.getElementById("hero-image-stack");
+                const heroSlides = Array.from(heroImageStack.children).filter(
+                    (el) => el.classList.contains("hero-slide"),
+                );
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const slides = [
-          { text: "Design Data Collection ", image: "assets/landing/platform-screenshot.png" },
-          { text: "User Research ", image: "assets/landing/project-dash.png" },
-          { text: "Gathering Feedback ", image: "assets/landing/coding-showcase.png" },
-          { text: "Data Analysis ", image: "assets/landing/project-dash.png" },
-          { text: "Connected Prototyping ", image: "assets/landing/coding-showcase.png" },
-        ];
+                function updateHeroSection() {
+                    isAnimating = true;
 
-        const cardRotations = [-8, 4, -6, 3, -5];
-        let currentIndex = 0;
-        let isAnimating = false;
+                    // Update text
+                    if (heroDynamicText) {
+                        heroDynamicText.classList.remove("hero-text-animate");
+                        void heroDynamicText.offsetWidth; // Force reflow
+                        heroDynamicText.textContent = slides[currentIndex].text;
+                        heroDynamicText.classList.add("hero-text-animate");
+                    }
 
-        const heroDynamicText = document.getElementById('hero-dynamic-text');
-        const heroImageStack = document.getElementById('hero-image-stack');
-        const heroSlides = Array.from(heroImageStack.children).filter(el => el.classList.contains('hero-slide'));
+                    // Update images
+                    heroSlides.forEach((img, index) => {
+                        const distanceFromTop =
+                            (index - currentIndex + slides.length) %
+                            slides.length;
+                        const isNextCard = distanceFromTop === 1;
+                        const rotation = cardRotations[index];
 
-        function updateHeroSection() {
-          isAnimating = true;
+                        let xOffset, yOffset, scale, zIndex;
 
-          // Update text
-          if (heroDynamicText) {
-            heroDynamicText.classList.remove('hero-text-animate');
-            void heroDynamicText.offsetWidth; // Force reflow
-            heroDynamicText.textContent = slides[currentIndex].text;
-            heroDynamicText.classList.add('hero-text-animate');
-          }
+                        if (isAnimating && isNextCard) {
+                            xOffset = (index % 3) * 2;
+                            yOffset = -60;
+                            scale = 1.05;
+                            zIndex = 45;
+                        } else {
+                            xOffset = distanceFromTop * 12 + (index % 3) * 2;
+                            yOffset = distanceFromTop * 8 + (index % 2) * 3;
+                            scale = 1 - distanceFromTop * 0.05;
+                            zIndex = 40 - distanceFromTop * 10;
+                        }
 
-          // Update images
-          heroSlides.forEach((img, index) => {
-            const distanceFromTop = (index - currentIndex + slides.length) % slides.length;
-            const isNextCard = distanceFromTop === 1;
-            const rotation = cardRotations[index];
+                        img.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${rotation}deg) scale(${scale})`;
+                        img.style.zIndex = zIndex;
+                        img.style.transition = `transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s linear`;
+                        img.src = slides[index].image;
+                    });
 
-            let xOffset, yOffset, scale, zIndex;
+                    setTimeout(() => {
+                        isAnimating = false;
+                        currentIndex = (currentIndex + 1) % slides.length;
+                    }, 1000);
+                }
 
-            if (isAnimating && isNextCard) {
-              xOffset = (index % 3) * 2;
-              yOffset = -60;
-              scale = 1.05;
-              zIndex = 45;
-            } else {
-              xOffset = distanceFromTop * 12 + (index % 3) * 2;
-              yOffset = distanceFromTop * 8 + (index % 2) * 3;
-              scale = 1 - distanceFromTop * 0.05;
-              zIndex = 40 - distanceFromTop * 10;
-            }
-
-            img.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${rotation}deg) scale(${scale})`;
-            img.style.zIndex = zIndex;
-            img.style.transition = `transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s linear`;
-            img.src = slides[index].image;
-          });
-
-          setTimeout(() => {
-            isAnimating = false;
-            currentIndex = (currentIndex + 1) % slides.length;
-          }, 1000);
-        }
-
-        updateHeroSection();
-        setInterval(updateHeroSection, 7000);
-      });
-    </script>
-  </body>
+                updateHeroSection();
+                setInterval(updateHeroSection, 7000);
+            });
+        </script>
+    </body>
 </html>
