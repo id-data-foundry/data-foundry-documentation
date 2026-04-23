@@ -119,7 +119,7 @@ external_base_urls:
   # DONT change the Data Foundry Base URL, your Data Foundry instance will do this itself.
   # URL's can be supplied with {{ site.external_base_urls.datafoundry }}
   # Users of these variables are responsible for including the protocol https:// or wss:// in the example itself
-  datafoundryurl: "https://data.id.tue.nl"
+  datafoundryurl: "DATAFOUNDRYBASEURL"
   datafoundrydomain: "DATAFOUNDRYDOMAIN"
   # Use as  {{ site.external_base_urls.oocsi }}
   oocsi: "hello.oocsi.net"
