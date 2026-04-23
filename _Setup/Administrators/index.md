@@ -36,7 +36,7 @@ Add the email addresses of the desired administrators to the `admins` list. Afte
 
 To access the admin portal, authenticated administrators simply append `/admin` to the Data Foundry instance URL:
 
-`https://{{ site.external_base_urls.datafoundry }}/admin`
+`{{ site.external_base_urls.datafoundryurl }}/admin`
 
 {% include df-link.html text="Go to the Admin Portal" path="/admin" %}
 

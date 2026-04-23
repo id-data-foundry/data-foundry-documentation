@@ -29,7 +29,7 @@ Open the new IoT dataset and scroll down to the configuration examples. Click on
 # import requests library
 import requests
 # API endpoint
-URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/ts/<dataset_id>/<dataset_token>"
+URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<dataset_id>/<dataset_token>"
 # use dict for parameters to be sent to the API
 DATACONTENT = {'source_id':'DEVICE_ID', 'activity': '<ACTIVITY>', '<data_name>': '<DATA>', '<data_name_2>': '<DATA_2>'}
 # post request

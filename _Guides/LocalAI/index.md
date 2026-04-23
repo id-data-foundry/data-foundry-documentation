@@ -11,7 +11,7 @@ has_toc: true
 This section contains task-oriented guides for working with the AI features of Data Foundry. These guides assume you have a basic understanding of the platform. For a more conceptual overview and details on available models, check out the [Local AI learning section]({% link _Learning/LocalAI/index.md %}).
 
 
-{% if site.external_base_urls.datafoundry == null %}
+{% if site.external_base_urls.datafoundryurl == null %}
 {: .warning}
 The Local AI functionality in the examples only works *live* with a Data Foundry instance that is configured with API keys and a gateway to a local AI runtime server. Otherwise, you can still browse the example and check their source code, but the AI requests will not work.
 {% endif %}
@@ -34,4 +34,3 @@ Local AI often means using chatbots for interaction. In Data Foundry, we offer t
 
 * **[Designing Custom Chatbots]({% link _Guides/LocalAI/Chatbots.md %})**: Learn how to create and configure your own LLM-based AI chatbot using system prompt and a custom knowledge base.
 * **[Scripting Conversational Experiences]({% link _Guides/LocalAI/convoscript/index.md %})**: Work with the ConvoScript tools integrated in Data Foundry to create scripted chatbots. You start with a clear conversational design, then extend it with dynamic features, LLMs and context.
-

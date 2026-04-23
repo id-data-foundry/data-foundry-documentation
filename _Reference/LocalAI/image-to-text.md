@@ -59,7 +59,7 @@ data = {
     'model': model
 }
 
-response = requests.post('https://{{ site.external_base_urls.datafoundry }}/v1/chat/completions', headers=headers, json=data)
+response = requests.post('{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions', headers=headers, json=data)
 
 # Raw response output for debugging
 print(response.text)

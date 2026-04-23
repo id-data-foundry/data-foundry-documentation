@@ -38,15 +38,15 @@ Create a new HTML file (e.g., `index.html`) using your text editor of choice (VS
 Convoscript runs on JavaScript, this means the convoscript.js file can be easily imported into any HTML file by including the following snippet into our basic HTML file. We can put this under the `<meta>` tags between the **`<head></head>`** tags.
 ```html
     <!-- ConvoScript Library -->
-    <script src="https://{{ site.external_base_urls.datafoundry }}/assets/js/convoscript/latest"></script>
+    <script src="{{ site.external_base_urls.datafoundryurl }}/assets/js/convoscript/latest"></script>
     <!-- AI Foundry Library required to interact with large language models-->
-    <script src="https://{{ site.external_base_urls.datafoundry }}/assets/javascripts/local-ai/latest/local-ai.js"></script>
+    <script src="{{ site.external_base_urls.datafoundryurl }}/assets/javascripts/local-ai/latest/local-ai.js"></script>
 ```
 Additionally, we want to add a nice stylesheet to make everything look pretty by posting this underneath.
 ```html
     <!-- PicoCSS stylesheet -->
-    <link rel="stylesheet" href="https://{{ site.external_base_urls.datafoundry }}/assets/stylesheets/picoCSS/pico.min.css" />
-    <link rel="stylesheet" href="https://{{ site.external_base_urls.datafoundry }}/assets/stylesheets/picoCSS/pico.colors.min.css" />
+    <link rel="stylesheet" href="{{ site.external_base_urls.datafoundryurl }}/assets/stylesheets/picoCSS/pico.min.css" />
+    <link rel="stylesheet" href="{{ site.external_base_urls.datafoundryurl }}/assets/stylesheets/picoCSS/pico.colors.min.css" />
     <!-- ConvoScript specific styling (create this file to add custom styles) -->
     <link rel="stylesheet" href="convoscript.css" />
 ```
@@ -101,7 +101,7 @@ After having set up the AI API keys, we can set up ConvoScript itself. We do thi
 const convoScript = new ConvoScript({
     // SETUP CONNECTION TO DF LLM
     api_token: api_token, //your data foundry api token
-    server: 'https://{{ site.external_base_urls.datafoundry }}', // optional: server (ex. "https://<data-foundry.net>")
+    server: 'https://{{ site.external_base_urls.datafoundryurl }}', // optional: server (ex. "https://<data-foundry.net>")
 
     // CONVOSCRIPT SETTINGS
     delayTime: 500, //A delay after every message that can help distinguish incoming messages

@@ -73,7 +73,7 @@ The `textToText` function is an asynchronous JavaScript function designed to int
 ```javascript
 foundry.textToText({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   model: "hermes-2-pro-llama-3-8b",
   prompt: "What is the capital of France?",
   temperature: 0.7,
@@ -166,7 +166,7 @@ Here is an example of how to use the `textToImage` function:
 ```javascript
 foundry.textToImage({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   prompt: "A futuristic cityscape at sunset",
   negativePrompt: "blurry, low quality",
   cfgScale: 12,
@@ -217,7 +217,7 @@ Below is an example of how to use the `textToSpeech` function:
 ```javascript
 foundry.textToSpeech({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   prompt: "Hello, world!",
   language: "en",
   voice: "af_heart",
@@ -265,7 +265,7 @@ Here is an example of how to use the `textToRobot` function:
 ```javascript
 foundry.textToRobot({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   projectId: "your_project_id_here",
   prompt: "Hello, world!",
   language: "en",
@@ -316,7 +316,7 @@ This function uses a large language model to process an image and generate a tex
 ```javascript
 foundry.imageToText({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   model: "llava-llama-3-8b-v1_1",
   prompt: "Describe the image",
   image: "https://example.com/image.jpg",
@@ -362,7 +362,7 @@ The `soundToText` function is an asynchronous JavaScript function designed to tr
 // Example: Transcribing an uploaded audio file
 foundry.soundToText({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   type: "file",
   file: audioFile, // Replace with your audio file object
   resultElementSelector: "#transcriptionResult",
@@ -376,7 +376,7 @@ foundry.soundToText({
 // Example: Recording audio and transcribing in real-time
 foundry.soundToText({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   type: "record",
   sliceDuration: 3000, // Transcribe every 3 seconds
   resultElementSelector: "#transcriptionResult",
@@ -390,7 +390,7 @@ foundry.soundToText({
 // Example: Stopping a recording and getting the full transcription
 foundry.soundToText({
   api_token: "your_api_key_here",
-  server: "https://{{ site.external_base_urls.datafoundry }}",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
   stopRec: true,
 }).then((completeTranscription) => {
   console.log("Complete transcription:", completeTranscription);
@@ -453,7 +453,7 @@ The `models` function is an asynchronous JavaScript function that retrieves a li
 
 ```javascript
 const apiToken = "your_api_token_here";
-const serverUrl = "https://{{ site.external_base_urls.datafoundry }}";
+const serverUrl = "{{ site.external_base_urls.datafoundryurl }}";
 
 const models = await foundry.models(apiToken, serverUrl);
 

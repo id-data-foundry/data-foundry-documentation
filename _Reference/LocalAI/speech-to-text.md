@@ -77,7 +77,7 @@ We first built this API for JavaScript and web access. Even then, the handling o
 							reader.onloadend = function() {
 								base64data = reader.result;
 
-								fetch("https://{{ site.external_base_urls.datafoundry }}/v1/audio/transcriptions", {
+								fetch("{{ site.external_base_urls.datafoundryurl }}/v1/audio/transcriptions", {
 										method: "POST",
 										mode: "cors",
 										cache: "no-cache",

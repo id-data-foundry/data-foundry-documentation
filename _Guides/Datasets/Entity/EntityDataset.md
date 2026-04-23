@@ -34,7 +34,7 @@ pip install requests
 import requests
 
 # API endpoint
-URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>"
+URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>"
 
 # Use dict for headers to be sent to the API
 HEADERS = {
@@ -54,7 +54,7 @@ print(r)
 ### Javascript:
 ```js
 // API endpoint
-const URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>";
+const URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>";
 
 // Headers to be sent to the API
 const HEADERS = {
@@ -88,7 +88,7 @@ fetch(URL, {
 import requests
 
 # API endpoint
-URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>"
+URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>"
 
 # Use dict for headers to be sent to the API
 HEADERS = {
@@ -105,7 +105,7 @@ print(r.json())
 ### Javascript:
 ```js
 // API endpoint
-const URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>";
+const URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>";
 
 // Headers to be sent to the API
 const HEADERS = {
@@ -136,7 +136,7 @@ fetch(URL, {
 import requests
 
 # API endpoint
-URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>"
+URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>"
 
 # Use dict for headers to be sent to the API
 HEADERS = {
@@ -156,7 +156,7 @@ print(r)
 ### Javascript:
 ```js
 // API endpoint
-const URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>";
+const URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>";
 
 // Headers to be sent to the API
 const HEADERS = {
@@ -190,7 +190,7 @@ fetch(URL, {
 import requests
 
 # API endpoint
-URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>"
+URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>"
 
 # Use dict for headers to be sent to the API
 HEADERS = {
@@ -207,7 +207,7 @@ print(r)
 ### Javascript:
 ```js
 // API endpoint
-const URL = "https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/entity/<DATASET-ID>";
+const URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/entity/<DATASET-ID>";
 
 // Headers to be sent to the API
 const HEADERS = {

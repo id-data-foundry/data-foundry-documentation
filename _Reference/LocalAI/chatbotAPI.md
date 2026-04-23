@@ -32,7 +32,7 @@ Authorization: Bearer df-abcdef1234567890...
 curl -X POST -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer YOUR_PROJECT_API_KEY' \
 -d '{"message": "What is mentioned in the project documents about sustainability?", "conversationId": "7b8e-4a2c-9d1f"}' \
- https://{{ site.external_base_urls.datafoundry }}/api/v1/chatbots/<CHATBOT_ID>/chat
+ {{ site.external_base_urls.datafoundryurl }}/api/v1/chatbots/<CHATBOT_ID>/chat
 ```
 
 ### Example Response

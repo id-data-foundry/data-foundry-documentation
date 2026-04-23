@@ -38,7 +38,7 @@ After having imported the Data Foundry library, we can set up the code to send n
 
 ```java
 // fill in the Data Foundry server URL, just the domain (add port if needed)
-DataFoundry df = new DataFoundry("{{ site.external_base_urls.datafoundry }}");
+DataFoundry df = new DataFoundry("{{ site.external_base_urls.datafoundrydomain }}");
 // create dataset access
 DFDataset iot = df.dataset("<Dataset ID>", "<Token>");
 // log activity to IoT dataset

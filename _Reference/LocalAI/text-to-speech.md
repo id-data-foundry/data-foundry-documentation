@@ -45,7 +45,7 @@ data = {
     'voice': 'af_heart',
 	'input': 'this is a test, do your best!'
 }
-response = requests.post('https://{{ site.external_base_urls.datafoundry }}/v1/audio/speech', headers=headers, json=data)
+response = requests.post('{{ site.external_base_urls.datafoundryurl }}/v1/audio/speech', headers=headers, json=data)
 
 # Output response as MP3 file
 with open("output.mp3", "wb") as f:
@@ -57,9 +57,9 @@ with open("output.mp3", "wb") as f:
 ``` bash
 curl -X POST -H 'Content-Type: application/json' \
 	-d '{"api_token": "df-123456789....", "text": "this is a test, do your best!"}' \
-	https://{{ site.external_base_urls.datafoundry }}/v1/audio/speech
+	{{ site.external_base_urls.datafoundryurl }}/v1/audio/speech
 ```
 If the call is successful, the response is a JSON object with a token that you can use to download the generated audio file:
 ```bash
-curl -O https://{{ site.external_base_urls.datafoundry }}/api/vendor/t2s/<TOKEN>
+curl -O {{ site.external_base_urls.datafoundryurl }}/api/vendor/t2s/<TOKEN>
 ```

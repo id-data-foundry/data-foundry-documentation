@@ -8,7 +8,7 @@ has_toc: true
 
 # Text-to-Text
 
-Our LocalAI API can be reached with `https://{{ site.external_base_urls.datafoundry }}/v1/chat/completions`. You can start by leaving the model parameter empty (but still include it!) and for more specific cases you can choose different models. Not all models on that page are currently deployed in Data Foundry, to check what models are available on your Data Foundry instance, use the Data Foundry model overview.
+Our LocalAI API can be reached with `{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions`. You can start by leaving the model parameter empty (but still include it!) and for more specific cases you can choose different models. Not all models on that page are currently deployed in Data Foundry, to check what models are available on your Data Foundry instance, use the Data Foundry model overview.
 
 {% include df-link.html text="Model Overview" path="/tools/models" %}
 
@@ -32,7 +32,7 @@ data = {
 	'messages': messages,
 	'model': model
 }
-response = requests.post('https://{{ site.external_base_urls.datafoundry }}/v1/chat/completions', headers=headers, json=data)
+response = requests.post('{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions', headers=headers, json=data)
 
 # Raw response output for debugging
 print(response.text)
@@ -51,7 +51,7 @@ var api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
 var messages = [{"role": "user", "content": "This is a mouse, who are you?"}]
 var model = "phi-2-dpo-7k"
 // Send a POST request to the API
-fetch("https://{{ site.external_base_urls.datafoundry }}/v1/chat/completions", {
+fetch("{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions", {
 	method: "POST",
 	cache: "no-cache",
 	headers: {
@@ -86,6 +86,6 @@ curl -X POST \
     ],
     "model": "phi-2-dpo-7k"
   }' \
-  https://{{ site.external_base_urls.datafoundry }}/v1/chat/completions
+  {{ site.external_base_urls.datafoundryurl }}/v1/chat/completions
 
 ```

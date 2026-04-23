@@ -34,7 +34,7 @@ var jsonBody = {
 	source_id: 'DEVICE_ID',
 	data: JSON.stringify(data)
 }
-fetch('https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/ts/13000/TOKEN', {
+fetch('{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/13000/TOKEN', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -76,7 +76,7 @@ Note that this works only if the page is hosted on Data Foundry.
 To import OOCSI on a website hosted anywhere else you can import it from any public data foundry instance. You can use the following code snippet but make sure to insert the URL of your Data Foundry instance.
 
 ```html
-<script src="https://{{ site.external_base_urls.datafoundry }}/assets/javascripts/oocsi-web.min.js"></script>
+<script src="{{ site.external_base_urls.datafoundryurl }}/assets/javascripts/oocsi-web.min.js"></script>
 ```
 
 #### Option 3: Use `node.js`
