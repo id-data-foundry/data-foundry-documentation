@@ -13,7 +13,7 @@ Entity datasets are useful to store participant or device-related meta data. For
 
 ```js
 // get entry in device profile from entity dataset 
-// (`DF.entity` selects the first entity dataset in your df project, if you want to use a specific dataset then replace this for `DF.dataset(dataset_id)`)
+// (`DF.entity` selects the first entity dataset in your DF project and offers specific operations)
 var profile = DF.entity.get(devices[0].id)
 
 // print out if necessary
@@ -46,8 +46,6 @@ You can get all items in the Entity datasets in one go and works with them (upda
 ```js
 // get all items from first entity dataset in project
 var allItems = DF.entity.getAll()
-// get all items from specific entity dataset, where 2 is the dataset ID
-// var allItems = DF.dataset(2).getAll()
 
 // print array of all items
 DF.print(allItems)

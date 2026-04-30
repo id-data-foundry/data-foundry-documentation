@@ -55,7 +55,7 @@ Retrieves event data from a device. When using DF.eventData, it will automatical
 
 #### Get data from any device
 ```js
-// Get event data from any device by leaving two entry brackets empty
+// Get event data from any device by providing an empty device ID string
 let items = DF.eventData.get('');
 // Get event data collected by any device from dataset 2
 let items = DF.dataset(2).get('');
@@ -94,6 +94,14 @@ If you only want to collect data collected within a certain timeframe, you can a
 ```js
 // Get the last 200 items collected by device 42, filtered by start and end time
 // The start and end date should be submitted in unix epoch (milliseconds) format
+
+// one minute (= 60 000 milliseconds) ago
+let start = Date.now() - 60 * 1000;
+// one day ago
+// let start = Date.now() - 24 * 60 * 60 * 1000;
+// right now
+let end = Date.now();
+
 let items = DF.eventData.get(42, 200, start, end);
 // Get the last 200 items collected by device 42 from dataset 2, filtered by start and end time
 let items = DF.dataset(2).get(42, 200, start, end);
@@ -114,15 +122,13 @@ DF.dataset(2).log(42, 'cooking activity', data);
 ## Entity Datasets
 
 {: .warning }
-These functions access the first active entity dataset in the project if a specific dataset is not selected. Replace `.entity` for `.dataset(<Dataset-ID>)` if you want to work with a specific dataset.
+These functions access the first active entity dataset in the project if a specific dataset is not selected.
 
 ### .getAll()
 Retrieves all items from an entity dataset.
 
 ```js
 let items = DF.entity.getAll();
-// or when retrieving data from a specific dataset, where 3 is the dataset ID
-let items = DF.dataset(3).getAll();
 ```
 
 ### .get()
@@ -131,7 +137,6 @@ Retrieves a specific entity dataset item.
 ```js
 // Get item with resource ID 'user1'
 let item = DF.entity.get('user1');
-
 ```
 
 ### .add()
