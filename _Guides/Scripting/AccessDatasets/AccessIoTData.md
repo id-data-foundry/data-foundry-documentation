@@ -16,8 +16,10 @@ Although we can store data automatically from an OOCSI channel with IoT datasets
 data.roundedXValue = Math.round(data.x)
 data.roundedYValue = Math.round(data.y)
 
-// log an event with new data
+// log an event with new data to your first IoT dataset in project
 DF.eventData.log(devices[0].id, '', data)
+// or log to a specific IoT dataset by entering the dataset id:
+// DF.dataset(dataset_id).log(devices[0].id, '', data)
 
 // in addition: change activity based on values (if greater 100)
 if(data.X > 100 && data.y > 100) {

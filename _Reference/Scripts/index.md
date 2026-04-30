@@ -36,7 +36,7 @@ DF.print(data);
 ## IoT Datasets
 
 {: .warning }
-These functions access the first active IoT dataset in the project if a specific dataset is not selected.
+These functions access the first active IoT dataset in the project if a specific dataset is not selected. Replace `.eventData` for `.dataset(<Dataset-ID>)` if you want to work with a specific dataset.
 
 ### .dataset()
 Selects a specific dataset to write to.
@@ -45,41 +45,84 @@ Selects a specific dataset to write to.
 // Select dataset with ID 2, then log data to it
 let data = { ... };
 DF.dataset(2).log(devices[0].id, 'running', data);
+
+// Or retrieve data from dataset.
+DF.dataset(2).get(42, 200);
 ```
 
 ### .get()
-Retrieves event data from a device.
+Retrieves event data from a device. When using DF.eventData, it will automatically select the first IoT dataset in the project.
 
+#### Get data from any device
+```js
+// Get event data from any device by leaving two entry brackets empty
+let items = DF.eventData.get('');
+// Get event data collected by any device from dataset 2
+let items = DF.dataset(2).get('');
+```
+
+#### Get data from specific device
+If you want to collect data from a specific Data Logger you can do so by putting the DeviceID in the request.
 ```js
 // Get event data from device 42
 let items = DF.eventData.get(42);
+// Get event data collected by device 42 from dataset 2
+let items = DF.dataset(2).get(42);
+```
 
-// Get the last 200 items
+#### Get the last 200 items collected by specific device
+If you want to only get the last 200 items collected by a device, you can add a second parameter specifying how many entries you want.
+```js
+// Get the last 200 items collected by device 42 from the first IoT dataset in your project
 let items = DF.eventData.get(42, 200);
+// Get the last 200 items collected by device 42 from dataset 2
+let items = DF.dataset(2).get(42, 200);
+```
 
-// Filter by start and end time
+#### Get 200 items collected by any device
+If you want to only get the last 200 items collected by any device, you can also add a second parameter specifying how many entries you want.
+```js
+// Get the last 200 items from the first IoT dataset in your project
+let items = DF.eventData.get('', 200);
+// Get the last 200 items from dataset 2
+let items = DF.dataset(2).get('', 200);
+```
+
+#### Get 200 items collected by device between start and end-time
+If you only want to collect data collected within a certain timeframe, you can add a start and end date
+
+```js
+// Get the last 200 items collected by device 42, filtered by start and end time
+// The start and end date should be submitted in unix epoch (milliseconds) format
 let items = DF.eventData.get(42, 200, start, end);
+// Get the last 200 items collected by device 42 from dataset 2, filtered by start and end time
+let items = DF.dataset(2).get(42, 200, start, end);
 ```
 
 ### .log()
 Adds a data item to the dataset.
 
 ```js
-// Log data for device 42, with an activity and data
+// Log data for device 42, with an activity and data to the first dataset in your project
 var data = {one: 1.2, two: 'wow!'};
 DF.eventData.log(42, 'cooking activity', data);
+
+// Log to a specific dataset, with 2 as dataset ID
+DF.dataset(2).log(42, 'cooking activity', data);
 ```
 
 ## Entity Datasets
 
 {: .warning }
-These functions access the first active entity dataset in the project if a specific dataset is not selected.
+These functions access the first active entity dataset in the project if a specific dataset is not selected. Replace `.entity` for `.dataset(<Dataset-ID>)` if you want to work with a specific dataset.
 
 ### .getAll()
 Retrieves all items from an entity dataset.
 
 ```js
 let items = DF.entity.getAll();
+// or when retrieving data from a specific dataset, where 3 is the dataset ID
+let items = DF.dataset(3).getAll();
 ```
 
 ### .get()
@@ -88,6 +131,7 @@ Retrieves a specific entity dataset item.
 ```js
 // Get item with resource ID 'user1'
 let item = DF.entity.get('user1');
+
 ```
 
 ### .add()
@@ -119,6 +163,7 @@ You can access any dataset by ID and filter results.
 
 ```js
 // Get last 200 items from dataset 100 within a timeframe
+// The start and end date should be submitted in unix epoch (milliseconds) format
 let items = DF.eventData.from(100).get('', 200, start, end);
 
 // Filter by device ID
