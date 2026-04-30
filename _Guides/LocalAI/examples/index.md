@@ -46,3 +46,6 @@ Take control of the AI's persona and behavior using a "system prompt." This exam
 
 ### [Example 12: Benchmarking Tool]({%link _Guides/LocalAI/examples/12.benchmarking.md %})
 This tool allows you to run a system and user prompt through multiple AI models for a set number of iterations. The results are displayed in a table for easy comparison of model outputs.
+
+### [Example 13: Token Usage & Energy]({%link _Guides/LocalAI/examples/13.TokenUsage.md %})
+This example demonstrates how to retrieve token usage statistics (prompt, completion, and total tokens) from the AI model. It also shows how to use this data to calculate a rough estimate of the energy consumption for a generation, promoting awareness of the environmental impact of AI.

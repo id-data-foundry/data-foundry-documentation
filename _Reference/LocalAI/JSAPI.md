@@ -61,6 +61,9 @@ The `textToText` function is an asynchronous JavaScript function designed to int
 - *`loadingElementSelector` (string, optional)*: A CSS selector for an element to indicate loading status.
 - *`resultElementSelector` (string, optional)*: A CSS selector for an element where the result will be displayed.
 
+**Returns:**
+- A `Promise` that resolves to a `string` (the generated text).
+
 **Error Handling:**
 
 - If `api_token` is not provided, the function logs an error and exits.
@@ -73,18 +76,42 @@ The `textToText` function is an asynchronous JavaScript function designed to int
 ```javascript
 foundry.textToText({
   api_token: "your_api_key_here",
-  server: "{{ site.external_base_urls.datafoundryurl }}",
-  model: "hermes-2-pro-llama-3-8b",
   prompt: "What is the capital of France?",
-  temperature: 0.7,
-  maxTokens: 100,
-  logging: true,
-  loadingElementSelector: "#loading-indicator",
   resultElementSelector: "#result-container"
 });
 ```
 
-In this example, the function sends the prompt "What is the capital of France?" to the specified server and model. It logs the process, displays a loading indicator on the element with ID `loading-indicator`, and appends the result to the element with ID `result-container`.
+### foundry.textToTextWithUsage({...})
+
+**Description:**
+
+Identical to `textToText`, but returns an object containing both the generated text and token usage statistics. This is useful for monitoring costs or estimating energy consumption.
+
+**Parameters:**
+
+- Same as `textToText`.
+
+**Returns:**
+
+- A `Promise` that resolves to an `object`:
+  - `text` (string): The generated response.
+  - `usage` (object):
+    - `prompt_tokens` (number): Number of tokens in the prompt.
+    - `completion_tokens` (number): Number of tokens in the generated response.
+    - `total_tokens` (number): Total number of tokens used.
+
+**Example Usage:**
+
+```javascript
+const result = await foundry.textToTextWithUsage({
+  api_token: "your_api_key_here",
+  prompt: "Explain nuclear fusion."
+});
+console.log(result.text);
+console.log(result.usage.total_tokens);
+```
+
+**See also:** [Example 13: Token Usage & Energy Estimation]({% link _Guides/LocalAI/examples/13.TokenUsage.md %})
 
 ### foundry.chatbot({...})
 
@@ -329,6 +356,36 @@ foundry.imageToText({
 ```
 
 In this example, the function sends an image URL and a prompt to the server. It uses the specified model and settings to generate a response. While the request is being processed, a loading indicator is shown, and the result is displayed in the element with the ID `result-container`.
+
+### foundry.imageToTextWithUsage({...})
+
+**Description:**
+
+Identical to `imageToText`, but returns an object containing both the generated text and token usage statistics.
+
+**Parameters:**
+
+- Same as `imageToText`.
+
+**Returns:**
+
+- A `Promise` that resolves to an `object`:
+  - `text` (string): The generated response.
+  - `usage` (object): Same structure as `textToTextWithUsage`.
+
+**Example Usage:**
+
+```javascript
+const result = await foundry.imageToTextWithUsage({
+  api_token: "your_api_key_here",
+  image: "https://example.com/image.jpg",
+  prompt: "Describe this image."
+});
+console.log(result.text);
+console.log(result.usage.total_tokens);
+```
+
+**See also:** [Example 13: Token Usage & Energy Estimation]({% link _Guides/LocalAI/examples/13.TokenUsage.md %})
 
 ### foundry.soundToText({...})
 
