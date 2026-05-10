@@ -398,7 +398,6 @@ The `soundToText` function is an asynchronous JavaScript function designed to tr
 - *`api_token` (required)*: Your API key for accessing the transcription service.
 - *`server` (optional)*: The server URL for the transcription API. Defaults to the current page's origin.
 - *`type` (optional)*: Specifies the mode of operation. Use `"file"` for file uploads or `"record"` for live microphone recording. Defaults to `"file"`.
-- *`sliceDuration` (optional)*: The duration (in milliseconds) for each audio slice when recording. Defaults to `5000`.
 - *`file` (optional)*: The audio file to be transcribed. Required if `type` is `"file"`.
 - *`resultElementSelector` (optional)*: A CSS selector for the HTML element where the transcription result will be displayed.
 - *`loadingElementSelector` (optional)*: A CSS selector for the HTML element that will show a loading indicator while transcription is in progress.
@@ -435,7 +434,6 @@ foundry.soundToText({
   api_token: "your_api_key_here",
   server: "{{ site.external_base_urls.datafoundryurl }}",
   type: "record",
-  sliceDuration: 3000, // Transcribe every 3 seconds
   resultElementSelector: "#transcriptionResult",
   loadingElementSelector: "#loadingIndicator",
   onTranscribe: (text) => {
