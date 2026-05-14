@@ -46,7 +46,7 @@
                 </p>
                 <p>
                     <label>Your Message:</label>
-                    <input type="text" id="prompt" placeholder="e.g., Send 'Hello' to the 'test' channel" />
+                    <input type="text" id="prompt" value="Send a greenish lighting scene to the system." />
                 </p>
             </div>
             <p>
@@ -114,7 +114,7 @@
                             api_token: "YOUR_API_KEY",
                             model: "qwen/qwen3.5-9b", // Use a model known for tool calling
                             messages: [
-                                { role: "system", content: "You are a helpful OOCSI assistant. You can send messages to OOCSI channels using the sendOOCSIMessage tool. When the user asks you to send something, use the tool. Confirm the action to the user." },
+                                { role: "system", content: "You are a helpful OOCSI assistant. If the user describes a lighting scene, use the sendOOCSIMessage tool to send the corresponding brightness, color, and status to the 'smart_lights' channel. Confirm the action to the user." },
                                 { role: "user", content: prompt }
                             ],
                             tools: tools,

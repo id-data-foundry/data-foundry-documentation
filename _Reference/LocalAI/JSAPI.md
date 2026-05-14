@@ -57,9 +57,16 @@ The `textToText` function is an asynchronous JavaScript function designed to int
 - *`messages` (array, optional)*: An array of message objects (e.g., role and content) to send to the model. If not provided, the function creates a message using the `prompt`.
 - *`temperature` (number, optional)*: Controls the randomness of the model's output. Defaults to 0.9.
 - *`maxTokens` (number, optional)*: The maximum number of tokens to generate in the response. Defaults to 250.
+- *`responseFormat` (object, optional)*: Used for forced JSON output. To ensure valid JSON, use `{ type: "json_schema", json_schema: { ... } }` with an explicit JSON schema.
+- *`tools` (array, optional)*: A list of tools (functions) the model may call.
+- *`toolChoice` (string/object, optional)*: Controls which tool is used (e.g., "auto", "none", or a specific tool).
 - *`logging` (boolean, optional)*: Enables or disables logging to the console. Defaults to true.
 - *`loadingElementSelector` (string, optional)*: A CSS selector for an element to indicate loading status.
 - *`resultElementSelector` (string, optional)*: A CSS selector for an element where the result will be displayed.
+
+### Advanced: Structured Output & Tools
+
+For more complex use cases where you need guaranteed JSON output or want to give the AI specific "tools" (capabilities), please refer to the [Structured Output and Tool Calling guide]({% link _Reference/LocalAI/StructuredOutputAndTools.md %}).
 
 **Returns:**
 - A `Promise` that resolves to a `string` (the generated text).
@@ -326,9 +333,16 @@ This function uses a large language model to process an image and generate a tex
 - *`messages` (optional)*: Predefined messages to send to the model. If not provided, the function generates them based on the `prompt` and `image`.
 - *`temperature` (optional)*: Controls the randomness of the model's output. Defaults to `0.8`.
 - *`maxTokens` (optional)*: The maximum number of tokens (words or characters) in the response. Defaults to `250`.
+- *`responseFormat` (object, optional)*: Used for forced JSON output. Use `{ type: "json_schema", json_schema: { ... } }` with an explicit JSON schema.
+- *`tools` (array, optional)*: A list of tools (functions) the model may call.
+- *`toolChoice` (string/object, optional)*: Controls which tool is used (e.g., "auto").
 - *`logging` (optional)*: If `true`, logs the process to the console. Defaults to `true`.
 - *`loadingElementSelector` (optional)*: A CSS selector for an element to show a loading indicator.
 - *`resultElementSelector` (optional)*: A CSS selector for an element to display the result.
+
+### Advanced: Structured Output & Tools
+
+For more complex use cases where you need guaranteed JSON output or want to give the AI specific "tools" (capabilities), please refer to the [Structured Output and Tool Calling guide]({% link _Reference/LocalAI/StructuredOutputAndTools.md %}).
 
 **Error Handling:**
 

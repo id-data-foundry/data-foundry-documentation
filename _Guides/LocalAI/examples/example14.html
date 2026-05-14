@@ -95,11 +95,27 @@
                         // send request
                         const response = await foundry.textToTextWithUsage({
                             api_token: "YOUR_API_KEY",
-                            model: "hermes-2-pro-llama-3-8b",
+                            model: "qwen/qwen3.5-9b",
                             temperature: 0.1,
                             maxTokens: 200,
-                            // Setting responseFormat to json_object forces the model to output valid JSON
-                            responseFormat: { type: "json_object" },
+                            // Setting responseFormat to json_schema forces the model to output valid JSON according to a schema
+                            responseFormat: { 
+                                type: "json_schema", 
+                                json_schema: {
+                                    name: "lighting_command",
+                                    strict: true,
+                                    schema: {
+                                        type: "object",
+                                        properties: {
+                                            brightness: { type: "number" },
+                                            color: { type: "string" },
+                                            status: { type: "string", enum: ["on", "off"] }
+                                        },
+                                        required: ["brightness", "color", "status"],
+                                        additionalProperties: false
+                                    }
+                                }
+                            },
                             messages: [
                                 { role: "system", content: systemPrompt },
                                 { role: "user", content: prompt },

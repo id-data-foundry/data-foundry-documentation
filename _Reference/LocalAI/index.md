@@ -15,6 +15,7 @@ The Reference section of this documentation contains all relevant information on
 - **[AI Model API]({% link _Reference/LocalAI/AIAPI.md %})**: Details on using the LocalAI APIs within Data Foundry.
 - **[Chatbot API]({% link _Reference/LocalAI/chatbotAPI.md %})**: Programmatic access to custom RAG-enabled chatbots.
 - **[JavaScript Library]({% link _Reference/LocalAI/JSAPI.md %})**: Reference for the `local-ai.js` library.
+- **[Structured Output & Tools]({% link _Reference/LocalAI/StructuredOutputAndTools.md %})**: Detailed guide on JSON schemas and tool calling.
 - **[Text‑to‑Text]({% link _Reference/LocalAI/AIAPI.md %})**: Example and usage of chat completions.
 - **[Text‑to‑Image]({% link _Reference/LocalAI/text-to-image.md %})**: Example and usage for image generation.
 - **[Text‑to‑Speech]({% link _Reference/LocalAI/text-to-speech.md %})**: Example and usage for text to speech.
