@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   * 
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   * 
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 15: Tool Calls</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <!-- Import OOCSI library for web -->
+        <script src="/assets/javascripts/oocsi-web.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 15: Tool Calls (Function Calling)</h1>
+
+            <p>
+                Talk to the OOCSI Assistant. You can ask it to send messages to specific channels. The LLM will trigger the <code>sendOOCSIMessage</code> tool when appropriate.
+            </p>
+
+            <div class="grid">
+                <p>
+                    <label>OOCSI Server:</label>
+                    <input type="text" id="server" value="wss://hello.oocsi.net/ws" />
+                </p>
+                <p>
+                    <label>Your Message:</label>
+                    <input type="text" id="prompt" placeholder="e.g., Send 'Hello' to the 'test' channel" />
+                </p>
+            </div>
+            <p>
+                <button id="submitBtn">Talk to Assistant</button>
+            </p>
+
+            <hr />
+
+            <h3>Assistant Response</h3>
+            <div id="result" style="background: #f4f4f4; padding: 1rem; border-radius: 8px; min-height: 3rem;"></div>
+            
+            <h3>Tool Execution Log</h3>
+            <div id="log" style="font-family: monospace; font-size: 0.9rem;"></div>
+
+            <script type="module">
+                let connectedServer = null;
+
+                // Define the tool schema
+                const tools = [
+                    {
+                        type: "function",
+                        function: {
+                            name: "sendOOCSIMessage",
+                            description: "Send a message to an OOCSI channel",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    channel: {
+                                        type: "string",
+                                        description: "The name of the OOCSI channel"
+                                    },
+                                    data: {
+                                        type: "object",
+                                        description: "The data to send as a JSON object"
+                                    }
+                                },
+                                required: ["channel", "data"]
+                            }
+                        }
+                    }
+                ];
+
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        const btn = document.querySelector("#submitBtn");
+                        const resultDiv = document.querySelector("#result");
+                        const logDiv = document.querySelector("#log");
+
+                        btn.setAttribute("disabled", true);
+                        resultDiv.innerText = "Assistant is thinking...";
+                        logDiv.innerHTML = "";
+
+                        const prompt = document.querySelector("#prompt").value;
+                        const server = document.querySelector("#server").value;
+
+                        // Connect to OOCSI
+                        if (connectedServer !== server) {
+                            OOCSI.connect(server);
+                            connectedServer = server;
+                        }
+
+                        // Send request with tools
+                        const response = await foundry.textToTextWithUsage({
+                            api_token: "YOUR_API_KEY",
+                            model: "qwen/qwen3.5-9b", // Use a model known for tool calling
+                            messages: [
+                                { role: "system", content: "You are a helpful OOCSI assistant. You can send messages to OOCSI channels using the sendOOCSIMessage tool. When the user asks you to send something, use the tool. Confirm the action to the user." },
+                                { role: "user", content: prompt }
+                            ],
+                            tools: tools,
+                            toolChoice: "auto",
+                            logging: true,
+                            loadingElementSelector: "#submitBtn"
+                        });
+
+                        btn.removeAttribute("disabled");
+
+                        if (response) {
+                            resultDiv.innerText = response.text || (response.toolCalls ? "Executing tools..." : "No response.");
+
+                            // Handle tool calls
+                            if (response.toolCalls && response.toolCalls.length > 0) {
+                                for (const toolCall of response.toolCalls) {
+                                    if (toolCall.function.name === "sendOOCSIMessage") {
+                                        try {
+                                            const args = JSON.parse(toolCall.function.arguments);
+                                            logDiv.innerHTML += `<div><b>Calling tool:</b> sendOOCSIMessage</div>`;
+                                            logDiv.innerHTML += `<div><b>Channel:</b> ${args.channel}</div>`;
+                                            logDiv.innerHTML += `<div><b>Data:</b> ${JSON.stringify(args.data)}</div>`;
+                                            
+                                            // Actual OOCSI send
+                                            OOCSI.send(args.channel, args.data);
+                                            
+                                            logDiv.innerHTML += `<div><mark>SUCCESS: Message sent to OOCSI</mark></div><br>`;
+                                        } catch (err) {
+                                            logDiv.innerHTML += `<div style="color:red;">Error parsing tool arguments: ${err.message}</div>`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+            </script>
+        </main>
+    </body>
+</html>
