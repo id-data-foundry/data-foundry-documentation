@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   * 
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   * 
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 14: Structured Output</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <!-- Import OOCSI library for web -->
+        <script src="/assets/javascripts/oocsi-web.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 14: Structured Output & OOCSI</h1>
+
+            <p>
+                Describe an ambiance or lighting scene. The LLM will convert this into a structured JSON command and we will send it to an OOCSI channel directly!
+            </p>
+
+            <div class="grid">
+                <div>
+                    <label>System Prompt (Hidden from user typically):</label>
+                    <textarea id="systemPrompt" rows="4" disabled>You are a smart home lighting assistant. Output ONLY valid JSON with keys "brightness" (0-100), "color" (hex string), and "status" ("on" or "off"). No markdown, no explanations.</textarea>
+                </div>
+                <div>
+                    <label>Your Lighting Request:</label>
+                    <textarea id="prompt" rows="4">Make it feel like a cozy, warm campfire evening.</textarea>
+                </div>
+            </div>
+
+            <div class="grid">
+                <p>
+                    <label>OOCSI Server:</label>
+                    <input type="text" id="server" value="wss://hello.oocsi.net/ws" />
+                </p>
+                <p>
+                    <label>OOCSI Channel:</label>
+                    <input type="text" id="channel" value="my_smart_home_lights_123" />
+                </p>
+            </div>
+            <p>
+                <button id="submitBtn">Generate & Send</button>
+            </p>
+
+            <hr />
+
+            <h3>LLM JSON Result</h3>
+            <pre><code id="result"></code></pre>
+            
+            <p id="oocsiStatus"></p>
+
+            <script type="module">
+                let connectedServer = null;
+
+                document
+                    .querySelector("#submitBtn")
+                    .addEventListener("click", async (e) => {
+                        document.querySelector("#submitBtn").setAttribute("disabled", true);
+                        document.querySelector("#result").innerText = "Generating...";
+                        document.querySelector("#oocsiStatus").innerText = "";
+
+                        const prompt = document.querySelector("#prompt").value;
+                        const systemPrompt = document.querySelector("#systemPrompt").value;
+                        const server = document.querySelector("#server").value;
+                        const channel = document.querySelector("#channel").value;
+
+                        // Connect to OOCSI only once or if the server URL has changed
+                        if (connectedServer !== server) {
+                            OOCSI.connect(server);
+                            connectedServer = server;
+                        }
+
+                        // send request
+                        const response = await foundry.textToTextWithUsage({
+                            api_token: "YOUR_API_KEY",
+                            model: "hermes-2-pro-llama-3-8b",
+                            temperature: 0.1,
+                            maxTokens: 200,
+                            // Setting responseFormat to json_object forces the model to output valid JSON
+                            responseFormat: { type: "json_object" },
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                { role: "user", content: prompt },
+                            ],
+                            logging: true,
+                            loadingElementSelector: "#submitBtn"
+                        });
+
+                        document.querySelector("#submitBtn").removeAttribute("disabled");
+
+                        if (response && response.text) {
+                            try {
+                                // The text is a JSON string
+                                const parsedJson = JSON.parse(response.text);
+                                
+                                // Display nicely formatted JSON
+                                document.querySelector("#result").innerText = JSON.stringify(parsedJson, null, 2);
+                                
+                                // Send over OOCSI
+                                OOCSI.send(channel, parsedJson);
+                                document.querySelector("#oocsiStatus").innerHTML = `<mark>Successfully sent to OOCSI channel: <b>${channel}</b></mark>`;
+
+                            } catch (error) {
+                                document.querySelector("#result").innerText = response.text;
+                                document.querySelector("#oocsiStatus").innerHTML = `<span style="color:red;">Error: Output was not valid JSON. Cannot send to OOCSI.</span>`;
+                            }
+                        }
+                    });
+            </script>
+        </main>
+    </body>
+</html>

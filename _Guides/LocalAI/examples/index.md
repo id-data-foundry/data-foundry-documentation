@@ -49,3 +49,6 @@ This tool allows you to run a system and user prompt through multiple AI models 
 
 ### [Example 13: Token Usage & Energy]({%link _Guides/LocalAI/examples/13.TokenUsage.md %})
 This example demonstrates how to retrieve token usage statistics (prompt, completion, and total tokens) from the AI model. It also shows how to use this data to calculate a rough estimate of the energy consumption for a generation, promoting awareness of the environmental impact of AI.
+
+### [Example 14: Structured Output (JSON)]({%link _Guides/LocalAI/examples/14.StructuredOutput.md %})
+This example demonstrates how to request structured JSON output from the AI model. It uses the `responseFormat` parameter to ensure the output is strictly valid JSON, which is then parsed and used to perform an action, such as sending a message over the OOCSI network to control smart home lighting.
