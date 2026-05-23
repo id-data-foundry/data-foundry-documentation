@@ -42,19 +42,30 @@
     const toggleButton = document.getElementById('theme-toggle');
     const icons = toggleButton.querySelectorAll('.js-toggle-dark-mode');
 
-    toggleButton.addEventListener('click', () => {
-      const currentTheme = icons[0].style.display === 'none' ? 'dark' : 'light';
-
+    const applyTheme = (theme) => {
+      if (theme === 'dark' || theme === 'DFdark') theme = 'DFdark';
+      else theme = 'DFlight';
+      
       if (typeof jtd !== 'undefined' && typeof jtd.setTheme === 'function') {
-        const newTheme = currentTheme === 'light' ? 'DFdark' : 'DFlight';
-        jtd.setTheme(newTheme);
+        jtd.setTheme(theme);
+        localStorage.setItem('jtd-theme', theme);
         icons.forEach(icon => {
-          icon.style.display = (icon.dataset.theme === newTheme) ? 'inline' : 'none';
+          icon.style.display = (icon.dataset.theme === theme) ? 'inline' : 'none';
         });
-      } else {
-        console.warn('jtd.setTheme is not defined');
       }
+    };
+
+    const savedTheme = localStorage.getItem('jtd-theme');
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    }
+
+    toggleButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isCurrentlyLight = icons[0].style.display !== 'none';
+      const newTheme = isCurrentlyLight ? 'DFdark' : 'DFlight';
+      applyTheme(newTheme);
     });
-});
+  });
 </script>
 {% endraw %}
