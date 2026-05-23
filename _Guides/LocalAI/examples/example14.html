@@ -28,8 +28,16 @@
             href="/assets/stylesheets/picoCSS/pico.jade.min.css"
         />
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <script src="/assets/javascripts/marked.min.js"></script>
         <!-- Import OOCSI library for web -->
         <script src="/assets/javascripts/oocsi-web.min.js"></script>
+        <style>
+            /* Markdown styling adjustments */
+            #result > :first-child { margin-top: 0; }
+            #result > :last-child { margin-bottom: 0; }
+            pre { white-space: pre-wrap; font-size: 0.95em; padding: 0.5rem; background-color: rgba(0,0,0,0.05); }
+            code { font-size: 0.95em; }
+        </style>
     </head>
     <body>
         <main class="container">

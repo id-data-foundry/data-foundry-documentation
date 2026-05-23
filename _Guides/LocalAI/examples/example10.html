@@ -28,6 +28,14 @@
             href="/assets/stylesheets/picoCSS/pico.jade.min.css"
         />
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <script src="/assets/javascripts/marked.min.js"></script>
+        <style>
+            /* Markdown styling adjustments */
+            #result > :first-child { margin-top: 0; }
+            #result > :last-child { margin-bottom: 0; }
+            pre { white-space: pre-wrap; font-size: 0.95em; padding: 0.5rem; background-color: rgba(0,0,0,0.05); }
+            code { font-size: 0.95em; }
+        </style>
     </head>
     <body>
         <main class="container">
@@ -102,7 +110,8 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                     selectElement.disabled = true;
 
                     try {
-                        const models = await foundry.models("YOUR_API_KEY");
+                        const rawModels = await foundry.models("YOUR_API_KEY");
+                        const models = (rawModels || []).filter(model => model.type && model.type.includes("📄"));
                         
                         if (models && models.length > 0) {
                             selectElement.innerHTML = '';
@@ -174,11 +183,22 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             // no logging on console needed
                             logging: false,
                         });
+                        
+                        // render markdown
+                        const resultElem = document.querySelector('#result');
+                        const rawText = resultElem.textContent;
+                        resultElem.innerHTML = marked.parse(rawText);
 
                         // enable submit button again
                         document
                             .querySelector("#submitBtn")
                             .removeAttribute("disabled");
+                    });
+            </script>
+        </main>
+    </body>
+</html>
+                   .removeAttribute("disabled");
                     });
             </script>
         </main>

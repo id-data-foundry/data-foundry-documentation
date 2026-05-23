@@ -60,6 +60,8 @@ The `textToText` function is an asynchronous JavaScript function designed to int
 - *`responseFormat` (object, optional)*: Used for forced JSON output. To ensure valid JSON, use `{ type: "json_schema", json_schema: { ... } }` with an explicit JSON schema.
 - *`tools` (array, optional)*: A list of tools (functions) the model may call.
 - *`toolChoice` (string/object, optional)*: Controls which tool is used (e.g., "auto", "none", or a specific tool).
+- *`stream` (boolean, optional)*: If set to `true`, the response will be streamed in chunks as it is generated. Defaults to `false`.
+- *`onChunk` (function, optional)*: A callback function that is triggered whenever a new chunk of text is received when streaming is enabled. Example: `(chunk) => console.log("Received chunk:", chunk)`.
 - *`logging` (boolean, optional)*: Enables or disables logging to the console. Defaults to true.
 - *`loadingElementSelector` (string, optional)*: A CSS selector for an element to indicate loading status.
 - *`resultElementSelector` (string, optional)*: A CSS selector for an element where the result will be displayed.
@@ -81,10 +83,22 @@ For more complex use cases where you need guaranteed JSON output or want to give
 **Example Usage:**
 
 ```javascript
+// Simple text generation
 foundry.textToText({
   api_token: "your_api_key_here",
   prompt: "What is the capital of France?",
   resultElementSelector: "#result-container"
+});
+
+// Streaming text generation
+foundry.textToText({
+  api_token: "your_api_key_here",
+  prompt: "Write a poem about the sea.",
+  stream: true,
+  onChunk: (chunk) => {
+    console.log("Received chunk:", chunk);
+  },
+  resultElementSelector: "#poem-container"
 });
 ```
 
@@ -336,6 +350,8 @@ This function uses a large language model to process an image and generate a tex
 - *`responseFormat` (object, optional)*: Used for forced JSON output. Use `{ type: "json_schema", json_schema: { ... } }` with an explicit JSON schema.
 - *`tools` (array, optional)*: A list of tools (functions) the model may call.
 - *`toolChoice` (string/object, optional)*: Controls which tool is used (e.g., "auto").
+- *`stream` (boolean, optional)*: If set to `true`, the response will be streamed in chunks as it is generated. Defaults to `false`.
+- *`onChunk` (function, optional)*: A callback function that is triggered whenever a new chunk of text is received when streaming is enabled. Example: `(chunk) => console.log("Received chunk:", chunk)`.
 - *`logging` (optional)*: If `true`, logs the process to the console. Defaults to `true`.
 - *`loadingElementSelector` (optional)*: A CSS selector for an element to show a loading indicator.
 - *`resultElementSelector` (optional)*: A CSS selector for an element to display the result.
@@ -355,6 +371,7 @@ For more complex use cases where you need guaranteed JSON output or want to give
 **Example Usage:**
 
 ```javascript
+// Simple image-to-text
 foundry.imageToText({
   api_token: "your_api_key_here",
   server: "{{ site.external_base_urls.datafoundryurl }}",
@@ -365,6 +382,18 @@ foundry.imageToText({
   maxTokens: 200,
   logging: true,
   loadingElementSelector: "#loading-indicator",
+  resultElementSelector: "#result-container"
+});
+
+// Streaming image-to-text
+foundry.imageToText({
+  api_token: "your_api_key_here",
+  prompt: "What is in this image?",
+  image: "https://example.com/image.jpg",
+  stream: true,
+  onChunk: (chunk) => {
+    console.log("Received chunk:", chunk);
+  },
   resultElementSelector: "#result-container"
 });
 ```

@@ -55,3 +55,6 @@ This example demonstrates how to request structured JSON output from the AI mode
 
 ### [Example 15: Tool Calls (Functions)]({%link _Guides/LocalAI/examples/15.ToolCalls.md %})
 This example explores Tool Calling (Function Calling), which allows the LLM to request the execution of specific functions in your code. You'll see how to define a tool schema and handle tool call requests to interact with external systems like OOCSI in a more robust and conversational way.
+
+### [Example 16: Streaming Responses]({%link _Guides/LocalAI/examples/16.Streaming.md %})
+Streaming allows you to receive the AI's response in real-time as it is being generated. This example demonstrates how to use the `stream` parameter and `onChunk` callback to create a more dynamic and responsive user interface, significantly reducing the perceived latency for long generations.
