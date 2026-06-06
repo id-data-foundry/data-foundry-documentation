@@ -15,7 +15,7 @@ A *completion* needs a prompt and the API will return a completion of this promp
 Let's try a first example with LocalAI. We want to generate a tagline for a flower shop.
 
 ````Javascript
-let result = DF.api("localai", {
+let result = DF.api("ai", {
   "api_token": "<API-KEY>"", 
   "task": "chat",
   "messages": "Write a tagline for a flower shop."
@@ -42,7 +42,7 @@ THe moderation API endpoint can be used to identify content that violates common
 The first example should result in a "flagged" moderation result:
 
 ````Javascript
-let result = DF.api("openai-gpt", {
+let result = DF.api("ai", {
   "api_token": "<API-KEY>", 
   "task": "moderation",
   "prompt": "testy banana"
@@ -53,7 +53,7 @@ DF.print(result)
 The second example should result in a "non-flagged" moderation result:
 
 ````Javascript
-let result = DF.api("openai-gpt", {
+let result = DF.api("ai", {
   "api_token": "<API-KEY>", 
   "task": "moderation",
   "prompt": "testy kiwi"
@@ -70,7 +70,7 @@ THe chat completion API endpoint can be used to generate a new reply to an exist
 The following example shows a simple continuation of a chat:
 
 ````Javascript
-let result = DF.api("localai", {
+let result = DF.api("ai", {
   "api_token": "<API-KEY>", 
   "task": "chat",
   "messages": [
@@ -95,10 +95,10 @@ Instead of using the Data Foundry API key, you can also use your own AI server A
 There are more options available than explained above. We generally follow the OpenAI parameter names.
 
 <!-- todo -->
-All DF API requests follow the structure, with `openai` as the only currently available API: 
+All DF API requests follow the structure: 
 
 ````Javascript
-let result = DF.api("openai-gpt", {
+let result = DF.api("ai", {
   "api_token": "<API-KEY>", 
   "task": "completion or moderation or ...",
   "prompt": "...",
