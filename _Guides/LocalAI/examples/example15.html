@@ -139,7 +139,7 @@
                             } else {
                                 resultDiv.innerText = response.toolCalls ? "Executing tools..." : "No response.";
                             }
-                        }
+                        
                             // Handle tool calls
                             if (response.toolCalls && response.toolCalls.length > 0) {
                                 for (const toolCall of response.toolCalls) {
