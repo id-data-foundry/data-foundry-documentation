@@ -80,23 +80,23 @@
                 <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                     <div>
                         <input type="checkbox" name="model" value="phi-2-chat" id="phi-2-chat" checked>
-                        <label for="phi-2-chat">Phi-2</label>
+                        <label for="phi-2-chat" title="phi-2-chat">Phi-2</label>
                     </div>
                     <div>
                         <input type="checkbox" name="model" value="dolphin-2.9.2-phi-3-Medium-abliterated" id="phi-3-medium">
-                        <label for="phi-3-medium">Phi-3 Medium</label>
+                        <label for="phi-3-medium" title="dolphin-2.9.2-phi-3-Medium-abliterated">Phi-3 Medium</label>
                     </div>
                     <div>
                         <input type="checkbox" name="model" value="LocalAI-functioncall-phi-4-v0.3" id="phi-4">
-                        <label for="phi-4">Phi-4</label>
+                        <label for="phi-4" title="LocalAI-functioncall-phi-4-v0.3">Phi-4</label>
                     </div>
                     <div>
                         <input type="checkbox" name="model" value="hermes-2-pro-llama-3-8b" id="hermes-2-pro" checked>
-                        <label for="hermes-2-pro">Hermes 2 Pro Llama 3</label>
+                        <label for="hermes-2-pro" title="hermes-2-pro-llama-3-8b">Hermes 2 Pro Llama 3 8b</label>
                     </div>
                     <div>
                         <input type="checkbox" name="model" value="fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo" id="llama-3-2">
-                        <label for="llama-3-2">Meta Llama 3.2</label>
+                        <label for="llama-3-2" title="fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo">Meta Llama 3.2 8b</label>
                     </div>
                 </div>
             </fieldset>
@@ -154,7 +154,8 @@
 
                                 const label = document.createElement('label');
                                 label.htmlFor = sanitizedId;
-                                label.textContent = model.id;
+                                label.textContent = model.name || model.id;
+                                label.title = model.id;
 
                                 div.appendChild(input);
                                 div.appendChild(label);

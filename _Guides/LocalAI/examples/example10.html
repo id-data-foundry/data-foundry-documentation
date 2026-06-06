@@ -62,19 +62,19 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                         <label>Choose model:</label>
                         <select name="model">
                             <option value="phi-2-chat">
-                                Phi-2
+                                Phi-2 (id: phi-2-chat)
                             </option>
                             <option value="dolphin-2.9.2-phi-3-Medium-abliterated">
-                                Phi-3 Medium
+                                Phi-3 Medium (id: dolphin-2.9.2-phi-3-Medium-abliterated)
                             </option>
                             <option value="LocalAI-functioncall-phi-4-v0.3">
-                                Phi-4
+                                Phi-4 (id: LocalAI-functioncall-phi-4-v0.3)
                             </option>
                             <option value="hermes-2-pro-llama-3-8b">
-                                Hermes 2 Pro Llama 3 8b
+                                Hermes 2 Pro Llama 3 8b (id: hermes-2-pro-llama-3-8b)
                             </option>
                             <option value="fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo">
-                                Meta Llama 3.2 8b
+                                Meta Llama 3.2 8b (id: fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo)
                             </option>
                         </select>
                     </p>
@@ -118,7 +118,7 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             models.forEach(model => {
                                 const option = document.createElement('option');
                                 option.value = model.id;
-                                option.textContent = model.id;
+                                option.textContent = model.name ? `${model.name} (id: ${model.id})` : model.id;
                                 if (model.id === "hermes-2-pro-llama-3-8b") {
                                     option.selected = true;
                                 }
@@ -193,12 +193,6 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                         document
                             .querySelector("#submitBtn")
                             .removeAttribute("disabled");
-                    });
-            </script>
-        </main>
-    </body>
-</html>
-                   .removeAttribute("disabled");
                     });
             </script>
         </main>
