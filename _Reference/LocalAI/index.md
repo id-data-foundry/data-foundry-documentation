@@ -12,6 +12,7 @@ The Reference section of this documentation contains all relevant information on
 
 ## Contents
 
+- **[AI in Scripts]({% link _Reference/LocalAI/AIscripts.md %})**: How to use AI functions in Data Foundry scripting.
 - **[AI Model API]({% link _Reference/LocalAI/AIAPI.md %})**: Details on using the LocalAI APIs within Data Foundry.
 - **[Chatbot API]({% link _Reference/LocalAI/chatbotAPI.md %})**: Programmatic access to custom RAG-enabled chatbots.
 - **[JavaScript Library]({% link _Reference/LocalAI/JSAPI.md %})**: Reference for the `local-ai.js` library.
