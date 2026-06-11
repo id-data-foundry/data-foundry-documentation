@@ -28,7 +28,7 @@
             href="/assets/stylesheets/picoCSS/pico.jade.min.css"
         />
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
-        <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
+        <script src="/assets/javascripts/hark.bundle.js"></script>
     </head>
     <body>
         <main class="container">
@@ -73,14 +73,12 @@
                             api_token: "YOUR_API_KEY",
                             // process a 'file' or 'record'
                             type: "record",
-                            // the time slicing that is sent to the server for processing
-                            sliceDuration: 6000,
                             // fill in results in the HTML element with the id "result"
                             resultElementSelector: "#result",
                             // loading indicator element
                             loadingElementSelector: "#result",
                             // no logging on console needed
-                            logging: true,
+                            logging: false,
                             stopRec: !recording,
                         });
                     });

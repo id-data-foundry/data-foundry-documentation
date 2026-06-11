@@ -28,6 +28,14 @@
             href="/assets/stylesheets/picoCSS/pico.jade.min.css"
         />
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <script src="/assets/javascripts/marked.min.js"></script>
+        <style>
+            /* Markdown styling adjustments */
+            #result > :first-child { margin-top: 0; }
+            #result > :last-child { margin-bottom: 0; }
+            pre { white-space: pre-wrap; font-size: 0.95em; padding: 0.5rem; background-color: rgba(0,0,0,0.05); }
+            code { font-size: 0.95em; }
+        </style>
     </head>
     <body>
         <main class="container">
@@ -54,19 +62,19 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                         <label>Choose model:</label>
                         <select name="model">
                             <option value="phi-2-chat">
-                                Phi-2
+                                Phi-2 (id: phi-2-chat)
                             </option>
                             <option value="dolphin-2.9.2-phi-3-Medium-abliterated">
-                                Phi-3 Medium
+                                Phi-3 Medium (id: dolphin-2.9.2-phi-3-Medium-abliterated)
                             </option>
                             <option value="LocalAI-functioncall-phi-4-v0.3">
-                                Phi-4
+                                Phi-4 (id: LocalAI-functioncall-phi-4-v0.3)
                             </option>
                             <option value="hermes-2-pro-llama-3-8b">
-                                Hermes 2 Pro Llama 3 8b
+                                Hermes 2 Pro Llama 3 8b (id: hermes-2-pro-llama-3-8b)
                             </option>
                             <option value="fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo">
-                                Meta Llama 3.2 8b
+                                Meta Llama 3.2 8b (id: fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo)
                             </option>
                         </select>
                     </p>
@@ -102,14 +110,15 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                     selectElement.disabled = true;
 
                     try {
-                        const models = await foundry.models("YOUR_API_KEY");
+                        const rawModels = await foundry.models("YOUR_API_KEY");
+                        const models = (rawModels || []).filter(model => model.type && model.type.includes("📄"));
                         
                         if (models && models.length > 0) {
                             selectElement.innerHTML = '';
                             models.forEach(model => {
                                 const option = document.createElement('option');
                                 option.value = model.id;
-                                option.textContent = model.id;
+                                option.textContent = model.name ? `${model.name} (id: ${model.id})` : model.id;
                                 if (model.id === "hermes-2-pro-llama-3-8b") {
                                     option.selected = true;
                                 }
@@ -174,6 +183,11 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             // no logging on console needed
                             logging: false,
                         });
+                        
+                        // render markdown
+                        const resultElem = document.querySelector('#result');
+                        const rawText = resultElem.textContent;
+                        resultElem.innerHTML = marked.parse(rawText);
 
                         // enable submit button again
                         document

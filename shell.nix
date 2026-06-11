@@ -4,7 +4,7 @@ pkgs.mkShell {
   name = "jekyll-ruby-python-env";
 
   buildInputs = [
-    pkgs.ruby_3_3
+    pkgs.ruby
     pkgs.bundler
     pkgs.jekyll
     pkgs.python3

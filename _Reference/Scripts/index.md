@@ -238,3 +238,20 @@ DF.telegramParticipant('u12345678abcdef', 'Thanks for the data!');
 // Reply to an incoming message
 DF.telegramReply('Message received, thank you.');
 ```
+
+## AI APIs
+
+### DF.api()
+Calls internal or external AI models for completions, moderation, and audio processing.
+
+```js
+// Ask the AI to complete a chat
+let result = DF.api("ai", {
+  "task": "chat",
+  "messages": [{ "role": "user", "content": "Write a tagline for a flower shop." }]
+});
+let parsed = JSON.parse(result);
+DF.print(parsed.content);
+```
+
+See the full **[AI in Scripts guide]({% link _Reference/LocalAI/AIscripts.md %})** for detailed examples and configuration options.

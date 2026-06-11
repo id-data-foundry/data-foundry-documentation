@@ -25,7 +25,7 @@ png, jpg, gif, mp3, wav, m4a, ogg
 - Data Foundry Instance
 
 ### Python:
-To get started with uploading images to the Media Dataset through Python, you can use the built-in `requests` library. This makes it easy to get started quickly without any additional dependencies. 
+To get started with uploading media files (images, audio, video) to the Media Dataset through Python, you can use the built-in `requests` library. This makes it easy to get started quickly without any additional dependencies. 
 
 Before you get started, make sure you have created a dataset and obtained the `Dataset ID` and `Dataset Token`.
 
@@ -34,7 +34,7 @@ Before you get started, make sure you have created a dataset and obtained the `D
 import requests
 
 # Your actual file path
-file_path = "path/to/your/image.jpg"
+file_path = "path/to/your/file.jpg" # or .mp3, .wav, .m4a
 
 # Open file in binary mode
 with open(file_path, 'rb') as f:
@@ -77,7 +77,7 @@ fetch('https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/media/<
 });
 ```
 
-## Download images from the Media Dataset
+## Download media files from the Media Dataset
 
 ### Requirements
 - Dataset ID
@@ -87,7 +87,7 @@ fetch('https://{{ site.external_base_urls.datafoundry }}/api/v1/datasets/media/<
 - Data Foundry Instance
 
 ### Python:
-To download an image from the Media Dataset through Python, you can use the built-in `requests` library.
+To download a file from the Media Dataset through Python, you can use the built-in `requests` library.
 
 ```python
 # Import requests library
@@ -103,8 +103,8 @@ response = requests.get(
 )
 
 if response.ok:
-    # Save image to file
-    with open('downloaded_image.jpg', 'wb') as f:
+    # Save file to disk
+    with open('downloaded_file.jpg', 'wb') as f: # or .mp3, etc.
         f.write(response.content)
     print('Download successful')
 else:

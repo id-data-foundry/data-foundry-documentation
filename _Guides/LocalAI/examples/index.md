@@ -49,3 +49,12 @@ This tool allows you to run a system and user prompt through multiple AI models 
 
 ### [Example 13: Token Usage & Energy]({%link _Guides/LocalAI/examples/13.TokenUsage.md %})
 This example demonstrates how to retrieve token usage statistics (prompt, completion, and total tokens) from the AI model. It also shows how to use this data to calculate a rough estimate of the energy consumption for a generation, promoting awareness of the environmental impact of AI.
+
+### [Example 14: Structured Output (JSON)]({%link _Guides/LocalAI/examples/14.StructuredOutput.md %})
+This example demonstrates how to request structured JSON output from the AI model. It uses the `responseFormat` parameter to ensure the output is strictly valid JSON, which is then parsed and used to perform an action, such as sending a message over the OOCSI network to control smart home lighting.
+
+### [Example 15: Tool Calls (Functions)]({%link _Guides/LocalAI/examples/15.ToolCalls.md %})
+This example explores Tool Calling (Function Calling), which allows the LLM to request the execution of specific functions in your code. You'll see how to define a tool schema and handle tool call requests to interact with external systems like OOCSI in a more robust and conversational way.
+
+### [Example 16: Streaming Responses]({%link _Guides/LocalAI/examples/16.Streaming.md %})
+Streaming allows you to receive the AI's response in real-time as it is being generated. This example demonstrates how to use the `stream` parameter and `onChunk` callback to create a more dynamic and responsive user interface, significantly reducing the perceived latency for long generations.

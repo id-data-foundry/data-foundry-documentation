@@ -13,7 +13,7 @@ Scripts are triggered and receive input data. The overview figure shows that dif
 Script inputs
 ### Scripts and Events
 
-Scripts react on events--either from OOCSI channels or from Telegram. For OOCSI, that means, a script listens to events on a particular channel. You can set this in the scripting view. The data of the triggering event is available from data, something like this:
+Scripts react to events—either from OOCSI channels, from Telegram messages, or from a recurring Timer. For OOCSI, that means a script listens to events on a particular channel. You can set this in the scripting view. The data of the triggering event is available from the `data` object, something like this:
 
 ```js
 // fresh event data
@@ -91,3 +91,17 @@ After checking, you can access the participant_id and researcher_id properties f
 Note that to enable Telegram registration for participants, you need to have a Diary dataset in your project, or a Media dataset with openParticipation. Only then, your participants will get the Telegram PIN number on their participant registration pages.
 
 When a participant uploads media, e.g., a photo, video or audio message to the Telegram bot, these media files will be saved in a Media dataset (if available in the project). Also, if there is a script connected to Telegram, this script will receive a short message about this upload: PHOTO_UPLOAD, VIDEO_UPLOAD or AUDIO_UPLOAD. You can use these messages to track participant submissions in a multi-state submissions process. The file size limit for media files is 30MB.
+
+### Script input from Timer
+
+A script can be configured to run automatically on a schedule using a Timer. You can select presets (like "Every minute", "Hourly", "Daily") or define a custom Cron expression. When triggered by a timer, the `data` object will contain a timer event:
+
+```js
+// timer event data
+data = {
+	event: 'timer',
+	timestamp: 1621234567890
+}
+```
+
+You can use the timestamp to perform time-based checks or periodic operations in your script.

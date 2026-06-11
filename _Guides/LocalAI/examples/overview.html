@@ -17,10 +17,12 @@
         <!-- Libraries used in examples -->
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
         <script src="/assets/javascripts/htmx.min.js"></script>
-        <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
         <!-- Required for Example 5 -->
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="/assets/javascripts/hark.bundle.js"></script>
         <!-- Required for Example 12 -->
+        <script src="/assets/javascripts/marked.min.js"></script>
+        <!-- Required for Example 14 -->
+        <script src="/assets/javascripts/oocsi-web.min.js"></script>
         <style>
             /* Custom styles for the navbar */
             nav {
@@ -35,7 +37,14 @@
                 background: #70fcba;
                 color: black;
                 padding: 1rem;
+                text-wrap: auto;
             }
+
+            /* Markdown styling adjustments */
+            #result > :first-child { margin-top: 0; }
+            #result > :last-child { margin-bottom: 0; }
+            pre { white-space: pre-wrap; font-size: 0.95em; padding: 0.5rem; background-color: rgba(0,0,0,0.05); }
+            code { font-size: 0.95em; }
         </style>
     </head>
     <body>
@@ -89,6 +98,15 @@
                             <option value="example13.html">
                                 Example 13: Token Consumption/Energy
                             </option>
+                            <option value="example14.html">
+                                Example 14: Structured Output (JSON)
+                            </option>
+                            <option value="example15.html">
+                                Example 15: Tool Calls (Functions)
+                            </option>
+                            <option value="example16.html">
+                                Example 16: Streaming responses
+                            </option>
                         </select>
                     </li>
                     <li>
@@ -111,36 +129,30 @@
                 <!-- Content will be loaded here -->
                 <p>Please select an example from the dropdown menu.</p>
             </div>
-
-            <!-- Hidden trigger for HTMX -->
-            <button
-                id="htmx-trigger"
-                hidden
-                hx-get=""
-                hx-target="#example-container"
-                hx-select="main"
-                hx-swap="innerHTML"
-            ></button>
         </main>
 
         <script type="module">
             document.addEventListener("DOMContentLoaded", () => {
                 const selector = document.getElementById("exampleSelector");
-                const trigger = document.getElementById("htmx-trigger");
                 const downloadLink = document.getElementById("downloadSource");
+                let currentExample = "";
 
                 function loadExample(filename) {
-                    if (!filename) return;
+                    if (!filename || filename === currentExample) return;
+
+                    currentExample = filename;
 
                     // Sync selector if loaded from hash
                     if (selector.value !== filename) {
                         selector.value = filename;
                     }
 
-                    // Update HTMX trigger and click it
-                    trigger.setAttribute("hx-get", filename);
-                    htmx.process(trigger);
-                    trigger.click();
+                    // Load example content using HTMX AJAX API
+                    htmx.ajax("GET", filename, {
+                        target: "#example-container",
+                        select: "main",
+                        swap: "innerHTML",
+                    });
 
                     // Update download link
                     if (downloadLink) {
