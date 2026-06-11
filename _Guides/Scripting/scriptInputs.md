@@ -13,7 +13,7 @@ Scripts are triggered and receive input data. The overview figure shows that dif
 Script inputs
 ### Scripts and Events
 
-Scripts react to events—either from OOCSI channels, from Telegram messages, or from a recurring Timer. For OOCSI, that means a script listens to events on a particular channel. You can set this in the scripting view. The data of the triggering event is available from the `data` object, something like this:
+Scripts react to events—either from OOCSI channels, from Telegram messages, from a recurring Timer, or from a Webhook. For OOCSI, that means a script listens to events on a particular channel. You can set this in the scripting view. The data of the triggering event is available from the `data` object, something like this:
 
 ```js
 // fresh event data
@@ -105,3 +105,30 @@ data = {
 ```
 
 You can use the timestamp to perform time-based checks or periodic operations in your script.
+
+### Script input from Webhook
+
+Scripts can be triggered by external HTTP POST requests (Webhooks). When you select "Webhook" as the trigger type on the script page, a unique URL will be displayed. Any JSON data sent in the body of a POST request to this URL will be available in the script as the `data` object.
+
+Webhooks can also return data back to the caller. Use the `DF.setResponse()` function to provide a JSON object that will be sent back in the HTTP response.
+
+```js
+// Webhook example: process input and return response
+if (data.key === 'request') {
+	// perform some logic
+	DF.print("Processing webhook request...");
+	
+	// return JSON response to the caller
+	DF.setResponse({
+		status: 'success',
+		message: 'Data received',
+		result: 42
+	});
+}
+```
+
+You can test your webhook using `curl`:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"key": "request"}' {{ site.external_base_urls.datafoundryurl }}/api/v2/scripts/[ID]/webhook/[TOKEN]
+```

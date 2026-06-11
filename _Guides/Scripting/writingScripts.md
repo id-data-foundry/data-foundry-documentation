@@ -13,7 +13,7 @@ Writing scripts might be quite intimidating at first as it adds yet another abst
 To create your first script, you'll first need to have a Data Foundry project to work in. After having opened or created a Data Foundry project, it will be hard to miss the create new script button on the main page, which is located right under the create new dataset button. Click on it to create your first script! This will take you to the script editor, where you can start writing your first script. 
 
 ## Step 2: Interacting with incoming data
-Because Data Foundry Scripts are triggered by an OOCSI message, a Telegram message, or a Timer event, every script execution receives a `data` object. This object includes access to the incoming data. For example, if you want to access the `temperature` property sent with the incoming data, you can use `data.temperature`. This allows you to easily interact with the incoming data. 
+Because Data Foundry Scripts are triggered by an OOCSI message, a Telegram message, a Timer event, or a Webhook POST request, every script execution receives a `data` object. This object includes access to the incoming data. For example, if you want to access the `temperature` property sent with the incoming data, you can use `data.temperature`. This allows you to easily interact with the incoming data. 
 
 you can preview this data through the testing tab, which is located to the right of the script editor below the information pane. Here you can test your script by emulating the incoming data. You can configure this yourself by changing up the data in the testing pane. To send the data, all you have to do is press the green test button.
 

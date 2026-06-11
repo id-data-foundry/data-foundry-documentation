@@ -11,7 +11,7 @@ Data Foundry provides an always-on scripting environment that allows for small p
 
 ## What Are Scripts?
 
-Scripts are written in JavaScript and run directly on the Data Foundry server. Every script can listen to events on OOCSI channels, receive messages from Telegram, or run automatically on a recurring timer (Cron), and process that data alongside information from its project.
+Scripts are written in JavaScript and run directly on the Data Foundry server. Every script can listen to events on OOCSI channels, receive messages from Telegram, receive HTTP POST webhooks, or run automatically on a recurring timer (Cron), and process that data alongside information from its project.
 
 Scripts have access to several project resources:
 - **Participants and Devices**: Manage project members and connected hardware.
