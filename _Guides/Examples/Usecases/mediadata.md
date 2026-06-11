@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Media Dataset
-parent: Datasets
+parent: Usecases
 nav_order: 5
 has_children: true
 ---

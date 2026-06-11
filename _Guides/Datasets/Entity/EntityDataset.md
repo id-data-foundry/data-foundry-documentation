@@ -7,17 +7,10 @@ has_children: true
 ---
 
 # Entity Dataset
-The Entity Dataset allows you to store and retrieve structured data items associated with a resource identifier. For more information on the Entity dataset check out the [Entity Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/entitydataset.md%}).
+The Entity Dataset allows you to store and retrieve structured data items associated with a resource identifier. For more information on how the Entity dataset works, check out the [Entity Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/entitydataset.md%}).
+
 {: .info}
 Before getting started with this guide, make sure you have followed [Tutorial 1]({% link _Tutorials/GettingStarted/MyFirstDataLogger.md%}), or are familiar with the basics of Data Foundry. You can also familiarize yourself by following the guide for [your specific client]({%link _Guides/Clients/index.md %}).
-
-## Import libraries
-
-You might need to install a library to make the Python code work. We need `requests` for retrieving the data and the easiest is to enter the following on the command line (where you also run Python):
-
-```bash
-pip install requests
-```
 
 ## Requirements
 - Dataset ID

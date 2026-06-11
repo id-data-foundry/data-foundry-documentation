@@ -5,14 +5,13 @@ parent: Datasets
 nav_order: 4
 has_children: true
 ---
-
-https://github.com/edenchiang/PlayWithDataFoundry/tree/master/examples/Questionnaire_Form
-
-### Description
+# Forms Dataset
+The Forms Dataset allows you to create simple forms, through our simple markdown-like language. This allows you to create forms in which you can ask questions to users or participants.
+## Description
 
 In this guide, we will show you how to use the Data Foundry Form dataset to create a questionnaire to collect data. Which will then be relayed to an IoT device over OOCSI.
 
-### Setting the Form dataset
+## Setting the Form dataset
 * Form dataset setting for questionnaire:
   1. Create a Form dataset in the target project
   2. Update the questionnaire in [Markdown language](https://www.markdownguide.org/cheat-sheet/)
@@ -20,7 +19,67 @@ In this guide, we will show you how to use the Data Foundry Form dataset to crea
   
   ![]({% link _Guides/Datasets/Forms/images/Form_dataset_setting.png %})
 
+### Form options
+#### Single choice
+If you want your form participants to pick an option from a list of answers, use the single choice element by following the format below.
+```markdown
+Question
+1. Option 1
+2. Option 2
+3. Option 3
+4. etc.
+```
 
+#### Multi Choice
+If you want you participants to be able to pick multiple options, use the multi choice element.
+```md
+Question
+- Option 1
+- Option 2
+- Option 3
+- etc.
+```
+
+#### Numerical scale
+For data that can be measured on a scale, you can use the numerical scale, you can customize the steps on the scale and what the labels on the end are.
+```md
+Question
+>  {numerical: {start:0, end:100, startLabel: "low rating", endLabel: "high rating"}}
+```
+
+#### Numerical input
+If you want your participants to answer with a numerical value, use the numerical input. This will make sure that the answer is always a number.
+```md
+Question
+>  {numerical: {}}
+```
+
+#### Text input
+If you just want your users to type in the answer you can use a simple text input.
+```md
+Question
+> placeholder text
+```
+
+**for multiple lines**
+this one does not support placeholder text
+```md
+Question
+> {rows: 5}
+```
+
+#### Grid selection (likert)
+for a wide array of questions and answer options, like a likert scale, use the grid notation. To make this easier you can use an online markdown grid generator.
+```md
+|                | Option 1 | Option 2 | Option 3 |
+| -------------- | ----------- | --------- | ------ | 
+| Question 1 |  |  |  |
+| Question 2  |  |  |  |
+| Call friends   |  |  |  |
+| Read a book    |  |  |  |
+```
+
+## Forwarding answers to OOCSI
 * For forwarding data to OOCSI channel: Data Foundry will forward all the data come into this dataset to the OOCSI channel
   1. Find the "OOCSI STREAM" with downward arrow in CONFIGURATION area
   2. Enter the name for the OOCSI channel

@@ -7,11 +7,16 @@ has_children: true
 ---
 
 # Media Dataset
-The Media Dataset allows you to upload and download images. For more information on the Media dataset check out the [Media Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/mediadataset.md%}).
+The Media Dataset allows you to upload and download images and audio files. For more information on how the Media dataset works, check out the [Media Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/mediadataset.md%}).
 {: .info}
 Before getting started with this guide, make sure you have followed [Tutorial 1]({% link _Tutorials/GettingStarted/MyFirstDataLogger.md%}), or are familiar with the basics of Data Foundry. You can also familiarize yourself by following the guide for [your specific client]({%link _Guides/Clients/index.md %}).
 
-## Upload images to the Media Dataset
+
+{: .warning}
+The media dataset only supports the following file formats: 
+png, jpg, gif, mp3, wav, m4a, ogg
+
+## Upload files to the Media Dataset
 
 ### Requirements
 - Dataset ID
