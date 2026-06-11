@@ -56,6 +56,21 @@ df {
 }
 ```
 
+## AI Processing
+
+Data Foundry supports AI-powered features that can be connected to either a local model instance (e.g., LocalAI) or an OpenAI-compatible API.
+
+```hocon
+df {
+    processing.ai {
+        # Base URL for the AI API (local or remote)
+        baseurl = "http://localhost:9191/v1"
+        # API key if required by the provider
+        key = ""
+    }
+}
+```
+
 ## OOCSI Server
 
 Data Foundry relies on OOCSI for real-time data streaming. You should point this to your OOCSI server instance.
