@@ -65,3 +65,5 @@ plt.show()
 ```
 
 This allows for powerful, reproducible data analysis and documentation that stays with your project.
+
+{% include df-link.html text="Take me to starboard" path="/tools/starboard" %}

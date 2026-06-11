@@ -14,21 +14,22 @@ So you've finally created your first Data Foundry project, and now you dont know
 
 ### Manage devices in your Data Foundry project
 This guide will show you how to add a new data collection device to your Data Foundry project.
-[Take me to the Example]({% link _Guides/ProjectManagement/AddDevice.md %}){: .btn}
 
+[Open Guide]({% link _Guides/ProjectManagement/AddDevice.md %}){: .btn}
 
 ### Manage collaborators in your Data Foundry project
 This guide will show you how to add and remove collaborators to your Data Foundry project.
-[Open Guide]({% link _Guides/ProjectManagement/AddParticipant.md %}){: .btn}
 
+[Open Guide]({% link _Guides/ProjectManagement/AddParticipant.md %}){: .btn}
 
 ## Resource and Device Management
 
 ### Add and manage participants in your Data Foundry project
 This guide will show you how to add and manage participants in your Data Foundry project.
-[Open Guide]({% link _Guides/ProjectManagement/AddDevice.md %}){: .btn}
 
+[Open Guide]({% link _Guides/ProjectManagement/AddDevice.md %}){: .btn}
 
 ### Create clusters of Participants, Devices and Wearables
 In this guide we will show you how you can cluster devices and wearables together with participants, making it easier to gain a data overview.
+
 [Open Guide]({% link _Guides/ProjectManagement/Clusters.md %}){: .btn}

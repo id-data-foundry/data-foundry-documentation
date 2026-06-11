@@ -14,7 +14,7 @@ The Activity Logger is a tool within DataFoundry that allows users to log variou
 ## Setup
 1.  **Navigate to the Setup Page:**
     *   Log in to DataFoundry.
-    *   Go to `/tools/actilogger` in your browser.
+    *   Go to `{{ site.external_base_urls.datafoundryurl }}/tools/actilogger` in your browser.
 2.  **Select a Project and Dataset:**
     *   On the setup page, use the dropdown menus to select an existing project and a dataset within that project.
     *   Ensure the selected dataset is active and has an API token configured.
@@ -27,7 +27,7 @@ The Activity Logger is a tool within DataFoundry that allows users to log variou
 ## Using the Activity Logger
 1.  **Access the Logger Interface:**
     *   After selecting a dataset, a "Start Activity Logger" button and a QR code will appear. Click the button or scan the QR code to open the logger interface.
-    *   Alternatively, you can navigate directly to the logger interface using the URL format: `/tools/actilogger/logger/<projectId>/<datasetId>/<datasetToken>/<participantId>`. Replace the placeholders with your actual project ID, dataset ID, dataset API token, and a participant ID (e.g., "NO_PARTICIPANT" if you are using an "open participation" dataset and haven't selected a specific participant).
+    *   Alternatively, you can navigate directly to the logger interface using the URL format: `{{ site.external_base_urls.datafoundryurl }}/tools/actilogger/logger/<projectId>/<datasetId>/<datasetToken>/<participantId>`. Replace the placeholders with your actual project ID, dataset ID, dataset API token, and a participant ID (e.g., "NO_PARTICIPANT" if you are using an "open participation" dataset and haven't selected a specific participant).
 2.  **Logging Direct Events:**
     *   On the logger interface, simply click the button corresponding to a "direct event activity". A brief visual cue will confirm that the event has been logged.
 3.  **Logging State Activities:**

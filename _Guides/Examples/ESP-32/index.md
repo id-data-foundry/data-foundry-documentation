@@ -13,14 +13,14 @@ Data Foundry was made with connectivity and building smart prototypes in mind he
 ## Micropython
 After years of using the Arduino IDE, we decided to also start supporting micropython, If you are not familiar with micropython, we can help you get started and prepare your board.
 
-{% link _Guides/Examples/ESP-32/ESP32micropython.md %}{: .btn}
+[Take me to the micropython example]({% link _Guides/Examples/ESP-32/ESP32micropython.md %}){: .btn}
 
 ## Camera Upload
 In this example we will show you how you can upload pictures taken with an esp32 camera module and sent these to a media dataset
 
-{% link _Guides/Examples/ESP-32/ESP32CameraUpload.md %}{: .btn}
+[Take me to the camera example]({% link _Guides/Examples/ESP-32/ESP32CameraUpload.md %}){: .btn}
 
 ## Asynchronous Communication
 In this example we will show you how you can facilitate communication between multiple prototypes that might not be online at the same time.
 
-{% link _Guides/Examples/ESP-32/Asynchronous.md %}{: .btn}
+[Take me to the asynchronous example]({% link _Guides/Examples/ESP-32/Asynchronous.md %}){: .btn}

@@ -24,3 +24,5 @@ optional: change the transcription language and quality in the dropdown menu.
 ## Supported Languages
 
 The tool supports multiple languages including English and Dutch.
+
+{% include df-link.html text="Take me to the transcription tools" path="/tools/mediaprocess" %}

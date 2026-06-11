@@ -20,6 +20,8 @@ The Web Flasher allows you to install MicroPython firmware directly from your br
 4.  Select the serial port of your device.
 5.  Choose the firmware version and click **Flash**.
 
+{% include df-link.html text="Take me to ESP tools" path="/tools/esp-web-tools" %}
+
 ## File Manager
 
 Once MicroPython is installed, you can use the File Manager to upload your python scripts (`main.py`, `boot.py`) to the device.

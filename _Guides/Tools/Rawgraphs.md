@@ -24,3 +24,5 @@ RawGraphs works by mapping dimensions of your data (columns) to visual variables
 2.  **Map Dimensions:** Drag columns like `timestamp`, `device_id`, or sensor values (e.g., `temperature`) into the chart slots (X-axis, Y-axis, Color, Size).
 3.  **Customize:** Tweak colors and labels.
 4.  **Export:** Download your visualization as an SVG or PNG for use in your reports or papers.
+
+{% include df-link.html text="Take me to rawgraphs" path="/tools/rawgraphs" %}
