@@ -28,12 +28,24 @@ Open the new IoT dataset and scroll down to the configuration examples. Click on
 ```python
 # import requests library
 import requests
+
 # API endpoint
-URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<dataset_id>/<dataset_token>"
-# use dict for parameters to be sent to the API
-DATACONTENT = {'source_id':'DEVICE_ID', 'activity': '<ACTIVITY>', '<data_name>': '<DATA>', '<data_name_2>': '<DATA_2>'}
-# post request
-r = requests.post(url = URL, params = DATACONTENT)
+URL = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<dataset_id>"
+
+# headers with authentication token and source device ID
+headers = {
+    "api_token": "<dataset_token>",
+    "source_id": "DEVICE_ID"
+}
+
+# the data to send to Data Foundry
+data = {
+    "<data_name>": "<DATA>",
+    "<data_name_2>": "<DATA_2>"
+}
+
+# post request with optional activity query parameter
+r = requests.post(url=URL, headers=headers, json=data, params={"activity": "<ACTIVITY>"})
 ```
 
 ---

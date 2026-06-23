@@ -45,27 +45,23 @@ Set up an IoT dataset to store the data into and also configure the HTTP POST op
         "somefloat" : 3.045,
         "somestring" : "blah"
       }
-    // Json object with data to send to Data Foundry
-    var jsonBody = {
-      activity: "ACTIVITY",
-      source_id: "dc0046f6309644c56",
-      data: JSON.stringify(data)
-    }
     // make Json string object
-    var dataToSend = JSON.stringify(jsonBody);
+    var dataToSend = JSON.stringify(data);
 
     // send request with XMLHttpRequest
     // update request content according to the target dataset in Data Foundry
     ajaxreq = new XMLHttpRequest();
-    // set specific URL for sending
-    ajaxreq.open("POST","{{ site.external_base_urls.datafoundryurl }}/datasets/ts/record/929/Q2R4eXlGVHgvdkExTFlYcUJrL01XeklLVEdIKy9BNlZxVTZTc2Z2dWFNTT0=");
+    // set specific URL for sending with activity query parameter
+    ajaxreq.open("POST","{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/929?activity=ACTIVITY");
     ajaxreq.setRequestHeader("Content-Type" , "application/json");
+    ajaxreq.setRequestHeader("api_token", "Q2R4eXlGVHgvdkExTFlYcUJrL01XeklLVEdIKy9BNlZxVTZTc2Z2dWFNTT0=");
+    ajaxreq.setRequestHeader("source_id", "dc0046f6309644c56");
     ajaxreq.setRequestHeader("mode","cors");
     ajaxreq.setRequestHeader("cache","no-cache");
     ajaxreq.setRequestHeader("redirect","follow");
     ajaxreq.setRequestHeader("referrerPolicy","no-referrer");
     ajaxreq.onreadystatechange = readystatechange;
-    // the Json data object has to be added to the last, otherwise it won't work properly
+    // send the Json data object
     ajaxreq.send(dataToSend);
   }
 ```

@@ -29,21 +29,18 @@ Open the new IoT dataset and scroll down to the configuration examples. Click on
 
 ```javascript
 var data = { ... your data goes here ... }
-var jsonBody = {
-	activity: 'ACTIVITY',
-	source_id: 'DEVICE_ID',
-	data: JSON.stringify(data)
-}
-fetch('{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/13000/TOKEN', {
+fetch('{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/13000?activity=ACTIVITY', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
     headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'api_token': 'TOKEN',
+            'source_id': 'DEVICE_ID'
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-    body: JSON.stringify(jsonBody)
+    body: JSON.stringify(data)
 });
 ```
 

@@ -21,57 +21,57 @@ Before getting started with this guide, make sure you have followed [Tutorial 1]
 > - **Data Foundry Instance**
 
 ### Python:
-To get started with uploading data to the IoT Dataset through Python, you can use the built-in `requests` and `json` libraries. This makes it to get started quickly without any additional dependencies. 
+To get started with uploading data to the IoT Dataset through Python, you can use the built-in `requests` library. This makes it to get started quickly without any additional dependencies. 
 
 Before you get started, make sure you have created a dataset and obtained the `Dataset ID` and `Dataset Token`. Additionally you need to create a device and copy the `DeviceID` for the `SourceID`.
 
 ```python
-# Import requests and json libraries
+# Import requests library
 import requests
-import json
 
 # Your actual data
 data = {
-    "Temperature":45,
-    "RoomName":"living room"
+    "Temperature": 45,
+    "RoomName": "living room"
     # ... your data goes here ...
 }
 
-# Metadata, what device is uploading and when
-jsondata = {
-    "source_id": "DEVICE_ID",
-    "activity": "ACTIVITY",
-    "data": json.dumps(data)
+# Request headers with authentication token and device ID
+headers = {
+    "api_token": "<DATASET-TOKEN>",
+    "source_id": "DEVICE_ID"
 }
 
-# Post request 
-response = requests.post("{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET-ID>/<DATASET-TOKEN>", json=jsondata)
+# Post request (with optional activity parameter)
+response = requests.post(
+    "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET-ID>",
+    headers=headers,
+    json=data,
+    params={"activity": "ACTIVITY"}
+)
 print(response)
 ```
 
 ### Javascript:
-The JavaScript example below shows how to upload data to the IoT Dataset using the `fetch` API. This is all built-in so you don't need any additional libraries. we also have a library 
+The JavaScript example below shows how to upload data to the IoT Dataset using the `fetch` API. This is all built-in so you don't need any additional libraries. 
 
 Before you get started, make sure you have created a dataset and obtained the `Dataset ID` and `Dataset Token`. Additionally you need to create a device and copy the `DeviceID` for the `SourceID`.
 
 ```js
 var data = { ... your data goes here ... }
-var jsonBody = {
-    activity: 'ACTIVITY',
-    source_id: 'DEVICE_ID',
-    data: JSON.stringify(data)
-}
 
-fetch('{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET-ID>/<DATASET-TOKEN>', {
+fetch('{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET-ID>?activity=ACTIVITY', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
     headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'api_token': '<DATASET-TOKEN>',
+            'source_id': 'DEVICE_ID'
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
-    body: JSON.stringify(jsonBody)
+    body: JSON.stringify(data)
 });
 ```
 
@@ -101,7 +101,7 @@ iot.data("temperature", 32).data("door", "closed").log();
 ### Command Line:
 
 ```bash
-curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "source_id=<DEVICE_ID>&activity=ACTIVITY&data=DATA" {{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET_ID>/<DATASET-TOKEN>
+curl -X POST -H "Content-Type: application/json" -H "api_token: <DATASET-TOKEN>" -H "source_id: <DEVICE_ID>" -d '{"Temperature":45,"RoomName":"living room"}' "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET_ID>?activity=ACTIVITY"
 ```
 
 ### Upload data in bulk to the IoT Dataset
@@ -110,15 +110,14 @@ curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "source_id=
 import csv
 import requests
 
-# Define the filename
+# Define the filename and URL
 csvfilename = "./mycsvfile.csv"
-url = "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET_ID>/<DATASET-TOKEN>
-```datasets/ts/logFile/20435"
+url = "{{ site.external_base_urls.datafoundryurl }}/datasets/ts/logFile/<DATASET_ID>"
 
 headers = {
-    'Content-Type':'text/plain',
-    "device_id": "DEVICE_ID",
-    "api_token": "DATASET_TOKEN",
+    'Content-Type': 'text/plain',
+    'source_id': 'DEVICE_ID',
+    'api_token': 'DATASET_TOKEN',
 }
 
 # Upload values to DF
@@ -140,5 +139,6 @@ if response.status_code in (200, 201, 202):
     print('*** Upload successful - file cleared')
 else:
     print('*** Upload failed with status code:', response.status_code)
+```
 
 ```
