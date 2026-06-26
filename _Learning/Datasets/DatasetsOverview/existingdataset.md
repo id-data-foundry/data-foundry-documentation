@@ -36,3 +36,98 @@ The ability to serve a collection of files as a website opens up many possibilit
 ## Project website
 
 You can use the existing dataset also to host a project website for your project. How to do this? Just name the dataset "www" and upload your HTML, JS, CSS and image files into the dataset. If you go back to the project page, you will see a link "Project website" next to the project title. Click this link to see the project website. Note that the project needs to be public to show the project website.
+
+## File Upload/Download API
+
+The Existing Dataset provides a programmatic API for uploading and downloading files.
+
+### 1. Generating an API Token
+Before using the API, you must generate a token. Open the dataset configuration in the Data Foundry GUI, navigate to the **HTTP data upload** tab, and click **Generate** next to the token field.
+
+### 2. HTTP POST File Upload
+You can upload one or more files to the dataset by sending a `POST` request to the following API endpoint:
+
+`POST /api/v1/datasets/existing/<DATASET_ID>`
+
+#### Headers
+*   `api_token`: Your generated API token.
+
+#### Body (Multipart Form Data)
+*   `files`: The file or files to be uploaded.
+*   `description`: (Optional) A description to associate with the uploaded files.
+
+#### Examples
+
+##### Javascript
+```javascript
+const uploadFile = async (datasetId, apiToken, file) => {
+  const formData = new FormData();
+  formData.append('files', file);
+  formData.append('description', 'Uploaded via API');
+
+  const response = await fetch(`https://your-datafoundry-url/api/v1/datasets/existing/${datasetId}`, {
+    method: 'POST',
+    headers: {
+      'api_token': apiToken
+    },
+    body: formData
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    console.log("Success:", result);
+  }
+};
+```
+
+##### cURL
+```bash
+curl -X POST \
+  -H "api_token: YOUR_API_TOKEN" \
+  -F "files=@/path/to/local/file.json" \
+  -F "description=Uploaded via cURL" \
+  "https://your-datafoundry-url/api/v1/datasets/existing/DATASET_ID"
+```
+
+##### Python
+```python
+import requests
+
+url = "https://your-datafoundry-url/api/v1/datasets/existing/DATASET_ID"
+headers = {
+    'api_token': 'YOUR_API_TOKEN'
+}
+files = {'files': open('file.json', 'rb')}
+data = {'description': 'Uploaded via Python'}
+
+response = requests.post(url, headers=headers, files=files, data=data)
+if response.status_code == 200:
+    print("Success:", response.json())
+```
+
+### 3. File Download
+There are two ways to download files programmatically:
+
+#### A. Public Download (No Authentication)
+If your dataset has public web access enabled, you can download files publicly using the tokenized file download route. In this route, the dataset ID is **not** included in the URL because it is derived directly from the token:
+
+`GET /datasets/existing/filePublic/<FILENAME>/<PUBLIC_ACCESS_TOKEN>`
+
+##### Example (cURL)
+```bash
+curl -O -J \
+  "https://your-datafoundry-url/datasets/existing/filePublic/file.json/YOUR_PUBLIC_ACCESS_TOKEN"
+```
+
+#### B. Direct Download (Requires User Session/Cookie)
+If you are running in a browser environment where the user is logged in, you can download the latest version of a file directly using the dataset ID:
+
+`GET /datasets/existing/downloadLatest/<DATASET_ID>/<FILENAME>`
+
+##### Example (cURL with Session Cookie)
+```bash
+curl -O -J \
+  -b cookies.txt \
+  "https://your-datafoundry-url/datasets/existing/downloadLatest/DATASET_ID/file.json"
+```
+
