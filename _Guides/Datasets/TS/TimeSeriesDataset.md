@@ -106,6 +106,35 @@ curl -X POST -H "Content-Type: application/json" -H "api_token: <DATASET-TOKEN>"
 
 ### Upload data in bulk to the IoT Dataset
 
+#### Option 1: Upload multiple records using a JSON Array
+You can upload multiple data items at once by sending a JSON array of JSON objects in the POST request body. This is useful for batching updates or uploading historical data.
+
+If a record contains a `"timestamp"` field (in epoch milliseconds or seconds), Data Foundry will automatically use it as the record's timestamp. If a record contains an `"activity"` field, it will override the HTTP header or URL parameter activity for that specific record.
+
+##### Example Payload:
+```json
+[
+  {
+    "timestamp": 1719379800000,
+    "temperature": 21.5,
+    "humidity": 45
+  },
+  {
+    "timestamp": 1719379860000,
+    "temperature": 22.0,
+    "humidity": 46,
+    "activity": "active"
+  }
+]
+```
+
+##### Curl Command:
+```bash
+curl -X POST -H "Content-Type: application/json" -H "api_token: <DATASET-TOKEN>" -H "source_id: <DEVICE_ID>" -d '[{"timestamp":1719379800000,"temperature":21.5},{"timestamp":1719379860000,"temperature":22.0}]' "{{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/ts/<DATASET_ID>"
+```
+
+#### Option 2: Upload a CSV File (Python example)
+
 ```python
 import csv
 import requests
