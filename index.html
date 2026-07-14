@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!doctype html>
 <html lang="en">
     <head>
@@ -515,5 +518,8 @@
                 setInterval(updateHeroSection, 7000);
             });
         </script>
+        {% if site.external_footer_script %}
+        <script src="{{ site.external_footer_script }}" defer></script>
+        {% endif %}
     </body>
 </html>
