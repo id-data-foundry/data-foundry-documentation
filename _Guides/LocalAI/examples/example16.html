@@ -95,6 +95,7 @@
           messages: [{role: "user", content: prompt}],
           temperature: temperature,
           stream: true,
+          maxTokens: 1000,
           // We can use resultElementSelector to let the library handle basic appending
           resultElementSelector: "#result",
           // Or we can use onChunk for more custom behavior
