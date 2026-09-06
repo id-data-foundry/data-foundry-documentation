@@ -80,3 +80,22 @@ df {
     oocsi_server = "oocsi.your-org.edu"
 }
 ```
+
+## System Notifications & Alerts
+
+Data Foundry can send system error alerts and AI service health notifications to Slack, Ntfy, and Pushover.
+
+```hocon
+df {
+    notifications {
+        enabled = true
+        channels {
+            slack.enabled = true
+            ntfy.enabled = false
+            pushover.enabled = false
+        }
+    }
+}
+```
+
+For full setup instructions and channel options, see the **[System Notifications & Alerts Guide]({% link _Setup/Configuration/Notifications.md %})**.

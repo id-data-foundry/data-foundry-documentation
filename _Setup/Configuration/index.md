@@ -13,3 +13,4 @@ This section covers the configuration of the Data Foundry instance, including sy
 *   **[Authentication]({% link _Setup/Configuration/ConfiguringAuth.md %})**: Manage administrator access, set up Single Sign-On (SSO) with OpenID Connect, and configure registration keys.
 *   **[Fitbit Setup]({% link _Setup/Configuration/FitbitSetup.md %})**: Instructions for registering a Fitbit application to enable wearable data integration.
 *   **[Telegram Bot Setup]({% link _Setup/Configuration/TelegramSetup.md %})**: A guide to creating a Telegram bot and connecting it to Data Foundry for interaction capabilities.
+*   **[System Notifications & Alerts]({% link _Setup/Configuration/Notifications.md %})**: Configure multi-channel system notifications (Slack, Ntfy, Pushover) and automated AI health alerts.
