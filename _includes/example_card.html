@@ -24,7 +24,7 @@
         <span>{{ include.title | default: "Example" }}</span>
         <div style="display: flex; gap: 8px">
             {% if include.newtab == "true" %}<a
-                href="overview.html#{{ include.src | split: '/' | last }}"
+                href="overview.html?aiServer={{ site.AI.server | url_encode }}&apiKey={{ site.AI.api_key | url_encode }}#{{ include.src | split: '/' | last }}"
                 target="_blank"
                 style="
                     font-size: 0.8rem;
