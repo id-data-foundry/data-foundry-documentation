@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# Media Dataset
+# Media Dataset <span class="label label-green">Learning</span><a href="{% link _Guides/Datasets/Media/MediaDataset.md%}" class="label label-grey">Guide</a>
 
 The Media Dataset is specifically designed for storing, displaying, and annotating media files. It's the ideal choice when your research involves collecting visual or auditory data, such as photos or audio recordings from participants, media from a field study, or any other standard media format like PNG, JPG, GIF, MP3, WAV, M4A, OGG, or MP4. This dataset provides a centralized and organized home for all your project's media materials. The media dataset stores images, audio, and video files. If you have an **Annotation Dataset** in your project, you can annotate the media files as well when you go to the dataset page (right side of media entry). You can also show the media files in the data tool to visualize, annotate, or export them.
 

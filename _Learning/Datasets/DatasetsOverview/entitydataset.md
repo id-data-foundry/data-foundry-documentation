@@ -6,9 +6,40 @@ Datasets Overviewhas_children: true
 has_toc: false
 ---
 
-# Entity Dataset
+# Entity Dataset <span class="label label-green">Learning</span><a href="{% link _Guides/Datasets/Entity/EntityDataset.md%}" class="label label-grey">Guide</a>
 
+### **What it is:**
+These datasets act like a digital profile or a "status board". They keep track of the most recent information for a person or an object (like a name or current settings).
+
+### **How it works:**
+Profiles are updated via **HTTP requests (API)** or **OOCSI messages**. When new information comes in, the profile is updated so it always shows the latest state.
+
+### **What you can do with it:**
+You can keep other systems in sync via **OOCSI** or export the latest status of all entities as a **CSV spreadsheet**.
+
+## Description
 The Entity Dataset is one of the most versatile and powerful datasets in Data Foundry, acting as a flexible key-value store for your project. It's designed to handle semi-structured data where each item, or "entity," is a JSON object identified by a unique `resource_id`. This dataset is perfect for scenarios where you need to store complex, evolving data that doesn't fit a rigid table structure. It fully supports CRUD (Create, Retrieve, Update, Delete) operations, primarily through a comprehensive [ReSTful API]({% link _Reference/DFapi.md %}), making it an ideal backend for custom applications, interactive installations, or dynamic data logging. Every item is identified by an ID and you can protect it with a token against unauthorized access. This way you could use this dataset to build a user account system in your digital prototype, or store visitor information in a museum exhibition. You can also use this dataset to temporarily store data that are shared between different prototypes.
+
+```mermaid
+  sequenceDiagram
+    participant A as App / Script (HTTP)
+    participant O as OOCSI
+    participant DS as Entity Dataset
+    participant OUT as OOCSI
+    participant CSV as CSV Export
+
+    alt State Update
+        A->>DS: Update via HTTP/API
+    else
+        O->>DS: Update via OOCSI
+    end
+
+    rect rgb(245, 245, 245)
+        Note over DS, CSV: Synchronization
+        DS->>OUT: Sync via OOCSI channel
+        DS->>CSV: Export last states as CSV
+    end
+```
 
 One of the standout features of the Entity Dataset is its intelligent handling of JSON data. While you can store any valid JSON object as an entity, the dataset automatically creates a "projection" of all the keys used across your items. This projection is then used to generate a user-friendly flat table view within Data Foundry, complete with inline editing, which is incredibly handy for quick modifications. For more complex or nested JSON structures, a hierarchical tree view is also available, allowing you to inspect the full depth of your data. This dual-view system provides both a quick overview and a detailed inspection tool, right out of the box.
 

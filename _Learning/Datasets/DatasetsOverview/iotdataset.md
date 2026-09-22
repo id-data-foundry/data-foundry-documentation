@@ -6,11 +6,40 @@ has_children: true
 has_toc: false
 ---
 
-# IoT Dataset
+# IoT Dataset <span class="label label-green">Learning</span><a href="{% link _Guides/Datasets/TS/TimeSeriesDataset.md%}" class="label label-grey ">Guide</a>
 
+### **What it is:** 
+Think of this as a digital logbook. It records information that changes over time, like temperature from a sensor or heart rate from a watch.
+### **How it works:** 
+Data arrives via HTTP requests (API) or OOCSI events. Every piece of information is saved with the exact time it was received, creating a history you can look back on.
+### **What you can do:** 
+You can automatically forward data to an OOCSI channel for real-time use or download the entire history as a CSV spreadsheet. 
+
+## Description
 The IoT Dataset is the workhorse for collecting time-ordered data from a vast array of sources. It's designed to be a generic and highly flexible solution for logging data from sensors, connected products, interactive installations, or any data-streaming application. If you have a device or service that generates data over time, the IoT Dataset is almost certainly the right tool for the job. The IoT dataset type is useful for all kinds of data from sensors and connected products. The items in this dataset are ordered by time, so the first item to be stored is the first in the list, then the next until the most recent time that was stored. Think of a log book in which all items are listed one after each other.
 
-One of its greatest strengths is the variety of ways you can send data to it. The dataset offers multiple ingestion methods to fit your specific needs: you can send a single JSON object or a JSON array of objects via an HTTP POST request, batch upload an entire CSV file, or even use a simple web form for manual entries. For more advanced use cases, it can be configured to listen to [OOCSI](https://oocsi.com/) message streams, making it a powerful hub for multi-device ecosystems. This flexibility makes it suitable for everything from quick prototypes to large-scale, public-facing installations, as it can be configured to accept data from any source, not just pre-registered devices.
+```mermaid
+  sequenceDiagram
+    participant D as Device / API (HTTP)
+    participant O as OOCSI
+    participant DS as IoT Dataset
+    participant OUT as OOCSI
+    participant CSV as CSV Export
+
+    alt Data Inlet
+        D->>DS: HTTP Request
+    else 
+        O->>DS: OOCSI Message
+    end
+
+    rect rgb(245, 245, 245)
+        Note over DS, CSV: Data Distribution
+        DS->>OUT: Forward to OOCSI channel
+        DS->>CSV: Export history as CSV
+    end
+```
+
+One of its greatest strengths is the variety of ways you can send data to it. The dataset offers multiple ingestion methods to fit your specific needs: you can send a single JSON object via an HTTP POST request, batch upload an entire CSV file, or even use a simple web form for manual entries. For more advanced use cases, it can be configured to listen to [OOCSI](https://oocsi.com/) message streams, making it a powerful hub for multi-device ecosystems. This flexibility makes it suitable for everything from quick prototypes to large-scale, public-facing installations, as it can be configured to accept data from any source, not just pre-registered devices.
 
 Despite its ability to accept flexible JSON payloads, the IoT Dataset brings structure to your data. Each record is stored with a `timestamp`, an optional `activity` label, and is associated with a `device_id`. The dataset intelligently inspects the keys within the incoming JSON data and dynamically builds a "projection," or schema. This allows you to export your entire dataset as a structured CSV file, where each key has its own column, even if different devices send slightly different data. To help you monitor your data streams, it also includes a live data visualization view and a tree view for exploring the raw data.
 

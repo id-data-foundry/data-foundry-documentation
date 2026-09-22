@@ -6,7 +6,8 @@ nav_order: 2
 has_children: true
 ---
 
-# Media Dataset
+# Media Dataset  <span class="label label-green">Guide</span><a href="{% link _Learning/Datasets/DatasetsOverview/mediadataset.md%}" class="label label-grey ">Learning</a>
+
 The Media Dataset allows you to upload and download images and audio files. For more information on how the Media dataset works, check out the [Media Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/mediadataset.md%}).
 {: .info}
 Before getting started with this guide, make sure you have followed [Tutorial 1]({% link _Tutorials/GettingStarted/MyFirstDataLogger.md%}), or are familiar with the basics of Data Foundry. You can also familiarize yourself by following the guide for [your specific client]({%link _Guides/Clients/index.md %}).

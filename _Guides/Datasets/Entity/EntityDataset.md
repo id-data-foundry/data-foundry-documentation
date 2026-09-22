@@ -6,7 +6,8 @@ nav_order: 3
 has_children: true
 ---
 
-# Entity Dataset
+# Entity Dataset <span class="label label-green">Guide</span><a href="{% link _Learning/Datasets/DatasetsOverview/entitydataset.md%}" class="label label-grey ">Learning</a>
+
 The Entity Dataset allows you to store and retrieve structured data items associated with a resource identifier. For more information on how the Entity dataset works, check out the [Entity Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/entitydataset.md%}).
 
 {: .info}

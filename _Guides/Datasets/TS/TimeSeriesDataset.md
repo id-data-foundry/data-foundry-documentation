@@ -6,11 +6,12 @@ nav_order: 1
 has_children: true
 ---
 
-# IoT Dataset
+# IoT Dataset  <span class="label label-green">Guide</span><a href="{% link _Learning/Datasets/DatasetsOverview/iotdataset.md%}" class="label label-grey ">Learning</a>
+
 The IoT Dataset is one of the most common dataset in Data Foundry. It allows you to upload any type of time series data. For more information on the IoT dataset check out the [IoT Dataset documentation]({% link _Learning/Datasets/DatasetsOverview/iotdataset.md%}).
 
 {: .info}
-Before getting started with this guide, make sure you have followed [Tutorial 1]({% link _Tutorials/GettingStarted/MyFirstDataLogger.md%}), or are familiar with the basics of Data Foundry. You can also familiarize yourself by following the guide for [your specific client]({%link _Guides/Clients/index.md %}).
+Before getting started with this guide, make sure you are familiar with the platform or have followed [Tutorial 1]({% link _Tutorials/GettingStarted/MyFirstDataLogger.md%}), or are familiar with the basics of Data Foundry. You can also familiarize yourself by following the guide for [your specific client]({%link _Guides/Clients/index.md %}).
 
 ## Upload data to the IoT Dataset
 

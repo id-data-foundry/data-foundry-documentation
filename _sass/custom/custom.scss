@@ -49,3 +49,17 @@ body,
 .btn-green {
   @include btn-color($white, #66BB6A);
 }
+
+.label.label-grey {
+    background-color: #e8e8e8;
+    color: #5c5c5c;
+}
+
+.label.label-green-light {
+    background-color: #d4edda;
+    color: #276c37;
+}
+
+.label + .label {
+  margin-left: 0px;
+}

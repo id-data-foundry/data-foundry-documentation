@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# Movement Dataset
+# Movement Dataset <span class="label label-green">Learning</span><a href="{% link _Guides/Datasets/Movement/MovementDataset.md%}" class="label label-grey">Guide</a>
 
 The Movement Dataset is a specialized tool for handling GPS location data. It is designed to import, parse, and store movement tracks from standard file formats, making it easy to analyze and visualize the spatial behavior of participants or the paths of tracked objects. If your research involves understanding where and how people or things move, this dataset is an essential tool. The movement dataset accepts GPX or XML files, which you can obtain, for example, from wearable GPS trackers.
 

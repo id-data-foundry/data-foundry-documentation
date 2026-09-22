@@ -8,6 +8,8 @@ has_toc: false
 
 # Existing Dataset (File Repository)
 
+## Description
+
 The Existing Dataset is a flexible and powerful file repository, designed to store any collection of files related to your project. Think of it as a dedicated hard drive for your study, where you can upload, organize, and manage a wide variety of documents, data files, images, and source code. Its primary purpose is to serve as a general-purpose storage solution that can also function as a self-contained website. Files in this dataset are accessible to the project owner, collaborators and subscribers. If the project is a public project, then the files will also be accessible to guests.
 
 The dataset provides a user-friendly interface for managing your files. You can upload individual files, entire folders, or even create new, empty text files directly within the browser. For each file, a set of contextual actions is available, such as downloading, deleting, and, for text-based files, editing them with a built-in code editor. A particularly powerful feature is its ability to serve its contents as a static website. If you upload HTML, CSS, and JavaScript files, you can configure the dataset to make them publicly accessible as a fully functional website.
