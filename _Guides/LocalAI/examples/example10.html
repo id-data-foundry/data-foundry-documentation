@@ -102,6 +102,13 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
             <p id="result"></p>
 
             <script type="module">
+                const params = new URLSearchParams(window.location.search);
+                const AI_SERVER = params.get("aiServer") || undefined;
+                const API_KEY = params.get("apiKey") || "YOUR_API_KEY";
+
+                console.debug("AI_SERVER:", AI_SERVER);
+                console.debug("API_KEY:", API_KEY);
+
                 // on page load, populate the models
                 (async () => {
                     const selectElement = document.querySelector('select[name="model"]');
@@ -112,7 +119,7 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                     try {
                         const rawModels = await foundry.models("YOUR_API_KEY");
                         const models = (rawModels || []).filter(model => model.type && model.type.includes("📄"));
-                        
+
                         if (models && models.length > 0) {
                             selectElement.innerHTML = '';
                             models.forEach(model => {
@@ -162,9 +169,9 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                         // send request
                         await foundry.textToText({
                             // optional: server (ex. "https://data-foundry.net")
-                            server: "",
+                            server: AI_SERVER,
                             // generate your own API token on Data Foundry
-                            api_token: "YOUR_API_KEY",
+                            api_token: API_KEY,
                             // select the model
                             model: model,
                             // preset temperature
@@ -183,7 +190,7 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             // no logging on console needed
                             logging: false,
                         });
-                        
+
                         // render markdown
                         const resultElem = document.querySelector('#result');
                         const rawText = resultElem.textContent;

@@ -124,6 +124,13 @@
             <div id="resultsContainer"></div>
 
             <script type="module">
+                const params = new URLSearchParams(window.location.search);
+                const AI_SERVER = params.get("aiServer") || undefined;
+                const API_KEY = params.get("apiKey") || "YOUR_API_KEY";
+
+                console.debug("AI_SERVER:", AI_SERVER);
+                console.debug("API_KEY:", API_KEY);
+
                 // on page load, populate the models
                 (async () => {
                     const modelsGrid = document.querySelector('fieldset .grid');
@@ -131,7 +138,7 @@
                     modelsGrid.innerHTML = '<div><p>Loading models...</p></div>';
 
                     try {
-                        const rawModels = await foundry.models("YOUR_API_KEY");
+                        const rawModels = await foundry.models(API_KEY, AI_SERVER);
                         console.log(rawModels)
 
                         // Filter to only include models with the "📄" emoji in their type attribute
@@ -184,7 +191,7 @@
 
                     const systemPrompt = document.getElementById('systemPrompt').value;
                     const userPrompt = document.getElementById('userPrompt').value;
-                    
+
                     const selectedModels = Array.from(document.querySelectorAll('input[name="model"]:checked'))
                                                 .map(cb => cb.nextElementSibling.textContent);
 
@@ -216,7 +223,7 @@
                     const btn = document.getElementById('runBenchmarkBtn');
                     const downloadBtn = document.getElementById('downloadMdBtn');
                     const resultsContainer = document.getElementById('resultsContainer');
-                    
+
                     // 1. Get inputs
                     const systemPrompt = document.getElementById('systemPrompt').value;
                     const userPrompt = document.getElementById('userPrompt').value;
@@ -260,8 +267,8 @@
                             cell.id = cellId;
 
                             const requestPromise = foundry.textToText({
-                                server: "",
-                                api_token: "YOUR_API_KEY",
+                                server: AI_SERVER,
+                                api_token: API_KEY,
                                 model: model.value,
                                 maxTokens: 4000,
                                 messages: [

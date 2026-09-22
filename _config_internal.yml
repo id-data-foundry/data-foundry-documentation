@@ -126,6 +126,13 @@ external_base_urls:
   # static URL to the docs, including protocol
   docs: "https://example.com/docs"
 
+# AI API key for Data Foundry
+# Allows you to configure an AI endpoint for the examples
+# IMPORTANT: this AI key will be visible to anyone viewing the examples
+# AI:
+#   api_key: "df-abcdef123456789"
+#   server: "https://example.df.nl"
+
 custom_js:
   - /assets/js/data-foundry-selector.js
 

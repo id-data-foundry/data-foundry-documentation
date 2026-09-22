@@ -48,6 +48,12 @@
             <div class="output" id="result"></div>
 
             <script type="module">
+                const params = new URLSearchParams(window.location.search);
+                const AI_SERVER = params.get("aiServer") || undefined;
+                const API_KEY = params.get("apiKey") || "YOUR_API_KEY";
+
+                console.debug("AI_SERVER:", AI_SERVER);
+                console.debug("API_KEY:", API_KEY);
                 let recording = false;
                 let recordAudio;
 
@@ -68,9 +74,9 @@
                         // record and process all-in-one
                         foundry.soundToText({
                             // optional: server (ex. "https://data-foundry.net")
-                            server: "",
+                            server: AI_SERVER,
                             // generate your own API token on Data Foundry
-                            api_token: "YOUR_API_KEY",
+                            api_token: API_KEY,
                             // process a 'file' or 'record'
                             type: "record",
                             // fill in results in the HTML element with the id "result"

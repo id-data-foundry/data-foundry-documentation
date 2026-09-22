@@ -81,6 +81,12 @@ translate the four numbers to Spanish, then add 10 to each number, and translate
             <p id="result"></p>
 
             <script type="module">
+              const params = new URLSearchParams(window.location.search);
+              const AI_SERVER = params.get("aiServer") || undefined;
+              const API_KEY = params.get("apiKey") || "YOUR_API_KEY";
+
+              console.debug("AI_SERVER:", AI_SERVER);
+              console.debug("API_KEY:", API_KEY);
                 // listen to button clicks and handle them
                 document
                     .querySelector("#submitBtn")
@@ -104,9 +110,9 @@ translate the four numbers to Spanish, then add 10 to each number, and translate
                         // send request
                         await foundry.textToText({
                             // optional: server (ex. "https://data-foundry.net")
-                            server: "",
+                            server: AI_SERVER,
                             // generate your own API token on Data Foundry
-                            api_token: "YOUR_API_KEY",
+                            api_token: API_KEY,
                             // select the model
                             model: "hermes-2-pro-llama-3-8b",
                             // submit data and the prompt as a user message
@@ -122,7 +128,7 @@ translate the four numbers to Spanish, then add 10 to each number, and translate
                             // no logging on console needed
                             logging: false,
                         });
-                        
+
                         // render markdown
                         const resultElem = document.querySelector('#result');
                         const rawText = resultElem.textContent;

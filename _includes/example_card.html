@@ -54,7 +54,7 @@
     </div>
     <div style="padding: 0">
         <iframe
-            src="{{ include.src }}"
+            src="{{ include.src }}?aiServer={{ site.AI.server | url_encode }}&apiKey={{ site.AI.api_key | url_encode }}"
             width="100%"
             frameborder="0"
             onload="
