@@ -15,21 +15,22 @@ Before we head into the different APIs and their usage, let's check out how to g
 
 ## API Access
 
-Here is a step-by-step guide on how to enable API access for one or more of your projects on Data Foundry:
+Here is a step-by-step guide on how to enable API access for your Data Foundry account:
 
-1. Create a new project or use an existing project; important: you need to be the owner of the project.
-2. Open the project edit page (pen icon on main project page).
-3. Scroll down to the API Access section.
-4. Read information carefully and click the button to generate a new API key.
-5. Copy the API key; it should look like `df-AHFJed65hg09sdv098asdvadv98`.
-6. Add a new script or open an existing script in the project.
-7. Try a few of the examples below, using the copied API key for `<API-KEY>`.
+1. Login to your Data Foundry account.
+2. Open your profile settings in the bottom left corner.
+3. Click the "API Access" tab.
+4. Scroll down to your "User API access token" in the section "Personal Access".
+5. Click "Reveal" to see your API key.
+6. Copy your API key and use it in your API requests.
 
 All APIs work with the same API key. So, once you have generated a key for your project, you can use it with all available APIs.
 
 ## API Reference
 
 The full API reference is available via the Swagger documentation on your Data Foundry instance.
+
+{% include df-link.html text="Local Swagger API" path="/api/v2/docs/datafoundry.html" %}
 
 ### Chatbot API
 
