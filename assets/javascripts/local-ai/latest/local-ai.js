@@ -1,15 +1,15 @@
 /*!
- * DF Local AI - a high-level library for Industrial Design education, 
+ * DF Local AI - a high-level library for Industrial Design education,
  * using Data Foundry Local AI functionalities.
- * 
+ *
  * Copyright (c) 2024-2026 Jort Wiersma and Mathias Funk
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     https://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,12 @@
  * limitations under the License.
  */
 const foundry = {
+  resolveServer: function (server) {
+    if (server && typeof server === "string" && server.trim().length > 0) {
+      return server.trim().replace(/\/+$/, "");
+    }
+    return typeof document !== "undefined" && document.location ? document.location.origin : "";
+  },
   textToText: async function (options) {
     const result = await foundry.textToTextWithUsage(options);
     return result ? result.text : undefined;
@@ -38,6 +44,7 @@ const foundry = {
     loadingElementSelector,
     resultElementSelector,
   }) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
       // Do not run the function when no API key is given
       console.error("No API key provided.");
@@ -121,7 +128,7 @@ const foundry = {
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
-          
+
           let parts = buffer.split(/\r?\n\r?\n/);
           buffer = parts.pop();
 
@@ -144,7 +151,7 @@ const foundry = {
               const data = JSON.parse(dataStr);
               const choice = data.choices && data.choices[0];
               const delta = choice && (choice.delta || choice.message);
-              
+
               if (delta && delta.content !== undefined && delta.content !== null) {
                 const content = delta.content;
 
@@ -225,6 +232,7 @@ const foundry = {
     loadingElementSelector,
     resultElementSelector,
   }) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
       console.error("No API key provided.");
       return;
@@ -288,7 +296,7 @@ const foundry = {
         document.querySelector(resultElementSelector).innerHTML += chatResponse;
       }
 
-      // Return an object with both the content and the conversationId 
+      // Return an object with both the content and the conversationId
       // to allow for easy state management in subsequent calls.
       return {
         content: chatResponse,
@@ -312,6 +320,7 @@ const foundry = {
     loadingElementSelector,
     resultElementSelector
   }) {
+    server = foundry.resolveServer(server);
     if (logging) {
       console.log("Running text-to-image function");
     }
@@ -396,6 +405,7 @@ const foundry = {
     resultElementSelector,
     logging = true,
   }) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
       // Do not run the function when no API key has been provided
       console.error("No API key provided.");
@@ -443,8 +453,8 @@ const foundry = {
         console.error("Problem occurred in generating speech.");
         return;
       }
-      
-      // note: we don't need to check for a json.error response, 
+
+      // note: we don't need to check for a json.error response,
       // because the response will either have a proper error code or contain the speech as MP3
 
       const blob = await response.blob();
@@ -470,6 +480,7 @@ const foundry = {
     resultElementSelector,
     logging = true,
   }) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
       // Do not run the function when no API key has been provided
       console.error("No API key provided.");
@@ -559,6 +570,7 @@ const foundry = {
     loadingElementSelector,
     resultElementSelector,
   }) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
       // Do not run the function when no API key has been provided
       console.error("No API key provided.");
@@ -649,7 +661,7 @@ const foundry = {
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
-          
+
           let parts = buffer.split(/\r?\n\r?\n/);
           buffer = parts.pop();
 
@@ -672,7 +684,7 @@ const foundry = {
               const data = JSON.parse(dataStr);
               const choice = data.choices && data.choices[0];
               const delta = choice && (choice.delta || choice.message);
-              
+
               if (delta && delta.content !== undefined && delta.content !== null) {
                 const content = delta.content;
 
@@ -704,7 +716,8 @@ const foundry = {
         const json = await response.json();
 
         // check for error in response
-        if(json.error) {
+        if (json.error) {
+          console.error("Error:", json);
           // if so, display and return
           alert(json.error);
           if (loadingElement) {
@@ -737,7 +750,7 @@ const foundry = {
         document.querySelector(resultElementSelector).innerHTML += chatResponse;
       }
 
-      return { text: chatResponse, toolCalls: toolCalls, usage: json.usage };
+      return { text: chatResponse, toolCalls: toolCalls, usage: usage };
     } catch (error) {
       console.error("Error:", error);
     }
@@ -753,6 +766,7 @@ const foundry = {
     logging = true, // Set to false to remove console logging
     stopRec = false, // In order to stop the recording, pass isRecording = true
   }) {
+    server = foundry.resolveServer(server);
     // Start the loading indicator
     let loadingElement;
     if (loadingElementSelector) {
@@ -831,7 +845,7 @@ const foundry = {
                 if(temp && temp != "[BLANK_AUDIO]") {
                   // notify callback and logging
                   onTranscribe(temp);
-                  
+
                   // append to transcription
                   transcription += temp + " ";
 
@@ -842,7 +856,7 @@ const foundry = {
                 }
               }
             };
-            
+
             window.df_mediaRecorder.start();
           })
           .catch((err) => {
@@ -888,16 +902,16 @@ const foundry = {
                 completeTranscription = "";
               }
             }
-            
+
             // Clean up the media stream tracks
             if (window.df_mediaRecorder && window.df_mediaRecorder.stream) {
                 window.df_mediaRecorder.stream.getTracks().forEach(track => track.stop());
             }
             window.df_mediaRecorder = null;
-            
+
             resolve(completeTranscription);
           };
-          
+
           window.df_mediaRecorder.stop();
         } else {
            resolve("");
@@ -979,6 +993,7 @@ const foundry = {
     });
   },
   models: async function (api_token, server = document.location.origin) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
       console.error("No api token provided!");
       return "No api token provided!";
