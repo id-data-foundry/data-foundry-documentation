@@ -120,7 +120,7 @@
                         // Send request with tools
                         const response = await foundry.textToTextWithUsage({
                             api_token: "YOUR_API_KEY",
-                            model: "qwen/qwen3.5-9b", // Use a model known for tool calling
+                            model: "coding", // Use "coding" placeholder or a specific model known for tool calling
                             messages: [
                                 { role: "system", content: "You are a helpful OOCSI assistant. If the user describes a lighting scene, use the sendOOCSIMessage tool to send the corresponding brightness, color, and status to the 'smart_lights' channel. Confirm the action to the user." },
                                 { role: "user", content: prompt }

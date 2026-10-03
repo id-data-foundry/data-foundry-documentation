@@ -91,7 +91,7 @@
         // send request with stream: true
         const result = await foundry.textToText({
           api_token: "YOUR_API_KEY",
-          model: "hermes-2-pro-llama-3-8b",
+          model: "default",
           messages: [{role: "user", content: prompt}],
           temperature: temperature,
           stream: true,
