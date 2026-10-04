@@ -7,31 +7,24 @@ has_children: true
 has_toc: false
 ---
 
-# Local AI Tutorial
+# Local AI Tutorials
 
-Data Foundry does not only provide tools to store, modify, and collect data; it also hosts its own AI models! In this tutorial, you will build and host your own AI-powered chatbot using HTML and JavaScript. If you prefer to configure a chatbot using the built-in No-Code tools, please refer to the [Designing Custom Chatbots]({% link _Guides/LocalAI/Chatbots.md %}) guide.
+Data Foundry does not only provide tools to store, modify, and collect data; it also hosts its own local AI models!
 
-We will take you through all steps, from hosting a small web interface to connecting the site to a local AI model through Data Foundry. 
+## Tutorials in this Section
 
-## Chatbot
+* **[Building Your First Agentic Chatbot]({% link _Tutorials/LocalAI/AgenticChatbot.md %})**: Build an autonomous assistant with a Think-and-Act loop, persistent user memory, note-taking, and on-demand document search.
+* If you want a quick reference to all chatbot settings, see the **[Designing Custom Chatbots]({% link _Guides/LocalAI/Chatbots.md %})** How-To Guide.
 
-What is a chatbot?
+---
+
+## Interactive Tours & Code Examples
 
 ![]({% link _Tutorials/LocalAI/images/DFchatbot.png %}){:width="20%"}{: style="float: right"}
 
+Learn how to connect custom web interfaces and prototypes to local AI models hosted on Data Foundry.
 
-##What is a chatbot on Data Foundry?
-
-How does this chatbot work?
-
-We will guide you through every step, from setting up a simple web interface to connecting it to a local AI model hosted on Data Foundry.
-
-
-## What do I need for the tutorial?
-
-[Download HTML File]({$ link /assets/files/MyFirstDFWebsite/index.html %}){: .btn .btn-green download="index.html"}
-
-## Tour link
-{% include df-link.html text="Take the Interactive Tour" path="/tour/ai-tour" %}
+* {% include df-link.html text="Take the Interactive AI Tour" path="/tour/ai-tour" %}
+* Explore client libraries and code snippets in our **[How-To Guides]({% link _Guides/LocalAI/index.md %})**.
 
 ---

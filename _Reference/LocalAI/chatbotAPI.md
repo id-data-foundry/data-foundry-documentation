@@ -7,7 +7,7 @@ has_toc: true
 ---
 # Chatbot API
 
-The Chatbot API provides programmatic access to your custom chatbots, including their RAG (Retrieval-Augmented Generation) capabilities and knowledge bases. It uses an OpenAI-compatible format.
+The Chatbot API provides programmatic access to your custom chatbots—supporting both **Standard** and **Agentic** engines, on-demand document knowledge retrieval, and persistent user memory. It uses an OpenAI-compatible request and response format.
 
 **Endpoint:** `POST /api/v1/chatbots/:id/chat`
 
@@ -24,7 +24,7 @@ Authorization: Bearer df-abcdef1234567890...
 | Name | Type | Description |
 | :--- | :--- | :--- |
 | `message` | String | **Required**. The user's input message. |
-| `conversationId` | String | **Optional**. A UUID to continue a conversation. If provided, the bot will use its chat history from the cache. |
+| `conversationId` | String | **Optional**. A unique identifier (UUID or session string) to continue a multi-turn conversation. In Agentic mode, this preserves conversation history and sandboxed user memory across requests. |
 
 ### Example Request (cURL)
 
