@@ -309,6 +309,7 @@ const foundry = {
   textToImage: async function ({
     api_token,
     server = document.location.origin,
+    model = "default",
     prompt,
     negativePrompt = '',
     cfgScale = 10,
@@ -352,6 +353,7 @@ const foundry = {
             "Authorization": `Bearer ${api_token}`,
           },
           body: JSON.stringify({
+            model: model,
             prompt: prompt,
             steps: steps,
             width: width,

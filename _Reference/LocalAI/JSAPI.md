@@ -190,6 +190,7 @@ The `textToImage` function is an asynchronous JavaScript function that generates
 
 - *`api_token` (required):* Your API key for authentication. The function will not run without this.
 - *`server` (optional):* The server URL to send the request to. Defaults to the current origin.
+- *`model` (optional):* The image generation model to use. Defaults to `"default"` (uses the configured image model on the server).
 - *`prompt` (required):* The text description of the image you want to generate.
 - *`negativePrompt` (optional):* A description of what you do not want in the image. Defaults to an empty string.
 - *`steps` (optional):* The number of steps for image generation. Higher values may improve quality but take longer. (Scale: 1-200, defaults to 20).
