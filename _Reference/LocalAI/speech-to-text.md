@@ -70,3 +70,56 @@ We first built this API for JavaScript and web access. Even then, the handling o
 </body>
 </html>
 ```
+
+### Python Example:
+
+You can transcribe an audio file by sending a `POST` request to `/v1/audio/transcriptions` with `multipart/form-data`:
+
+[Download Python Script]({% link assets/files/speech-to-text/transcribe.py %}){: .btn .btn-green download="transcribe.py"}
+
+```python
+import requests
+
+api_key = 'df-abcdef1234567890abcdef1234567890abcdef123456789='
+headers = {
+    "Authorization": f"Bearer {api_key}"
+}
+
+audio_path = "recording.mp3"  # .mp3, .wav, .m4a, etc.
+
+# Optional parameters supported by the STT service:
+# model: e.g., 'parakeet_v3' (default), 'whisper-base', 'whisper-medium', 'whisper-large'
+# lang: optional language hint (e.g., 'en', 'nl')
+# timestamps: 'true' to include segment timecodes
+data = {
+    'model': 'parakeet_v3',
+    'lang': 'en'
+}
+
+with open(audio_path, 'rb') as audio_file:
+    files = {
+        'file': audio_file
+    }
+    response = requests.post(
+        '{{ site.external_base_urls.datafoundryurl }}/v1/audio/transcriptions',
+        headers=headers,
+        files=files,
+        data=data
+    )
+
+if response.status_code == 200:
+    result = response.json()
+    print("Transcription:", result.get("text"))
+else:
+    print(f"Error {response.status_code}:", response.text)
+```
+
+### Command Line Example:
+
+```bash
+curl -X POST "{{ site.external_base_urls.datafoundryurl }}/v1/audio/transcriptions" \
+  -H "Authorization: Bearer df-abcdef1234567890abcdef1234567890abcdef123456789=" \
+  -F "file=@recording.mp3" \
+  -F "model=parakeet_v3" \
+  -F "lang=en"
+```

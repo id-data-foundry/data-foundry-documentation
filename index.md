@@ -54,4 +54,4 @@ Data Foundry has been licensed under the **GNU Affero General Public License V3*
 
 ## Team
 
-Data Foundry was developed by Mathias Funk, Eden Chiang, Eva van der Born and Diede van Marle since 2019, funded and supported by the Industrial Design department at Eindhoven University of Technology. The open-sourcing and finalisation of the platform has been made possible by NWO under the TDDC-NES funding scheme, as the Open Design Data Infrastructure (ODeDaI) project.
+Data Foundry was developed by Mathias Funk, Eden Chiang, Eva van der Born and Diede van Marle since 2019, funded and supported by the Industrial Design department at Eindhoven University of Technology. The open-sourcing and finalisation of the platform has been made possible by [NWO under the TDDC-NES funding scheme](https://doi.org/10.61686/WKVTQ62126), as the [Open Design Data Infrastructure (ODeDaI)](https://www.nwo.nl/en/projects/icttdcc002003) project.
