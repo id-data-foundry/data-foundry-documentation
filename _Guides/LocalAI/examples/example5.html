@@ -22,7 +22,7 @@
   -->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Local AI Example 5</title>
+        <title>Local AI Example 5: Speech-to-Text</title>
         <link
             rel="stylesheet"
             href="/assets/stylesheets/picoCSS/pico.jade.min.css"
@@ -32,56 +32,114 @@
     </head>
     <body>
         <main class="container">
-            <h1>Example 5: audio to text transcription</h1>
+            <h1>Example 5: Audio to Text Transcription</h1>
 
             <p>
-                Let's try transcribing some audio right here. Press the button
-                to start recording...
+                DataFoundry offers dual Speech-to-Text capabilities: sub-100ms real-time live streaming via Sherpa-ONNX, and longform high-accuracy batch audio file transcription via Parakeet TDT / Whisper.
             </p>
 
-            <button id="submitBtn">Start</button>
-            <span id="status"></span>
+            <article>
+                <header>
+                    <strong>1. Real-Time Streaming Transcription (Live Microphone)</strong>
+                </header>
+                <p>
+                    Click <strong>Start Streaming</strong> and speak into your microphone. Words are transcribed with sub-100ms latency directly over a persistent WebSocket connection.
+                </p>
+                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                    <button id="streamBtn" style="width: auto; margin-bottom: 0;">Start Streaming</button>
+                    <span id="streamStatus" style="font-weight: 500; color: var(--primary);"></span>
+                </div>
+                <div style="background: rgba(0,0,0,0.03); border: 1px solid var(--muted-border-color); border-radius: 6px; padding: 1rem; min-height: 80px;">
+                    <div><small style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-color);">Committed Transcript:</small></div>
+                    <div id="streamFinalResult" style="font-size: 1.1rem; margin-top: 0.25rem;"></div>
+                    <div style="margin-top: 0.5rem;"><small style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-color);">Interim Partial:</small></div>
+                    <div id="streamPartialResult" style="color: var(--primary); font-style: italic;"></div>
+                </div>
+            </article>
 
-            <hr />
-            <br />
-
-            <div class="output" id="result"></div>
+            <article>
+                <header>
+                    <strong>2. Batch File Transcription (Longform Audio)</strong>
+                </header>
+                <p>
+                    Select an audio file (.wav, .mp3, .m4a) to upload for high-accuracy batch transcription with model selection and diarization.
+                </p>
+                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                    <input type="file" id="audioFile" accept="audio/*" style="margin-bottom: 0;" />
+                    <button id="transcribeFileBtn" style="width: auto; margin-bottom: 0;">Transcribe File</button>
+                </div>
+                <div style="background: rgba(0,0,0,0.03); border: 1px solid var(--muted-border-color); border-radius: 6px; padding: 1rem; min-height: 80px;">
+                    <div><small style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-color);">File Transcript:</small></div>
+                    <div id="fileResult" style="font-size: 1.1rem; margin-top: 0.25rem;"></div>
+                </div>
+            </article>
 
             <script type="module">
-                let recording = false;
-                let recordAudio;
+                let streaming = false;
 
-                document
-                    .querySelector("#submitBtn")
-                    .addEventListener("click", async (e) => {
-                        // toggle recording state
-                        recording = !recording;
+                const streamBtn = document.querySelector("#streamBtn");
+                const streamStatus = document.querySelector("#streamStatus");
+                const streamFinalResult = document.querySelector("#streamFinalResult");
+                const streamPartialResult = document.querySelector("#streamPartialResult");
 
-                        // change the button text for toggling between recording and stopping
-                        document.querySelector("#submitBtn").innerText =
-                            recording ? "Stop" : "Start";
-                        // change the status indicator
-                        document.querySelector("#status").innerText = recording
-                            ? "Recording..."
-                            : "";
+                streamBtn.addEventListener("click", async () => {
+                    if (!streaming) {
+                        streaming = true;
+                        streamBtn.innerText = "Stop Streaming";
+                        streamStatus.innerText = "Connecting...";
 
-                        // record and process all-in-one
-                        foundry.soundToText({
-                            // optional: server (ex. "https://data-foundry.net")
-                            server: "",
-                            // generate your own API token on Data Foundry
-                            api_token: "YOUR_API_KEY",
-                            // process a 'file' or 'record'
-                            type: "record",
-                            // fill in results in the HTML element with the id "result"
-                            resultElementSelector: "#result",
-                            // loading indicator element
-                            loadingElementSelector: "#result",
-                            // no logging on console needed
-                            logging: false,
-                            stopRec: !recording,
-                        });
+                        try {
+                            await foundry.transcribeLive({
+                                server: "",
+                                api_token: "YOUR_API_KEY",
+                                onPartial: (partial) => {
+                                    streamPartialResult.innerText = partial;
+                                },
+                                onFinal: (finalText) => {
+                                    streamFinalResult.innerText += (streamFinalResult.innerText ? " " : "") + finalText;
+                                    streamPartialResult.innerText = "";
+                                },
+                                onStateChange: (state) => {
+                                    streamStatus.innerText = state === "listening" ? "Listening..." : state;
+                                },
+                                onError: (err) => {
+                                    console.error("Streaming STT error:", err);
+                                    streamStatus.innerText = "Error: " + (err.message || err);
+                                }
+                            });
+                        } catch (e) {
+                            console.error(e);
+                            streaming = false;
+                            streamBtn.innerText = "Start Streaming";
+                            streamStatus.innerText = "Failed to start";
+                        }
+                    } else {
+                        streaming = false;
+                        streamBtn.innerText = "Start Streaming";
+                        streamStatus.innerText = "Stopped";
+                        await foundry.stopLive();
+                    }
+                });
+
+                const fileBtn = document.querySelector("#transcribeFileBtn");
+                const fileInput = document.querySelector("#audioFile");
+                const fileResult = document.querySelector("#fileResult");
+
+                fileBtn.addEventListener("click", async () => {
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        alert("Please select an audio file first.");
+                        return;
+                    }
+                    fileResult.innerText = "Transcribing file...";
+                    const text = await foundry.transcribeFile({
+                        server: "",
+                        api_token: "YOUR_API_KEY",
+                        file: fileInput.files[0],
+                        resultElementSelector: "#fileResult",
+                        loadingElementSelector: "#fileResult"
                     });
+                    fileResult.innerText = text || "(No speech detected)";
+                });
             </script>
         </main>
     </body>

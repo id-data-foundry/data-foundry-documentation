@@ -757,229 +757,288 @@ const foundry = {
       console.error("Error:", error);
     }
   },
-  soundToText: async function ({
+  transcribeFile: async function ({
     api_token,
     server = document.location.origin,
-    type = "file", //'file' or 'record'
-    file, // The audio file that needs to be transcribed
-    resultElementSelector, // Element that will be used to place the result on the page
-    loadingElementSelector, // Element that will be given a loading indicator attribute when the AI is working
+    file,
+    model = "whisper-base",
+    lang = "",
+    timestamps = false,
+    diarization = false,
+    num_speakers = null,
+    resultElementSelector,
+    loadingElementSelector,
     onTranscribe = (text) => {},
-    logging = true, // Set to false to remove console logging
-    stopRec = false, // In order to stop the recording, pass isRecording = true
+    logging = true,
   }) {
     server = foundry.resolveServer(server);
-    // Start the loading indicator
+    if (!api_token) {
+      console.error("No API key provided for transcribeFile.");
+      return;
+    }
+    if (!file) {
+      console.error("No audio file provided to transcribeFile.");
+      return;
+    }
+
     let loadingElement;
     if (loadingElementSelector) {
       loadingElement = document.querySelector(loadingElementSelector);
-      if(!loadingElement) {
-        console.warn("Element specified for loading indicator not found (using result element instead)");
+      if (!loadingElement && resultElementSelector) {
         loadingElement = document.querySelector(resultElementSelector);
       }
       loadingElement && loadingElement.setAttribute("aria-busy", "true");
     }
 
-    // If the function is instructed to stop recording, do so and return a transcription of the complete recording
-    if (stopRec) {
-      let res = await stopRecording();
-      return res;
-    }
+    const formData = new FormData();
+    formData.append("model", model);
+    formData.append("file", file, file.name || "audio.webm");
+    if (lang) formData.append("lang", lang);
+    if (timestamps) formData.append("timestamps", "true");
+    if (diarization) formData.append("diarization", "true");
+    if (num_speakers) formData.append("num_speakers", String(num_speakers));
 
+    try {
+      if (logging) console.log("transcribeFile: Uploading audio to longform STT service...");
+      const response = await fetch(`${server}/v1/audio/transcriptions`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${api_token}`,
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+      const text = result && result.text ? result.text : "";
+      if (logging) console.log("transcribeFile result:", text);
+
+      onTranscribe(text);
+      if (resultElementSelector && text) {
+        const target = document.querySelector(resultElementSelector);
+        if (target) target.innerHTML += text + " ";
+      }
+      return text;
+    } catch (error) {
+      console.error("transcribeFile error:", error);
+    } finally {
+      loadingElement && loadingElement.setAttribute("aria-busy", "false");
+    }
+  },
+
+  transcribeLive: async function ({
+    api_token,
+    server = document.location.origin,
+    sampleRate = 16000,
+    resultElementSelector,
+    partialElementSelector,
+    loadingElementSelector,
+    onPartial = (text) => {},
+    onFinal = (text) => {},
+    logging = true,
+  }) {
+    server = foundry.resolveServer(server);
     if (!api_token) {
-      // Do not run the function when no API key has been provided
-      console.error("No API key provided.");
+      console.error("No API key provided for transcribeLive.");
       return;
     }
 
-    // Variable that will get larger each time a new part of the recording is created.
-    let transcription = "";
-
-    // In record mode, start the recording
-    if (type === "record") {
-      startRecording();
+    let loadingElement;
+    if (loadingElementSelector) {
+      loadingElement = document.querySelector(loadingElementSelector);
+      loadingElement && loadingElement.setAttribute("aria-busy", "true");
     }
 
-    // In file mode, transcribe the provided file without a popup. Can be used if file selection needs to be handled differently.
-    if (type === "file") {
-      return await df_transcribe({
-        api_token: api_token,
-        file: file,
-      });
+    let wsProto = "ws:";
+    if (typeof location !== "undefined" && location.protocol === "https:") {
+      wsProto = "wss:";
     }
+    const host = server.replace(/^https?:\/\//, "");
+    const wsUrl = `${wsProto}//${host}/v1/audio/transcriptions/stream?token=${encodeURIComponent(api_token)}`;
 
-    // Helper functions
+    let ws = null;
+    let audioContext = null;
+    let mediaStream = null;
+    let processor = null;
+    let fullTranscription = "";
 
-    function startRecording() {
-      // Use native MediaRecorder and hark.js for voice activity detection
-      loadHark(function () {
-        navigator.mediaDevices
-          .getUserMedia({
-            audio: true,
-          })
-          .then(function (stream) {
-            window.df_mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
-            window.df_speechEvents = hark(stream, { interval: 100 });
+    try {
+      if (logging) console.log("transcribeLive: Connecting to real-time STT WebSocket:", wsUrl);
+      ws = new WebSocket(wsUrl);
 
-            window.df_speechEvents.on('stopped_speaking', function() {
-              if (window.df_mediaRecorder.state === 'recording') {
-                // Stopping the recorder natively triggers ondataavailable
-                window.df_mediaRecorder.stop();
-                // Immediately start recording the next chunk
-                window.df_mediaRecorder.start();
-              }
+      const sessionPromise = new Promise((resolve, reject) => {
+        ws.onopen = async () => {
+          if (logging) console.log("transcribeLive: WebSocket connected. Starting mic capture...");
+          try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                channelCount: 1,
+                sampleRate: sampleRate,
+                echoCancellation: true,
+                noiseSuppression: true,
+              },
             });
 
-            window.df_mediaRecorder.ondataavailable = async function (e) {
-              if (e.data && e.data.size > 0) {
-                // Add the result to transcription variable
-                let temp = await df_transcribe({
-                  api_token: api_token,
-                  file: e.data,
-                });
+            audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: sampleRate });
+            const source = audioContext.createMediaStreamSource(mediaStream);
+            processor = audioContext.createScriptProcessor(2048, 1, 1);
 
-                // Log the temporary transcription
-                if (logging) {
-                  console.log("Transcription:", temp);
-                }
+            processor.onaudioprocess = (e) => {
+              if (ws.readyState !== WebSocket.OPEN) return;
+              const inputData = e.inputBuffer.getChannelData(0);
 
-                // don't output blank audio
-                if(temp && temp != "[BLANK_AUDIO]") {
-                  // notify callback and logging
-                  onTranscribe(temp);
-
-                  // append to transcription
-                  transcription += temp + " ";
-
-                  // Place resulting transcription on the page
-                  if (resultElementSelector) {
-                    document.querySelector(resultElementSelector).innerHTML += temp + " ";
-                  }
-                }
+              // Convert Float32 to 16-bit linear PCM
+              const pcm16 = new Int16Array(inputData.length);
+              for (let i = 0; i < inputData.length; i++) {
+                const s = Math.max(-1, Math.min(1, inputData[i]));
+                pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
               }
+
+              // Base64 encode PCM frame for JSON WebSocket
+              let binary = "";
+              const bytes = new Uint8Array(pcm16.buffer);
+              const len = bytes.byteLength;
+              for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+              }
+              const base64Audio = btoa(binary);
+
+              ws.send(JSON.stringify({
+                audio: base64Audio,
+                sample_rate: sampleRate,
+              }));
             };
 
-            window.df_mediaRecorder.start();
-          })
-          .catch((err) => {
-            // always check for errors at the end.
-            console.error(`${err.name}: ${err.message}`);
-          });
-      });
-    }
+            source.connect(processor);
+            processor.connect(audioContext.destination);
 
-    // Function to stop recording and create a new transcription of the complete recording instead of using slices
-    async function stopRecording() {
-      return new Promise((resolve) => {
-        if (window.df_speechEvents) {
-          window.df_speechEvents.stop();
-          window.df_speechEvents = null;
-        }
-
-        if (window.df_mediaRecorder && window.df_mediaRecorder.state !== 'inactive') {
-          // Temporarily override ondataavailable to catch the final blob and resolve it
-          window.df_mediaRecorder.ondataavailable = async function(e) {
-            let completeTranscription = "";
-            if (e.data && e.data.size > 0 && api_token) {
-              completeTranscription = await df_transcribe({
-                api_token: api_token,
-                file: e.data,
-              });
-
-              // Log the raw transcription
-              if (logging) {
-                console.log("Transcription:", completeTranscription);
-              }
-
-              // don't output blank audio
-              if(completeTranscription && completeTranscription != "[BLANK_AUDIO]") {
-                // notify callback and logging
-                onTranscribe(completeTranscription);
-
-                // Place result on screen
-                if (resultElementSelector) {
-                  document.querySelector(resultElementSelector).innerHTML += completeTranscription + " ";
-                }
-              } else {
-                completeTranscription = "";
-              }
-            }
-
-            // Clean up the media stream tracks
-            if (window.df_mediaRecorder && window.df_mediaRecorder.stream) {
-                window.df_mediaRecorder.stream.getTracks().forEach(track => track.stop());
-            }
-            window.df_mediaRecorder = null;
-
-            resolve(completeTranscription);
-          };
-
-          window.df_mediaRecorder.stop();
-        } else {
-           resolve("");
-        }
-      });
-    }
-    // This function is used to transcribe audio. It will return text.
-    async function df_transcribe({ model = "whisper-base", file }) {
-      // Create FormData object and append the file and other parameters
-      const formData = new FormData();
-      formData.append("model", model); // Add model
-      formData.append("file", file, file.name || "audio.webm"); // Add uploaded or provided file, fallback to audio.webm for blobs
-
-      try {
-        // Make request
-        const response = await fetch(
-          `${server}/v1/audio/transcriptions`,
-          {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${api_token}`,
-            },
-            body: formData,
+            window.df_liveSession = {
+              stop: stopLiveInternal,
+            };
+            resolve(window.df_liveSession);
+          } catch (micErr) {
+            console.error("Microphone access failed:", micErr);
+            reject(micErr);
           }
-        );
-        const result = await response.json(); // It may occur that the reponsonse is not perfect json, leading to errors
-        if (logging) {
-          // log result
-          console.log("Result:", result.text);
-        }
-
-        // return result
-        return result.text;
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
-
-    // In order to make use of the hark library, check if this library is available, and add it if that is not the case. Then, use hark functionality
-    function loadHark(callback) {
-      // Check if hark is already available
-      if (typeof hark !== "undefined") {
-        if (logging) {
-          console.log("hark is already loaded.");
-        }
-        callback(); // If loaded, run the callback
-      } else {
-        if (logging) {
-          console.log("hark is not loaded, adding script to the page.");
-        }
-        // Create a script element to load hark from CDN
-        var script = document.createElement("script");
-        script.src = "https://unpkg.com/hark@1.2.3/hark.bundle.js";
-        script.async = true;
-
-        // Set up callback when the script is loaded
-        script.onload = function () {
-          if (logging) {
-            console.log("hark has been loaded.");
-          }
-          callback();
         };
 
-        // Append script to the head of the document
-        document.head.appendChild(script);
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === "partial") {
+              if (logging) console.log("Live STT partial:", data.text);
+              onPartial(data.text);
+              if (partialElementSelector) {
+                const pEl = document.querySelector(partialElementSelector);
+                if (pEl) pEl.textContent = data.text;
+              }
+            } else if (data.type === "final") {
+              if (logging) console.log("Live STT final:", data.text);
+              fullTranscription += (fullTranscription ? " " : "") + data.text;
+              onFinal(data.text);
+              if (partialElementSelector) {
+                const pEl = document.querySelector(partialElementSelector);
+                if (pEl) pEl.textContent = "";
+              }
+              if (resultElementSelector) {
+                const rEl = document.querySelector(resultElementSelector);
+                if (rEl) rEl.innerHTML += data.text + " ";
+              }
+            }
+          } catch (err) {
+            console.error("Error parsing live STT message:", err);
+          }
+        };
+
+        ws.onerror = (err) => {
+          console.error("Live STT WebSocket error:", err);
+          reject(err);
+        };
+      });
+
+      function stopLiveInternal() {
+        if (processor) {
+          try { processor.disconnect(); } catch (e) {}
+          processor = null;
+        }
+        if (audioContext) {
+          try { audioContext.close(); } catch (e) {}
+          audioContext = null;
+        }
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((t) => t.stop());
+          mediaStream = null;
+        }
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          try {
+            ws.send(JSON.stringify({ action: "stop" }));
+            ws.close();
+          } catch (e) {}
+        }
+        ws = null;
+        loadingElement && loadingElement.setAttribute("aria-busy", "false");
+        window.df_liveSession = null;
+        return fullTranscription;
       }
+
+      window.df_stopLive = stopLiveInternal;
+      return await sessionPromise;
+    } catch (err) {
+      loadingElement && loadingElement.setAttribute("aria-busy", "false");
+      console.error("transcribeLive error:", err);
+    }
+  },
+
+  stopLive: function () {
+    if (window.df_stopLive) {
+      return window.df_stopLive();
+    }
+    return "";
+  },
+
+  soundToText: async function ({
+    api_token,
+    server = document.location.origin,
+    type = "file", //'file' or 'record'
+    file, // The audio file that needs to be transcribed
+    resultElementSelector,
+    partialElementSelector,
+    loadingElementSelector,
+    onTranscribe = (text) => {},
+    logging = true,
+    stopRec = false,
+  }) {
+    if (stopRec) {
+      if (window.df_stopLive) {
+        return window.df_stopLive();
+      }
+      return "";
+    }
+
+    // 1. File mode: delegate to dedicated transcribeFile
+    if (type === "file" || file) {
+      return await foundry.transcribeFile({
+        api_token,
+        server,
+        file,
+        resultElementSelector,
+        loadingElementSelector,
+        onTranscribe,
+        logging,
+      });
+    }
+
+    // 2. Record mode: delegate to real-time streaming transcribeLive
+    if (type === "record") {
+      return await foundry.transcribeLive({
+        api_token,
+        server,
+        resultElementSelector,
+        partialElementSelector,
+        loadingElementSelector,
+        onPartial: onTranscribe,
+        onFinal: onTranscribe,
+        logging,
+      });
     }
   },
   stopRec: async function ({

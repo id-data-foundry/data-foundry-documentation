@@ -7,15 +7,74 @@ has_toc: true
 ---
 # Speech-to-Text
 
-Speech-to-Text (STT) is the translation of an audio recording of speech, e.g., as a .wav or .mp3 file, into the text that was spoken. While this is pretty straight-forward for humans (provided that they are speaking the right language and are not eating a delicious hamburger at the moment), but it's hard for machines. In the past years there was some progress in this area. And today, we can do this easily on a server or even locally on a mobile device. In the following, we will explain how you can make use of this API in your designs.
+DataFoundry provides two complementary Speech-to-Text (STT) services designed for different interaction paradigms:
 
-Whenever you submit a piece of audio to the server, a machine-learning model needs to process and return the extracted text. That means, it can take a few seconds to return API calls. The longer the audio that you submit, the longer the wait will be. Also, transmit audio chunks that are longer than 3-5 seconds, otherwise the model does not have enough context to properly extract speech.
+1. **Real-Time Streaming STT (`foundry.transcribeLive`)**:
+   - **Protocol:** Persistent WebSocket connection (`/v1/audio/transcriptions/stream`).
+   - **Backend:** Sherpa-ONNX streaming Zipformer engine (`tools/services/ai/stt-realtime`, default port 8093).
+   - **Latency:** Sub-100ms interim partial hypotheses as words are spoken.
+   - **Use cases:** Live dictation, voice conversational agents, interactive prototypes, speech command interfaces.
 
-[**Speech-to-Text Example**]({%link _Guides/LocalAI/examples/example5.html %}){: .btn}
+2. **Longform Batch Transcription (`foundry.transcribeFile` or HTTP POST `/v1/audio/transcriptions`)**:
+   - **Protocol:** HTTP POST multipart file upload.
+   - **Backend:** Parakeet TDT / Whisper service (`tools/services/ai/stt`, default port 8092).
+   - **Features:** High-accuracy transcription of long audio recordings (.wav, .mp3, .m4a), speaker diarization (`diarization=true`), and monotonic segment timestamps.
+   - **Use cases:** Recorded interviews, audio lectures, meeting transcripts, podcast analysis.
 
-## Examples
-### Javascript Example:
-We first built this API for JavaScript and web access. Even then, the handling of audio is not the easiest. Check out the full example below for some ideas:
+[**Speech-to-Text Live Example**]({%link _Guides/LocalAI/examples/example5.html %}){: .btn}
+
+## Modes & JavaScript Usage
+
+### 1. Real-Time Streaming Transcription (`transcribeLive`)
+
+Stream audio from the user's microphone in real-time over WebSocket, receiving continuous partial hypotheses followed by committed sentences:
+
+```javascript
+// Start streaming microphone audio
+await foundry.transcribeLive({
+  api_token: "df-abcdef1234567890abcdef1234567890abcdef123456789=",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
+  onPartial: (partialText) => {
+    // Real-time interim hypothesis (updates as words are spoken)
+    document.querySelector("#status").innerText = partialText;
+  },
+  onFinal: (finalSegment) => {
+    // Committed sentence / phrase
+    document.querySelector("#output").innerText += " " + finalSegment;
+  },
+  resultElementSelector: "#output"
+});
+
+// Stop streaming when done
+await foundry.stopLive();
+```
+
+### 2. File Upload Batch Transcription (`transcribeFile`)
+
+Upload an entire audio file for full transcription:
+
+```javascript
+const file = document.querySelector("#audioInput").files[0];
+
+const fullText = await foundry.transcribeFile({
+  api_token: "df-abcdef1234567890abcdef1234567890abcdef123456789=",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
+  file: file,
+  model: "parakeet_v3",
+  lang: "en",
+  timestamps: false,
+  diarization: false,
+  resultElementSelector: "#fileOutput"
+});
+
+console.log("Transcribed text:", fullText);
+```
+
+### 3. Unified Helper (`soundToText`)
+
+The classic `soundToText` function acts as a backwards-compatible dispatcher:
+- Setting `type: "record"` triggers real-time streaming microphone capture.
+- Setting `type: "file"` transcribes an uploaded audio file.
 
 ```html
 <!DOCTYPE html>

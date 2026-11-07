@@ -24,7 +24,7 @@ Complex tasks are often better handled by breaking them down into smaller steps.
 This example connects the physical world with AI by allowing you to capture a photo using your device's camera. You can then write a prompt to ask the AI to describe, analyze, or creatively interpret the image you just took. It showcases the model's multi-modal capabilities, processing visual input alongside text.
 
 ### [Example 5: Audio to Text]({%link _Guides/LocalAI/examples/5.Speech-to-Text.md %})
-Learn how to convert spoken words into written text using the `soundToText` feature. This example lets you record audio directly in the browser and sends it to the server for transcription. It's a great starting point for building voice-controlled interfaces or transcription tools.
+Learn how to convert spoken words into written text using real-time streaming STT (`transcribeLive`) and batch file transcription (`transcribeFile`). This example lets you stream live microphone audio over WebSocket with sub-100ms latency or transcribe uploaded audio files. It's a great starting point for building voice-controlled interfaces or transcription tools.
 
 ### [Example 6: Prompt to Image]({%link _Guides/LocalAI/examples/6.Text-to-Image.md %})
 Visual creativity is at your fingertips with this example, which uses a text prompt to generate images. You will see how describing a scene, style, or object can produce a unique visual output. Experimenting with different descriptive words and negative prompts helps refine the artistic results.

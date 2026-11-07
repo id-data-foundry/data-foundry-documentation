@@ -56,17 +56,74 @@ df {
 }
 ```
 
-## AI Processing
+## AI Processing & Voice Services
 
-Data Foundry supports AI-powered features that can be connected to either a local model instance (e.g., LocalAI) or an OpenAI-compatible API.
+Data Foundry supports AI-powered features connected to local model engines or OpenAI-compatible APIs, including dual Speech-to-Text backends for longform batch transcription and real-time streaming recognition.
 
 ```hocon
 df {
     processing.ai {
-        # Base URL for the AI API (local or remote)
+        # Base URL for the text/vision AI API (local or remote)
         baseurl = "http://localhost:9191/v1"
         # API key if required by the provider
         key = ""
+
+        # Speech-to-Text Services
+        stt {
+            # Longform batch audio file transcription (Parakeet TDT / Whisper)
+            longform.url = "http://localhost:8092"
+            # Real-time low-latency streaming STT over WebSocket (Sherpa-ONNX)
+            realtime.url = "http://localhost:8093"
+        }
+
+        # Concurrency & queue lanes for AI requests
+        lanes {
+            text {
+                concurrency = 4
+                queue = 8
+                timeout = 120s
+            }
+            vision {
+                concurrency = 2
+                queue = 4
+                timeout = 180s
+            }
+            stt {
+                concurrency = 2
+                queue = 4
+                timeout = 300s
+            }
+            stt_realtime {
+                concurrency = 8
+                queue = 16
+                timeout = 600s
+            }
+            tts {
+                concurrency = 2
+                queue = 4
+                timeout = 120s
+            }
+            embedding {
+                concurrency = 4
+                queue = 8
+                timeout = 60s
+            }
+        }
+    }
+}
+```
+
+## External Vendors & Academic Integrations
+
+Data Foundry can integrate with academic discovery platforms like Semantic Scholar:
+
+```hocon
+idp {
+    vendors {
+        semanticscholar {
+            # Optional Semantic Scholar API key for paper and author lookups
+            api_key = ""
+        }
     }
 }
 ```
@@ -90,9 +147,20 @@ df {
     notifications {
         enabled = true
         channels {
-            slack.enabled = true
-            ntfy.enabled = false
-            pushover.enabled = false
+            slack {
+                enabled = true
+                webhook_url = "https://hooks.slack.com/services/..."
+            }
+            ntfy {
+                enabled = false
+                topic = "datafoundry-alerts"
+                server = "https://ntfy.sh"
+            }
+            pushover {
+                enabled = false
+                user = ""
+                token = ""
+            }
         }
     }
 }

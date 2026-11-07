@@ -431,11 +431,96 @@ console.log(result.usage.total_tokens);
 
 **See also:** [Example 13: Token Usage & Energy Estimation]({% link _Guides/LocalAI/examples/13.TokenUsage.md %})
 
-### foundry.soundToText({...})
+### foundry.transcribeFile({...})
 
 **Description:**
 
-The `soundToText` function is an asynchronous JavaScript function designed to transcribe audio into text. It supports two modes: recording audio directly from the microphone or transcribing an uploaded audio file. The function uses an API for transcription and provides options for customization, such as logging, loading indicators, and displaying results on a webpage.
+The `transcribeFile` function is an asynchronous JavaScript function that submits an audio file (`.wav`, `.mp3`, `.m4a`, etc.) to the DataFoundry batch speech-to-text service (port 8092 by default) and returns the full transcribed text. It supports model selection (e.g., Parakeet TDT, Whisper), language hints, diarization, and monotonic timestamps.
+
+**Parameters:**
+
+- *`api_token` (required)*: Your DataFoundry API key for accessing the transcription service.
+- *`server` (optional)*: The server URL for the transcription API. Defaults to the current page's origin.
+- *`file` (required)*: A `File` or `Blob` object containing the audio to transcribe.
+- *`model` (optional)*: Name of the STT model (e.g., `"whisper-base"`, `"parakeet_v3"`, `"parakeet-tdt"`). Defaults to `"whisper-base"`.
+- *`lang` (optional)*: Optional language code hint (e.g. `"en"`, `"nl"`). Defaults to `""`.
+- *`timestamps` (optional)*: Set to `true` to request segment timecodes. Defaults to `false`.
+- *`diarization` (optional)*: Set to `true` to enable speaker diarization. Defaults to `false`.
+- *`num_speakers` (optional)*: Expected number of speakers (integer) for diarization. Defaults to `null`.
+- *`resultElementSelector` (optional)*: A CSS selector for the HTML element where the transcription result will be placed.
+- *`loadingElementSelector` (optional)*: A CSS selector for an HTML element that will be given `aria-busy="true"` while transcription is in progress.
+- *`onTranscribe` (optional)*: A callback function `(text) => {}` that is triggered when the transcription result is available.
+- *`logging` (optional)*: Set to `true` to enable console logging or `false` to disable it. Defaults to `true`.
+
+**Return Value:**
+
+Returns a Promise that resolves to the transcribed text (string), or an empty string on error.
+
+**Example Usage:**
+
+```javascript
+const audioInput = document.querySelector("#audioFile");
+const file = audioInput.files[0];
+
+const text = await foundry.transcribeFile({
+  api_token: "your_api_key_here",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
+  file: file,
+  model: "parakeet_v3",
+  lang: "en",
+  resultElementSelector: "#transcriptionResult",
+  loadingElementSelector: "#loadingIndicator"
+});
+console.log("Transcribed:", text);
+```
+
+### foundry.transcribeLive({...}) & foundry.stopLive()
+
+**Description:**
+
+The `transcribeLive` function starts low-latency real-time microphone streaming transcription via a persistent WebSocket connection (`/v1/audio/transcriptions/stream`) powered by Sherpa-ONNX (port 8093 by default). Audio is captured directly from the user's microphone as 16kHz mono Float32 / 16-bit PCM and streamed in chunks. As speech is recognized, interim partial text updates are emitted with sub-100ms latency, followed by finalized segment hypotheses.
+
+Call `foundry.stopLive()` to stop streaming audio and close the WebSocket connection.
+
+**Parameters (`foundry.transcribeLive`):**
+
+- *`api_token` (required)*: Your DataFoundry API key for authentication.
+- *`server` (optional)*: The server URL (HTTP or WS). Defaults to current page's origin.
+- *`onPartial` (optional)*: Callback `(text) => {}` triggered with real-time interim hypothesis as words are spoken.
+- *`onFinal` (optional)*: Callback `(text) => {}` triggered whenever an utterance segment is finalized.
+- *`onError` (optional)*: Callback `(error) => {}` triggered if a connection or microphone error occurs.
+- *`onStateChange` (optional)*: Callback `(state) => {}` where state is `"connecting"`, `"listening"`, `"stopping"`, or `"closed"`.
+- *`resultElementSelector` (optional)*: A CSS selector for an HTML element whose text will be updated continuously.
+- *`loadingElementSelector` (optional)*: A CSS selector for an HTML element given `aria-busy="true"` while live streaming.
+- *`logging` (optional)*: Set to `true` to enable console logging or `false` to disable it. Defaults to `true`.
+
+**Example Usage:**
+
+```javascript
+// Start real-time live microphone transcription
+await foundry.transcribeLive({
+  api_token: "your_api_key_here",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
+  onPartial: (partialText) => {
+    document.querySelector("#liveStatus").innerText = partialText;
+  },
+  onFinal: (finalSegment) => {
+    document.querySelector("#transcript").innerText += " " + finalSegment;
+  },
+  resultElementSelector: "#liveTranscript"
+});
+
+// Stop listening when done
+await foundry.stopLive();
+```
+
+### foundry.soundToText({...}) (Backward-Compatible Dispatcher)
+
+**Description:**
+
+`foundry.soundToText` is a unified convenience dispatcher preserved for backward compatibility:
+- When called with `type: "record"` (or when `stopRec: true`), it automatically delegates to `foundry.transcribeLive` and `foundry.stopLive`.
+- When called with `type: "file"`, it automatically delegates to `foundry.transcribeFile`.
 
 **Parameters:**
 
@@ -449,22 +534,15 @@ The `soundToText` function is an asynchronous JavaScript function designed to tr
 - *`logging` (optional)*: Set to `true` to enable console logging or `false` to disable it. Defaults to `true`.
 - *`stopRec` (optional)*: Set to `true` to stop recording and return the complete transcription. Defaults to `false`.
 
-**Error Handling:**
-
-- If no `api_token` is provided, the function logs an error: `"No API key provided."`
-- If the `loadingElementSelector` does not match any element, an error is logged: `"Element selected for loading indicator not found."`
-- If the browser does not support microphone access or the user denies permission, an error is logged with the specific issue.
-- If the transcription API request fails, the error message is logged to the console.
-
 **Example Usage:**
 
 ```javascript
-// Example: Transcribing an uploaded audio file
+// Example: Transcribing an uploaded audio file (delegates to transcribeFile)
 foundry.soundToText({
   api_token: "your_api_key_here",
   server: "{{ site.external_base_urls.datafoundryurl }}",
   type: "file",
-  file: audioFile, // Replace with your audio file object
+  file: audioFile,
   resultElementSelector: "#transcriptionResult",
   loadingElementSelector: "#loadingIndicator",
   onTranscribe: (text) => {
@@ -473,7 +551,7 @@ foundry.soundToText({
   logging: true,
 });
 
-// Example: Recording audio and transcribing in real-time
+// Example: Recording audio and transcribing in real-time (delegates to transcribeLive)
 foundry.soundToText({
   api_token: "your_api_key_here",
   server: "{{ site.external_base_urls.datafoundryurl }}",
@@ -486,7 +564,7 @@ foundry.soundToText({
   logging: true,
 });
 
-// Example: Stopping a recording and getting the full transcription
+// Example: Stopping a recording and getting the full transcription (delegates to stopLive)
 foundry.soundToText({
   api_token: "your_api_key_here",
   server: "{{ site.external_base_urls.datafoundryurl }}",
