@@ -42,12 +42,32 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
             >
 
             <div class="grid">
-                <p>
+                <div>
+                    <label for="voiceSelect">Model &amp; Voice</label>
+                    <select id="voiceSelect">
+                        <optgroup label="Robotic (In-Process Java)">
+                            <option value="robot:retro" selected>Robot - Computer (FreeTTS)</option>
+                            <option value="robot:dalek">Robot - Dalek (Ring Modulation)</option>
+                            <option value="robot:cyborg">Robot - Cyborg (Metallic Flanger)</option>
+                            <option value="robot:vintage">Robot - Vintage 8-bit (SAM)</option>
+                        </optgroup>
+                        <optgroup label="Neural (Kokoro)">
+                            <option value="kokoro:af_heart">Kokoro - Heart (Female)</option>
+                            <option value="kokoro:af_bella">Kokoro - Bella (Female)</option>
+                            <option value="kokoro:am_adam">Kokoro - Adam (Male)</option>
+                            <option value="kokoro:am_michael">Kokoro - Michael (Male)</option>
+                            <option value="kokoro:bf_emma">Kokoro - Emma (British Female)</option>
+                            <option value="kokoro:bm_george">Kokoro - George (British Male)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div>
+                    <label>&nbsp;</label>
                     <button id="submitBtn">Submit</button>
-                </p>
+                </div>
             </div>
 
-            <audio id="result"></audio>
+            <audio id="result" controls style="width: 100%; margin-top: 1rem; display: none;"></audio>
 
             <script type="module">
                 // listen to button clicks and handle them
@@ -59,8 +79,9 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             .querySelector("#submitBtn")
                             .setAttribute("disabled", true);
 
-                        // retrieve prompt
+                        // retrieve prompt and selected voice/model
                         const prompt = document.querySelector("#prompt").value;
+                        const [model, voice] = document.querySelector("#voiceSelect").value.split(":");
 
                         // send request
                         await foundry.textToSpeech({
@@ -70,8 +91,10 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             api_token: "YOUR_API_KEY",
                             // submit the prompt
                             prompt: prompt,
-                            // choose a voice from: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md
-                            voice: "af_heart",
+                            // model selection: "robot" or "kokoro"
+                            model: model,
+                            // voice preset
+                            voice: voice,
                             // fill results in the HTML element with the id "result"
                             resultElementSelector: "#result",
                             // loading indicator element
@@ -79,6 +102,12 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                             // no logging on console needed
                             logging: false,
                         });
+
+                        // display audio player once loaded
+                        const audioEl = document.querySelector("#result");
+                        if (audioEl.src) {
+                            audioEl.style.display = "block";
+                        }
 
                         // enable submit button again
                         document

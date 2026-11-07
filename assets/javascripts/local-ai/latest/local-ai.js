@@ -403,6 +403,8 @@ const foundry = {
     prompt,
     language = "en",
     voice = "af_heart",
+    model = "kokoro",
+    speed = 1.0,
     loadingElementSelector,
     resultElementSelector,
     logging = true,
@@ -438,11 +440,12 @@ const foundry = {
             "Authorization": `Bearer ${api_token}`,
           },
           body: JSON.stringify({
-            model: "kokoro",
+            model: model || "kokoro",
             // choose from: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md
             voice: voice,
             lang: language,
-            input: prompt
+            input: prompt,
+            speed: speed,
           }),
         }
       );
@@ -478,6 +481,8 @@ const foundry = {
     projectId,
     prompt,
     language = "en",
+    voice = "retro",
+    speed = 1.0,
     loadingElementSelector,
     resultElementSelector,
     logging = true,
@@ -489,12 +494,20 @@ const foundry = {
       return;
     }
 
+    // Modern local AI route: /v1/audio/speech with model: "robot"
     if (!projectId) {
-      // Do not run the function when no project ID has been provided
-      console.error(
-        "No project ID provided. Please find your project ID at the info section of your project."
-      );
-      return;
+      return foundry.textToSpeech({
+        api_token,
+        server,
+        prompt,
+        language,
+        voice,
+        model: "robot",
+        speed,
+        loadingElementSelector,
+        resultElementSelector,
+        logging,
+      });
     }
 
     if (logging) {

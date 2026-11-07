@@ -7,7 +7,14 @@ has_toc: true
 ---
 # Text-to-Speech
 
-Text-to-Speech (TTS) is the neural synthesis of natural speech from textual input. Data Foundry provides a high-quality TTS endpoint powered by neural models such as Kokoro, turning sentences into natural-sounding spoken audio directly in MP3 format.
+Text-to-Speech (TTS) is the synthesis of spoken audio from textual input. Data Foundry provides an OpenAI-compatible speech synthesis endpoint supporting both natural neural speech powered by **Kokoro** and zero-latency robotic voices powered by **FreeTTS** diphone and DSP synthesis:
+
+- **`model: "kokoro"`**: High-quality natural human neural speech (voices: `af_heart`, `am_adam`, `bf_emma`, etc.).
+- **`model: "robot"`**: Built-in, zero-latency in-process robotic speech synthesis (input limited to 1,024 characters for performance and security):
+  - `voice: "retro"` or `"computer"` (default): Crisp 16kHz diphone synthetic computer voice powered by FreeTTS.
+  - `voice: "dalek"`: FreeTTS processed through a 45 Hz ring modulator (classic *Doctor Who* Dalek).
+  - `voice: "cyborg"`: FreeTTS processed through a metallic comb filter / flanger chassis.
+  - `voice: "vintage"` or `"sam"`: Authentic 8-bit retro formant voice (1982 SAM / Commodore 64 style).
 
 The modern speech generation endpoint is OpenAI-compatible and streams the resulting audio (`audio/mpeg`) directly back in the HTTP response. Different voices and languages can be configured via request parameters.
 
