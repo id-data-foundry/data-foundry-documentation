@@ -8,84 +8,87 @@ has_toc: true
 
 # Text-to-Text
 
-Our LocalAI API can be reached with `{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions`. You can start by leaving the model parameter empty (but still include it!) and for more specific cases you can choose different models. Not all models on that page are currently deployed in Data Foundry, to check what models are available on your Data Foundry instance, use the Data Foundry model overview.
+Our LocalAI API can be reached at `{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions`. You can start by leaving the model parameter as `default` (or empty) and for more specific tasks choose different models. To check what models are available on your Data Foundry instance, see the Model Overview:
 
 {% include df-link.html text="Model Overview" path="/tools/models" %}
 
 ## Examples
-### Python Example
+
+### Python Example:
+
+You can send chat completion requests or run interactive conversations using Python:
+
+[Download Python Script]({% link assets/files/chat-completion/chat.py %}){: .btn .btn-green download="chat.py"}
 
 ```python
 import requests
 
 api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
-messages = []
-headers={"Authorization": f"Bearer {api_key}"}
-
-# AI model ID you want to use
-model="phi-2-dpo-7k"
-# Add user prompt to history
-messages.append({'role':'user', 'content': 'This is a mouse, who are you?'})
-
-# Check the localai for scripting docs for more details
-data = {
-	'messages': messages,
-	'model': model
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
 }
-response = requests.post('{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions', headers=headers, json=data)
 
-# Raw response output for debugging
-print(response.text)
+payload = {
+    "model": "default",
+    "messages": [
+        {"role": "system", "content": "You are a helpful design research assistant."},
+        {"role": "user", "content": "What is physical computing in interactive design?"}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 1000
+}
 
-# Use response parsed as JSON
-jsonResponse = response.json()
-# Chatbot response (on the next line in blue)
-print("\033[1;32mChatbot Response: \n\033[35m" + jsonResponse["choices"][0]["message"]["content"])
+response = requests.post(
+    "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions",
+    headers=headers,
+    json=payload
+)
 
+if response.status_code == 200:
+    result = response.json()
+    reply = result["choices"][0]["message"]["content"]
+    print("Response:\n", reply)
+else:
+    print(f"Error {response.status_code}:", response.text)
 ```
 
-### JavaScript Example
+### JavaScript Example:
 
 ```js
-var api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
-var messages = [{"role": "user", "content": "This is a mouse, who are you?"}]
-var model = "phi-2-dpo-7k"
-// Send a POST request to the API
+var api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789=";
+var messages = [{"role": "user", "content": "What is physical computing in interactive design?"}];
+var model = "default";
+
 fetch("{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions", {
-	method: "POST",
-	cache: "no-cache",
-	headers: {
-	  "Authorization": `Bearer ${api_key}`
-	},
-	referrerPolicy: "no-referrer",
-	body: JSON.stringify({
-		"messages": messages,
-		"model":model
-	}),
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${api_key}`,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    messages: messages,
+    model: model
+  })
 })
-.then((response) => response.json())
-.then((json) => {
-	// check content of response
-	console.log(json)
-	// json.content contains the generated chat response
-	chatResponse = json.content
-});
+  .then((response) => response.json())
+  .then((json) => {
+    console.log("Chat response:", json.choices[0].message.content);
+  });
 ```
 
-### Command Line Example
+### Command Line Example:
 
-You can send API requests directly from any prototype that can access the web and send HTTP requests, e.g., an ESP32 or Raspberry Pi. Below is an example of a command-line call for Mac/Linux:
+You can send API requests directly from any prototype or device that can make HTTP requests:
 
 ```bash
-curl -X POST \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer df-abcdef1234567890abcdef1234567890abcdef123456789=' \
+curl -X POST "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer df-abcdef1234567890abcdef1234567890abcdef123456789=" \
   -d '{
     "messages": [
-      {"role": "user", "content": "This is a mouse, who are you?"}
+      {"role": "user", "content": "What is physical computing in interactive design?"}
     ],
-    "model": "phi-2-dpo-7k"
-  }' \
-  {{ site.external_base_urls.datafoundryurl }}/v1/chat/completions
-
+    "model": "default"
+  }'
 ```

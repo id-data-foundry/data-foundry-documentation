@@ -9,6 +9,8 @@ nav_order: 1
 
 When you want the AI to do more than just "chat", you can use **Structured Output** and **Tool Calling**. These features allow you to get data in a specific format (like JSON) or give the AI the ability to "interact" with your code.
 
+[Download Python Script]({% link assets/files/structured-output/extract_structured_data.py %}){: .btn .btn-green download="extract_structured_data.py"}
+
 <details open markdown="block">
   <summary>
     Table of contents
@@ -20,7 +22,7 @@ When you want the AI to do more than just "chat", you can use **Structured Outpu
 
 ---
 
-## 1. Structured Output (`responseFormat`)
+## 1. Structured Output (`response_format`)
 
 Sometimes you need the AI to return data that your program can easily understand, like a list of items, a configuration, or a specific set of values. Instead of just asking the AI to "output JSON" in the prompt (which it might sometimes fail to do correctly), you can enforce a **JSON Schema**.
 
@@ -34,7 +36,59 @@ A JSON Schema (sometimes called a "JS Schema" or simply a "Blueprint") is a way 
 #### Beginner Example
 If you want the AI to pick a random color and give you its name and Hex code, your "blueprint" (schema) would describe an object with two strings.
 
+### Using it in Python
+
+Send a standard HTTP request to `/v1/chat/completions` with the `response_format` object:
+
+```python
+import json
+import requests
+
+api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+schema = {
+    "name": "color_picker",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "name": {"type": "string", "description": "The name of the color"},
+            "hex": {"type": "string", "description": "The hex code, e.g. #FF5733"}
+        },
+        "required": ["name", "hex"],
+        "additionalProperties": False
+    }
+}
+
+payload = {
+    "model": "default",
+    "messages": [
+        {"role": "user", "content": "Pick a random warm color."}
+    ],
+    "response_format": {
+        "type": "json_schema",
+        "json_schema": schema
+    }
+}
+
+response = requests.post(
+    "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions",
+    headers=headers,
+    json=payload
+)
+
+if response.status_code == 200:
+    data = json.loads(response.json()["choices"][0]["message"]["content"])
+    print("Color Name:", data["name"])
+    print("Hex Code:", data["hex"])
+```
+
 ### Using it in JavaScript
+
 In the `local-ai.js` library, you pass this schema inside the `responseFormat` parameter.
 
 ```javascript
@@ -70,15 +124,71 @@ console.log("Hex Code:", data.hex);
 
 ## 2. Tool Calling (`tools`)
 
-Tool calling (also known as "Function Calling") allows you to give the AI "powers" or "capabilities". You describe your own JavaScript functions to the AI, and the AI can decide to "call" them when it needs to perform a specific action.
+Tool calling (also known as "Function Calling") allows you to give the AI "powers" or "capabilities". You describe your own functions to the AI, and the AI can decide to "call" them when it needs to perform a specific action.
 
 ### How it Works
 1. **Define the Tools**: You provide a list of functions, explaining what they do and what parameters they need (using the same JSON Schema format).
 2. **AI Decides**: The AI looks at the user's request. If it thinks one of your tools can help, it returns a **tool call** instead of a normal text message.
-3. **You Execute**: Your code detects the tool call, runs your actual JavaScript function with the arguments provided by the AI, and then uses the result.
+3. **You Execute**: Your code detects the tool call, runs your actual function with the arguments provided by the AI, and then uses the result.
 
-### Example: A Lighting Assistant
-Suppose you have a function that sends commands to smart lights. You can tell the AI about it:
+### Using Tool Calling in Python
+
+```python
+import json
+import requests
+
+api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "setLightLevel",
+            "description": "Sets the brightness of the room lights",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "level": {"type": "integer", "description": "Brightness from 0 to 100"}
+                },
+                "required": ["level"]
+            }
+        }
+    }
+]
+
+payload = {
+    "model": "default",
+    "messages": [
+        {"role": "system", "content": "You are a room lighting assistant."},
+        {"role": "user", "content": "It's a bit too dark in here."}
+    ],
+    "tools": tools,
+    "tool_choice": "auto"
+}
+
+response = requests.post(
+    "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions",
+    headers=headers,
+    json=payload
+)
+
+if response.status_code == 200:
+    msg = response.json()["choices"][0]["message"]
+    tool_calls = msg.get("tool_calls", [])
+    if tool_calls:
+        call = tool_calls[0]
+        if call["function"]["name"] == "setLightLevel":
+            args = json.loads(call["function"]["arguments"])
+            print(f"Executing setLightLevel with brightness: {args['level']}")
+    else:
+        print("Reply:", msg.get("content"))
+```
+
+### Using Tool Calling in JavaScript
 
 ```javascript
 // 1. Define the tool(s)

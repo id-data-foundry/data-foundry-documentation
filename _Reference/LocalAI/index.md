@@ -22,3 +22,4 @@ The Reference section of this documentation contains all relevant information on
 - **[Text‑to‑Speech]({% link _Reference/LocalAI/text-to-speech.md %})**: Example and usage for text to speech.
 - **[Speech‑to‑Text]({% link _Reference/LocalAI/speech-to-text.md %})**: Example and usage for speech recognition.
 - **[Image‑to‑Text]({% link _Reference/LocalAI/image-to-text.md %})**: Example and usage for OCR.
+- **[PDF‑to‑Text]({% link _Reference/LocalAI/pdf-to-text.md %})**: Example and usage for PDF text extraction.

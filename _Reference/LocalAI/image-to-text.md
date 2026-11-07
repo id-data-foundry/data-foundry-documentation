@@ -6,67 +6,105 @@ nav_order: 7
 has_toc: true
 ---
 # Image-to-Text
-Image‑to‑text (also called image captioning or visual question answering) turns a picture into a natural language description. This allows you to easily describe images and create visual transcriptions and is as easy as sending a picture along with a prompt to the AI api. Image-to-Text allows your AI model to interpret and interact with the real world, taking AI interactions past just chatting. The Data Foundry local‑AI library for javascript exposes this capability through the **`foundry.imageToText({...})`** function.
 
-[**Image-to-Text Example**]({%link _Guides/LocalAI/examples/example4.html %}){: .btn}
+Image‑to‑text (also called visual question answering or image captioning) turns a picture into a natural language description. This allows models to interpret and interact with real-world visual content, taking AI interactions past plain text. Data Foundry provides vision-capable models (such as LLaVA) via an OpenAI-compatible multimodal endpoint.
+
+[**Image-to-Text Example**]({% link _Guides/LocalAI/examples/example4.html %}){: .btn}
 
 ## How it works
-The function sends an HTTP POST request to your project’s AI endpoint with a JSON payload that contains the image (as a URL or file) and optional prompts.  A multi-modal model such as LLaVA runs on the server, processes the image and returns a textual response which can be displayed in the browser. To see if a model has multi-modal capabilities, check the model cards of the models available at your data foundry instance. You can find an overview of all relevant models at the link below.
+
+The client sends an HTTP `POST` request to `/v1/chat/completions` with a JSON payload containing the image encoded as a base64 data URL inside the `messages` content list, along with your text prompt. A multimodal vision model processes both the image and text and returns the response.
+
+To see which vision models are deployed on your instance, check the model overview:
 
 {% include df-link.html text="Model Overview" path="/tools/models" %}
 
 ## Examples
-### Javascript example:
-
-You can find a working example of a website using [Image-to-Text here]({%link _Guides/LocalAI/examples/4.Image-to-Text.md%}) for more information on the request itself check the [Data Foundry Javascript Library reference page.]({% link _Reference/LocalAI/JSAPI.md%}#foundryimagetotext)
 
 ### Python Example:
+
+You can send an image and a prompt using Python:
+
+[Download Python Script]({% link assets/files/image-to-text/describe_image.py %}){: .btn .btn-green download="describe_image.py"}
+
 ```python
-import requests
 import base64
+import mimetypes
+import requests
 
-api_key = 'df-abcdef1234567890abcdef1234567890abcdef123456789='
-messages = []
-headers = {"Authorization": f"Bearer {api_key}"}
-model = "llava-llama-3-8b-v1_1"  # Vision-capable model on the TU/e LocalAI server
-
-# Load and encode a local image as base64
-image_path = "image.jpg"  # Replace with your image path
-with open(image_path, "rb") as image_file:
-    image_data = base64.b64encode(image_file.read()).decode("utf-8")
-
-# Add user prompt with image to history
-# The image is passed as a base64-encoded data URL inside the content list
-messages.append({
-    'role': 'user',
-    'content': [
-        {
-            'type': 'image_url',
-            'image_url': {
-                'url': f"data:image/jpeg;base64,{image_data}"
-            }
-        },
-        {
-            'type': 'text',
-            'text': 'What do you see in this image? Describe it in detail.'
-        }
-    ]
-})
-
-# Check the localai for scripting docs for more details
-data = {
-    'messages': messages,
-    'model': model
+api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
 }
 
-response = requests.post('{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions', headers=headers, json=data)
+# Encode a local image as a base64 data URL
+image_path = "image.jpg"
+mime_type, _ = mimetypes.guess_type(image_path)
+mime_type = mime_type or "image/jpeg"
 
-# Raw response output for debugging
-print(response.text)
+with open(image_path, "rb") as image_file:
+    b64_image = base64.b64encode(image_file.read()).decode("utf-8")
 
-# Use response parsed as JSON
-jsonResponse = response.json()
+data_url = f"data:{mime_type};base64,{b64_image}"
 
-# Chatbot response (on the next line in blue)
-print("\033[1;32mChatbot Response: \n\033[35m" + jsonResponse["choices"][0]["message"]["content"])
+payload = {
+    "model": "llava-llama-3-8b-v1_1",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": data_url
+                    }
+                },
+                {
+                    "type": "text",
+                    "text": "What do you see in this image? Describe it in detail."
+                }
+            ]
+        }
+    ]
+}
+
+response = requests.post(
+    "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions",
+    headers=headers,
+    json=payload
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("Description:\n", result["choices"][0]["message"]["content"])
+else:
+    print(f"Error {response.status_code}:", response.text)
 ```
+
+### Command Line Example:
+
+```bash
+# Prepare image payload as base64
+IMAGE_B64=$(base64 -w 0 image.jpg)
+
+curl -X POST "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions" \
+  -H "Authorization: Bearer df-abcdef1234567890abcdef1234567890abcdef123456789=" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llava-llama-3-8b-v1_1",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,'"$IMAGE_B64"'"}},
+          {"type": "text", "text": "Describe what you see in this image."}
+        ]
+      }
+    ]
+  }'
+```
+
+### JavaScript Example:
+
+You can find a working interactive example in the [Image-to-Text Guide]({% link _Guides/LocalAI/examples/4.Image-to-Text.md %}). For more information on JavaScript client methods, check the [Data Foundry JavaScript Library reference]({% link _Reference/LocalAI/JSAPI.md %}#foundryimagetotext).

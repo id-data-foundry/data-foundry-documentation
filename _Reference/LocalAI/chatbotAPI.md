@@ -32,6 +32,43 @@ Authorization: Bearer df-abcdef1234567890...
 * **Chat Isolation:** To keep conversation history separate between users, generate and provide a unique `conversationId` (e.g. UUID) for each user thread. Conversation turns and transcripts are strictly scoped by chatbot and conversation ID.
 * **Memory Isolation:** In Agentic mode, provide the `user` parameter when calling with a shared Project API Key or Dataset API Token. DataFoundry sandboxes each end-user's profile facts and note files in a dedicated, collision-free directory. User A cannot read, overwrite, or access User B's memories.
 
+### Python Example:
+
+You can interact with your custom chatbot and preserve conversation sessions using Python:
+
+[Download Python Script]({% link assets/files/chatbot/chat.py %}){: .btn .btn-green download="chat.py"}
+
+```python
+import requests
+
+api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
+chatbot_id = 42
+
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "message": "What is mentioned in the project documents about sustainability?",
+    "conversationId": "7b8e-4a2c-9d1f",
+    "user": "student_jordan_101"
+}
+
+response = requests.post(
+    f"{{ site.external_base_urls.datafoundryurl }}/api/v1/chatbots/{chatbot_id}/chat",
+    headers=headers,
+    json=payload
+)
+
+if response.status_code == 200:
+    result = response.json()
+    reply = result["choices"][0]["message"]["content"]
+    print("Chatbot Reply:\n", reply)
+else:
+    print(f"Error {response.status_code}:", response.text)
+```
+
 ### Example Request (cURL)
 
 ```bash
