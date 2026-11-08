@@ -397,6 +397,295 @@ const foundry = {
       console.error("There was a problem with the fetch operation:", error.message);
     }
   },
+  imageToImage: async function ({
+    api_token,
+    server = document.location.origin,
+    model = "default",
+    image,
+    prompt,
+    negativePrompt = '',
+    strength = 0.7,
+    cfgScale = 10,
+    seed = -1,
+    steps = 20,
+    width = 512,
+    height = 512,
+    logging = true,
+    loadingElementSelector,
+    resultElementSelector
+  }) {
+    server = foundry.resolveServer(server);
+    if (logging) {
+      console.log("Running image-to-image function");
+    }
+    if (!api_token) {
+      console.error("No API key provided.");
+      return;
+    }
+    if (!image) {
+      console.error("No input image provided.");
+      return;
+    }
+
+    let loadingElement;
+    if (loadingElementSelector) {
+      loadingElement = document.querySelector(loadingElementSelector);
+      if (!loadingElement) {
+        console.warn("Element specified for loading indicator not found (using result element instead)");
+        loadingElement = document.querySelector(resultElementSelector);
+      }
+      loadingElement && loadingElement.setAttribute("aria-busy", "true");
+    }
+
+    try {
+      const normalizedImage = await foundry.normalizeImageInput(image);
+      const formData = new FormData();
+      if (normalizedImage instanceof Blob) {
+        formData.append("image", normalizedImage, "image.png");
+      } else {
+        formData.append("image", normalizedImage);
+      }
+      formData.append("model", model);
+      if (prompt) formData.append("prompt", prompt);
+      if (negativePrompt) formData.append("negativeprompt", negativePrompt);
+      if (strength !== undefined) formData.append("strength", String(Math.max(0.0, Math.min(1.0, strength))));
+      if (cfgScale !== undefined) formData.append("cfg", String(cfgScale));
+      if (seed !== undefined) formData.append("seed", String(seed));
+      if (steps !== undefined) formData.append("steps", String(Math.max(1, Math.min(50, steps))));
+      if (width !== undefined) formData.append("width", String(Math.max(64, Math.min(2048, width))));
+      if (height !== undefined) formData.append("height", String(Math.max(64, Math.min(2048, height))));
+
+      const response = await fetch(`${server}/v1/images/edits`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${api_token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      if (loadingElement) {
+        loadingElement.setAttribute("aria-busy", "false");
+      }
+
+      if (json.error) {
+        alert(json.error);
+        return;
+      }
+
+      if (logging) {
+        console.log("Generated image:", json["image_url"]);
+      }
+
+      if (resultElementSelector) {
+        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+      }
+
+      return json["image_url"];
+    } catch (error) {
+      console.error("There was a problem with image-to-image operation:", error.message);
+    } finally {
+      if (loadingElement) {
+        loadingElement.setAttribute("aria-busy", "false");
+      }
+    }
+  },
+  editImage: async function ({
+    api_token,
+    server = document.location.origin,
+    model = "default",
+    image,
+    mask,
+    prompt,
+    negativePrompt = '',
+    strength = 0.8,
+    cfgScale = 10,
+    seed = -1,
+    steps = 20,
+    width = 512,
+    height = 512,
+    logging = true,
+    loadingElementSelector,
+    resultElementSelector
+  }) {
+    server = foundry.resolveServer(server);
+    if (logging) {
+      console.log("Running edit-image (inpainting) function");
+    }
+    if (!api_token) {
+      console.error("No API key provided.");
+      return;
+    }
+    if (!image) {
+      console.error("No base image provided.");
+      return;
+    }
+
+    let loadingElement;
+    if (loadingElementSelector) {
+      loadingElement = document.querySelector(loadingElementSelector);
+      if (!loadingElement) {
+        console.warn("Element specified for loading indicator not found (using result element instead)");
+        loadingElement = document.querySelector(resultElementSelector);
+      }
+      loadingElement && loadingElement.setAttribute("aria-busy", "true");
+    }
+
+    try {
+      const normalizedImage = await foundry.normalizeImageInput(image);
+      const formData = new FormData();
+      if (normalizedImage instanceof Blob) {
+        formData.append("image", normalizedImage, "image.png");
+      } else {
+        formData.append("image", normalizedImage);
+      }
+      if (mask) {
+        const normalizedMask = await foundry.normalizeImageInput(mask);
+        if (normalizedMask instanceof Blob) {
+          formData.append("mask", normalizedMask, "mask.png");
+        } else {
+          formData.append("mask", normalizedMask);
+        }
+      }
+      formData.append("model", model);
+      if (prompt) formData.append("prompt", prompt);
+      if (negativePrompt) formData.append("negativeprompt", negativePrompt);
+      if (strength !== undefined) formData.append("strength", String(Math.max(0.0, Math.min(1.0, strength))));
+      if (cfgScale !== undefined) formData.append("cfg", String(cfgScale));
+      if (seed !== undefined) formData.append("seed", String(seed));
+      if (steps !== undefined) formData.append("steps", String(Math.max(1, Math.min(50, steps))));
+      if (width !== undefined) formData.append("width", String(Math.max(64, Math.min(2048, width))));
+      if (height !== undefined) formData.append("height", String(Math.max(64, Math.min(2048, height))));
+
+      const response = await fetch(`${server}/v1/images/edits`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${api_token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      if (loadingElement) {
+        loadingElement.setAttribute("aria-busy", "false");
+      }
+
+      if (json.error) {
+        alert(json.error);
+        return;
+      }
+
+      if (logging) {
+        console.log("Edited image:", json["image_url"]);
+      }
+
+      if (resultElementSelector) {
+        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+      }
+
+      return json["image_url"];
+    } catch (error) {
+      console.error("There was a problem with image edit operation:", error.message);
+    } finally {
+      if (loadingElement) {
+        loadingElement.setAttribute("aria-busy", "false");
+      }
+    }
+  },
+  imageVariation: async function ({
+    api_token,
+    server = document.location.origin,
+    model = "default",
+    image,
+    n = 1,
+    logging = true,
+    loadingElementSelector,
+    resultElementSelector
+  }) {
+    server = foundry.resolveServer(server);
+    if (logging) {
+      console.log("Running image-variation function");
+    }
+    if (!api_token) {
+      console.error("No API key provided.");
+      return;
+    }
+    if (!image) {
+      console.error("No input image provided.");
+      return;
+    }
+
+    let loadingElement;
+    if (loadingElementSelector) {
+      loadingElement = document.querySelector(loadingElementSelector);
+      if (!loadingElement) {
+        console.warn("Element specified for loading indicator not found (using result element instead)");
+        loadingElement = document.querySelector(resultElementSelector);
+      }
+      loadingElement && loadingElement.setAttribute("aria-busy", "true");
+    }
+
+    try {
+      const normalizedImage = await foundry.normalizeImageInput(image);
+      const formData = new FormData();
+      if (normalizedImage instanceof Blob) {
+        formData.append("image", normalizedImage, "image.png");
+      } else {
+        formData.append("image", normalizedImage);
+      }
+      formData.append("model", model);
+      if (n !== undefined) formData.append("n", String(n));
+
+      const response = await fetch(`${server}/v1/images/variations`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${api_token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+
+      if (loadingElement) {
+        loadingElement.setAttribute("aria-busy", "false");
+      }
+
+      if (json.error) {
+        alert(json.error);
+        return;
+      }
+
+      if (logging) {
+        console.log("Variation image:", json["image_url"]);
+      }
+
+      if (resultElementSelector) {
+        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+      }
+
+      return json["image_url"];
+    } catch (error) {
+      console.error("There was a problem with image variation operation:", error.message);
+    } finally {
+      if (loadingElement) {
+        loadingElement.setAttribute("aria-busy", "false");
+      }
+    }
+  },
   textToSpeech: async function ({
     api_token,
     server = document.location.origin,
@@ -1231,10 +1520,53 @@ const foundry = {
         const processedImage = canvas.toDataURL("image/jpeg", 0.5); // 0.5 reduces image quality to decrease the prompt length
         if (logging) {
           console.log("Image processed.");
-          console.log(processedImage);
         }
         resolve(processedImage);
       });
     }
+  },
+  normalizeImageInput: async function (source) {
+    if (!source) return null;
+    if (typeof HTMLCanvasElement !== "undefined" && source instanceof HTMLCanvasElement) {
+      return new Promise((resolve) => {
+        source.toBlob((blob) => resolve(blob), "image/png");
+      });
+    }
+    if (typeof HTMLImageElement !== "undefined" && source instanceof HTMLImageElement) {
+      const canvas = document.createElement("canvas");
+      canvas.width = source.naturalWidth || source.width;
+      canvas.height = source.naturalHeight || source.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(source, 0, 0);
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), "image/png");
+      });
+    }
+    if (typeof Blob !== "undefined" && source instanceof Blob) {
+      return source;
+    }
+    if (typeof source === "string") {
+      if (source.startsWith("data:")) {
+        const parts = source.split(",");
+        const mimeMatch = parts[0].match(/:(.*?);/);
+        const mime = (mimeMatch && mimeMatch[1]) ? mimeMatch[1] : "image/png";
+        const bstr = atob(parts[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+      } else {
+        try {
+          const res = await fetch(source);
+          return await res.blob();
+        } catch (e) {
+          console.warn("Could not fetch image URL as Blob, returning original string:", e);
+          return source;
+        }
+      }
+    }
+    return source;
   }
 };
