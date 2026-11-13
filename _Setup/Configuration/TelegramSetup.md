@@ -26,5 +26,14 @@ Now to request a telegram Bot API token, follow the instructions below.
 ![New bot]({% link _Setup/Configuration/assets/BotFather0.jpg %}){:width="30%"}
 ![Configure bot and copy token]({% link _Setup/Configuration/assets/BotFather6.jpg %}){:width="30%"}
 
-## Step 5. Copy and Insert api key
-In the application.conf file used to set up your data foundry instance, there is a small field for you to fill in your new telegram API key
+## Step 5. Copy and Insert API Key
+In `conf/application.conf`, configure your Telegram bot username and token under `df.telegram`:
+
+```hocon
+df {
+    telegram {
+        bot_name = "your_bot_username"
+        bot_token = "1111111111:aaa_aaaaaaaaaaaaaaaaaa-aaaaaaaaaaa"
+    }
+}
+```

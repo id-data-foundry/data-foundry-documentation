@@ -64,6 +64,20 @@ df {
 
 Once configured, a "Sign in with SSO" option will appear on the login page.
 
+> For production HTTPS deployments, also set `play.http.session.secure = true` and `play.http.session.domain = "your-domain.edu"` in `conf/application.conf`.
+
+## Participation Token Expiration
+
+You can optionally limit how long participant invitation or access tokens remain valid:
+
+```hocon
+df {
+    auth {
+        participationTokenMaxAgeDays = 30
+    }
+}
+```
+
 ## Registration Keys
 
 If you want to restrict registration to specific users (e.g., for a private instance or internal testing), you can configure registration keys. Users will need to provide a valid key to sign up.

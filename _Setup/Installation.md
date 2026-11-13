@@ -42,8 +42,8 @@ git submodule update
 
 This will install all the required files to get started with the configuration process
 
-### Step 3 (optional): Configuring Configuration file
-configuring `configuration/application.conf` > needs a special page
+### Step 3 (optional): Configuring `application.conf`
+Configure `conf/application.conf` for your instance URL, authentication, AI services, and notifications. See the **[Instance Configuration Guide]({% link _Setup/Configuration/ConfiguringDF.md %})** and **[Configuration Key Reference]({% link _Setup/Configuration/ConfigurationReference.md %})**.
 
 ### Step 4 (optional): Configuring Docker Compose file
 This repository contains 2 docker compose files, one for the development environment and one for the production environment. In here you can enable additional services like a reverse proxy, FAIRLY or OOCSI. 

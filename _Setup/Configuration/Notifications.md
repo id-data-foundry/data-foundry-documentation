@@ -122,6 +122,9 @@ df {
 
                 # Default priority for INFO alerts: -2 (lowest), -1 (low), 0 (normal), 1 (high)
                 priority = 0
+
+                # Optional API URL override (default: https://api.pushover.net/1/messages.json)
+                # url = "https://api.pushover.net/1/messages.json"
             }
         }
     }

@@ -14,3 +14,4 @@ This section covers the configuration of the Data Foundry instance, including sy
 *   **[Fitbit Setup]({% link _Setup/Configuration/FitbitSetup.md %})**: Instructions for registering a Fitbit application to enable wearable data integration.
 *   **[Telegram Bot Setup]({% link _Setup/Configuration/TelegramSetup.md %})**: A guide to creating a Telegram bot and connecting it to Data Foundry for interaction capabilities.
 *   **[System Notifications & Alerts]({% link _Setup/Configuration/Notifications.md %})**: Configure multi-channel system notifications (Slack, Ntfy, Pushover) and automated AI health alerts.
+*   **[Configuration Key Reference]({% link _Setup/Configuration/ConfigurationReference.md %})**: Complete key-by-key lookup table for `conf/application.conf` and admin-relevant `conf/reference.conf` settings.

@@ -13,8 +13,13 @@ Data Foundry uses a relational database to store user information, project metad
 
 *   **Development (H2):** By default, in development mode, Data Foundry uses an in-memory H2 database. This is fast but volatile; data is lost when the server stops unless configured to persist to a file.
     ```hocon
+    # In-memory H2 (default for development)
     db.default.url="jdbc:h2:mem:play;DB_CLOSE_DELAY=-1"
+
+    # File-backed H2 (persists data locally in ./data/play)
+    # db.default.url="jdbc:h2:./data/play"
     ```
+    For local production testing with a populated test database, you can also set `production.mockDB = true`.
 
 *   **Production (PostgreSQL):** For production environments, we strongly recommend using PostgreSQL. This is configured in the `DF-production.yaml` Docker Compose file.
 

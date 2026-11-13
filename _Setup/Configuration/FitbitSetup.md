@@ -51,4 +51,15 @@ your instance url + /wearables/signup/fitbit
 #### Default Access Type
 `Read-Only`
 
-## Step 4. Copy and Insert api key
+## Step 4. Copy and Insert API Key
+
+Add your Fitbit OAuth 2.0 Client ID and Client Secret to `conf/application.conf` under `df.vendor`:
+
+```hocon
+df {
+    vendor {
+        fitbit.id = "YOUR_FITBIT_CLIENT_ID"
+        fitbit.secret = "YOUR_FITBIT_CLIENT_SECRET"
+    }
+}
+```

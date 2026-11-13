@@ -12,10 +12,11 @@ To make hosting a large Data Foundry instance easier, we built several administr
 
 ## Configuring Administrators
 
-Admin users are configured in the `application.conf` file. By default, no user is assigned as an admin. To configure a new administrator, open the `conf/application.conf` file and locate the `users` section:
+Admin users are configured in the `application.conf` file. By default, no user is assigned as an admin. To configure a new administrator, open the `conf/application.conf` file and locate the `df.users` section:
 
 ```hocon
-users {
+df {
+    users {
         # List of admin user email addresses
         admins = ["admin@example.org"]
 
@@ -27,6 +28,7 @@ users {
 
         # List of reviewers email addresses
         reviewers = ["reviewer@example.org"]
+    }
 }
 ```
 

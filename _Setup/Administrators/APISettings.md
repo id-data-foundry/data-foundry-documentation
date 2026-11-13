@@ -12,9 +12,28 @@ Data Foundry provides several APIs for programmatic access to data and services.
 
 System-wide API keys are configured in `conf/application.conf` under `df.keys`.
 
+*   **`registration`**: List of valid registration codes required to sign up when registration is restricted.
+*   **`project`**: Secret key used for project-level token operations.
 *   **`api`**: The master API key for general system access (use with caution).
 *   **`auth.api`**: Key for the authentication service.
-*   **`v2.user.api`**: Specialized keys for user-centric API operations.
+*   **`v2.multi.api`**: List of V2 multi-project API keys for trusted external services.
+*   **`v2.user.api`**: List of specialized V2 keys for user-centric API operations (convention: service name in the first 8 characters).
+
+```hocon
+df {
+    keys {
+        registration = ["secret-signup-code"]
+        project = ""
+        api = ""
+        auth.api = ""
+
+        v2 {
+            multi.api = [""]
+            user.api = [""]
+        }
+    }
+}
+```
 
 ## Project API Keys
 
