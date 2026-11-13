@@ -1,0 +1,113 @@
+<script>
+(function() {
+  var peleLoadPromise = null;
+
+  function collectDiagramNodes() {
+    var rawNodes = document.querySelectorAll('pre > code.language-mermaid, code.language-mermaid, .language-mermaid, .pele');
+    var nodes = [];
+    var seen = [];
+    Array.prototype.forEach.call(rawNodes, function(el) {
+      if (!el || el.tagName === 'svg' || el.getAttribute('data-processed') === 'true') return;
+      if (el.tagName === 'CODE' && el.parentElement && el.parentElement.classList.contains('language-mermaid')) return;
+      var target = el;
+      if (el.tagName === 'CODE' && el.parentElement && el.parentElement.tagName === 'PRE') {
+        target = el.parentElement;
+      }
+      if (seen.indexOf(target) === -1) {
+        seen.push(target);
+        nodes.push({ host: target, sourceEl: el });
+      }
+    });
+    return nodes;
+  }
+
+  function ensurePeleLoaded(onReady) {
+    if (window.pele) {
+      onReady();
+      return Promise.resolve();
+    }
+    if (!peleLoadPromise) {
+      peleLoadPromise = new Promise(function(resolve, reject) {
+        var script = document.createElement('script');
+        script.src = {{ '/assets/javascripts/pele.min.js' | relative_url | jsonify }};
+        script.defer = true;
+        script.onload = function() { resolve(); };
+        script.onerror = function(err) { peleLoadPromise = null; reject(err); };
+        document.body.appendChild(script);
+      });
+    }
+    return peleLoadPromise.then(onReady).catch(function(err) {
+      console.error('Failed to load Pele renderer:', err);
+    });
+  }
+
+  function preprocessPeleSource(text) {
+    if (!text || !/^\s*gantt\b/m.test(text)) return text;
+    var reserved = /^\s*(click|call|gantt|section|title|accTitle|accDescr|accDescription|weekday|weekend)\b/i;
+    return text.split('\n').map(function(line) {
+      if (reserved.test(line) && line.indexOf(':') !== -1) {
+        return line.replace(/^(\s*)([^\s].*)$/, '$1' + String.fromCharCode(8203) + '$2');
+      }
+      return line;
+    }).join('\n');
+  }
+
+  function renderDocDiagrams() {
+    var entries = collectDiagramNodes();
+    if (!entries.length) return;
+
+    ensurePeleLoaded(function() {
+      if (!window.pele) return;
+      entries.forEach(function(entry) {
+        var host = entry.host;
+        var sourceEl = entry.sourceEl;
+        if (!host || !host.parentNode) return;
+        var rawText = host.getAttribute('data-diagram-source') || sourceEl.textContent.trim();
+        if (!rawText) return;
+
+        try {
+          var processedText = preprocessPeleSource(rawText);
+          var containerWidth = host.clientWidth || (host.parentElement ? host.parentElement.clientWidth : 0);
+          var options = {
+            config: {
+              gantt: {
+                barHeight: 14,
+                barGap: 4
+              }
+            }
+          };
+          if (containerWidth && containerWidth > 100) {
+            options.config.gantt.useWidth = Math.round(containerWidth);
+          }
+
+          var res = window.pele.render(processedText, options);
+          if (!res || !res.svg) return;
+
+          var container = host.tagName === 'PRE' ? document.createElement('div') : host;
+          container.classList.add('pele');
+          container.setAttribute('data-processed', 'true');
+          container.setAttribute('data-diagram-source', rawText);
+          container.innerHTML = res.svg;
+
+          if (host.tagName === 'PRE') {
+            var highlightRoot = host.closest('.highlighter-rouge');
+            if (highlightRoot && highlightRoot.parentNode) {
+              highlightRoot.parentNode.replaceChild(container, highlightRoot);
+            } else {
+              host.parentNode.replaceChild(container, host);
+            }
+          }
+        } catch (err) {
+          console.error('Pele render error:', err);
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderDocDiagrams);
+  } else {
+    renderDocDiagrams();
+  }
+})();
+</script>

@@ -49,3 +49,29 @@ body,
 .btn-green {
   @include btn-color($white, #66BB6A);
 }
+
+// Pele diagrams
+.pele {
+  width: 100%;
+  display: block;
+  margin: 1rem 0;
+  --pele-font: #{$font-family-base};
+  --pele-font-mono: Consolas, Monaco, 'Ubuntu Mono', monospace;
+  --pele-bg: #{$body-background-color};
+  --pele-fg: #{$body-heading-color};
+  --pele-muted: #{$body-text-color};
+  --pele-line: #{$body-text-color};
+  --pele-border: #{$green-100};
+  --pele-surface: #{$table-background-color};
+  --pele-surface-alt: #{$feedback-color};
+  --pele-accent: #{$green-200};
+  --pele-radius: 6px;
+}
+
+.pele svg,
+svg.pele {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}

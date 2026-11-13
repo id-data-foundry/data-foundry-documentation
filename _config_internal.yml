@@ -132,6 +132,8 @@ custom_js:
 head_custom: |
   <script src="{{ '/assets/js/data-foundry-selector.js' | relative_url }}"></script>
 
+mermaid: true
+
 compress_html:
   clippings: all
   comments: all
