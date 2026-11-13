@@ -213,7 +213,8 @@ const foundry = {
 
       // Place result on the page (only if not streaming, as streaming already handles this)
       if (!stream && resultElementSelector && chatResponse) {
-        document.querySelector(resultElementSelector).innerHTML += chatResponse;
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.insertAdjacentText("beforeend", chatResponse);
       }
 
       // Return the AI response and usage
@@ -292,8 +293,9 @@ const foundry = {
       }
 
       // Place result on the page
-      if (resultElementSelector) {
-        document.querySelector(resultElementSelector).innerHTML += chatResponse;
+      if (resultElementSelector && chatResponse) {
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.insertAdjacentText("beforeend", chatResponse);
       }
 
       // Return an object with both the content and the conversationId
@@ -1051,7 +1053,8 @@ const foundry = {
 
       // Place result on the page
       if (!stream && resultElementSelector && chatResponse) {
-        document.querySelector(resultElementSelector).innerHTML += chatResponse;
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.insertAdjacentText("beforeend", chatResponse);
       }
 
       return { text: chatResponse, toolCalls: toolCalls, usage: usage };
@@ -1117,7 +1120,7 @@ const foundry = {
       onTranscribe(text);
       if (resultElementSelector && text) {
         const target = document.querySelector(resultElementSelector);
-        if (target) target.innerHTML += text + " ";
+        if (target) target.insertAdjacentText("beforeend", text + " ");
       }
       return text;
     } catch (error) {
@@ -1243,7 +1246,7 @@ const foundry = {
               }
               if (resultElementSelector) {
                 const rEl = document.querySelector(resultElementSelector);
-                if (rEl) rEl.innerHTML += data.text + " ";
+                if (rEl) rEl.insertAdjacentText("beforeend", data.text + " ");
               }
             }
           } catch (err) {
@@ -1378,7 +1381,11 @@ const foundry = {
   popup: async function (type, logging = true) {
     // If not file input had already been created, create a new one
     if (!document.querySelector("#df_hiddenFileInput")) {
-      document.body.innerHTML += `<input type="file" id="df_hiddenFileInput" style="display: none;" onchange=""></input>`;
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "file";
+      hiddenInput.id = "df_hiddenFileInput";
+      hiddenInput.style.display = "none";
+      document.body.appendChild(hiddenInput);
     }
 
     // If types audio / image have been selected, add 'accept' attribute and set to the correct value
