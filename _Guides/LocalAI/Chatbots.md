@@ -32,11 +32,12 @@ Standard  [—●]  Agentic
 | **How it answers** | Direct reply based on your prompt and matching text | Thinks first, uses tools when needed, and searches documents on demand |
 | **Document search** | Automatically includes matching text sections before answering | Searches uploaded documents only when your question relates to them |
 | **Memory & Notes** | Forgets everything once a conversation ends | Remembers facts about you and saves private notes across chats |
-| **Customization** | Instructions (System Prompt) | Instructions + `AGENTS.md` guidelines |
+| **Customization** | Instructions (System Prompt) | Instructions (System Prompt) + `AGENTS.md` guidelines |
+| **Model & Temperature** | Pick any hosted AI model and temperature | Uses the platform's tool-calling coding model automatically |
 | **Multiple chats** | One chat thread | Multiple separate conversation threads |
-| **Best for** | Simple Q&A, FAQs, quick document reference | Personal research assistants, study partners, interactive coaches |
+| **Best for** | Simple Q&A, FAQs, quick document reference | Personal research assistants, study partners, diary studies, interactive coaches |
 
-> **Need a step-by-step beginner walkthrough?** Follow our hands-on tutorial: **[Building Your First Agentic Chatbot]({% link _Tutorials/LocalAI/AgenticChatbot.md %})**.
+> **Need a step-by-step walkthrough?** Start with **[Building Your First Agentic Chatbot]({% link _Tutorials/LocalAI/AgenticChatbot.md %})** (~15 min), or try the **[Advanced: Diary Study Companion]({% link _Tutorials/LocalAI/DiaryStudyCompanion.md %})** (~45 min) for a complete research case. For concepts, see **[AI Agents: How Agentic Chatbots Work]({% link _Learning/LocalAI/AgenticChatbots.md %})**.
 
 ---
 
@@ -94,6 +95,11 @@ When reference documents (PDFs, Markdown, or text files) are uploaded:
 
 The **Agentic** engine turns your chatbot into an active problem solver that can reason, look up information on demand, remember personal facts, and take private notes.
 
+{: .info}
+New to agents? Read **[AI Agents: How Agentic Chatbots Work]({% link _Learning/LocalAI/AgenticChatbots.md %})** for a beginner-friendly overview of tools, memory types, and limits.
+
+In Agentic mode, Data Foundry automatically selects the platform's tool-calling coding model (so **AI Brain & Model Selection** is hidden). **User Memory & Notes** and **Multi-Session Support** are both enabled by default on new bots, and you can still set **Instructions (System Prompt)**, **Knowledge Base Retrieval (RAG)** tuning (**Max Reference Chunks**, **Relevance Threshold**, **Show/Hide Sources**), and **Starter Prompts**.
+
 ### How Agentic Chatbots Work: The "Think-and-Act" Loop
 Standard chatbots generate an immediate text response as soon as you press enter. An agentic chatbot, by contrast, uses a **Think-and-Act loop** (often called ReAct):
 
@@ -113,17 +119,20 @@ User Prompt ──> [ 1. Think & Plan ] ──> Needs info / memory?
 ```
 
 1. **Think & Plan:** The bot inspects your prompt along with any facts it already knows about you. It decides whether it can answer right away or needs to gather information first.
-2. **Take Action:** When needed, the bot calls specialized tools:
+2. **Take Action:** When needed, the bot calls built-in tools:
    * `search_knowledge_base`: Looks up specific topics in your uploaded documents.
-   * `update_user_memory`: Saves an important fact about you (such as your name, research topic, or preferences) into your persistent profile.
-   * `write_user_file`: Creates or updates a private markdown notes file (e.g. `notes.md` or `study_guide.md`).
-   * `read_user_file`: Reads your previously saved notes to answer your questions.
-3. **Synthesize Final Reply:** Once the bot has the information it needs, it writes a cohesive answer, citing the documents it used and displaying friendly activity badges.
+   * `update_user_memory` / `delete_user_memory`: Saves or removes a fact about you (such as your name, research topic, or preferences) in your persistent profile.
+   * `write_user_file` / `read_user_file` / `delete_user_file`: Creates, reads, or deletes flat Markdown note files in your private space (e.g. `notes.md` or `diary.md`; subfolders are not allowed).
+   * `reset_user_memory`: Clears all saved profile facts and note files when the user asks to wipe everything.
+3. **Synthesize Final Reply:** Once the bot has the information it needs, it writes a cohesive answer, citing the documents it used and displaying friendly activity badges. Data Foundry caps each message at **10 think-and-act steps** so an agent cannot get stuck in an infinite loop.
 
 ### Crafting Guidelines with `AGENTS.md`
 In Agentic mode, a dedicated card appears: **🤖 Agent Guidelines & Memory Configuration (`AGENTS.md`)**.
 
-`AGENTS.md` acts as the operational manual for your agent. It defines how proactive the bot should be, what memory facts to listen for, and how to structure notes. Changes saved in `AGENTS.md` are **hot-reloaded instantly**—you do not need to restart or recreate the bot.
+`AGENTS.md` acts as the operational manual for your agent. It defines how proactive the bot should be, what memory facts to listen for, and how to structure notes. Changes saved in `AGENTS.md` are **applied instantly**—you do not need to restart or recreate the bot.
+
+{: .info}
+**Tip:** You can also upload or manage `AGENTS.md` (or `.agents/AGENTS.md`) directly as a file in the dataset folder if you prefer to version or reuse guidelines across bots.
 
 To get started quickly, click the **"📋 Insert Starter Template"** button in the designer.
 
@@ -162,16 +171,18 @@ explore ideas, synthesize literature, and structure their projects.
 ### Knowledge Base Documents & Smart Search
 Under the **📚 Knowledge Base** tab, you can upload reference materials for your bot:
 * **Supported Formats:** PDF files (`.pdf`), Markdown files (`.md`), and plain text (`.txt`).
-* **Status Badges:** Uploaded files display an **Indexed ✅** badge once they are indexed and ready for searching.
+* **Status Badges:** Uploaded files display an **Indexed ✅** badge once they are indexed and ready for searching. Newly uploaded or deleted documents take effect right away without needing to re-save settings.
+* **Markdown Chunking Tip:** Data Foundry splits Markdown documents at headings (`#`, `##`, `###`, `####`). Write one clear topic per `##` heading so search retrieves focused, accurate excerpts.
 * **On-Demand Search:** Unlike standard bots that search on every single turn, agentic bots only call `search_knowledge_base` when a question actually requires document reference.
 * **Interactive Citations:** When the agent retrieves information from a document, it attaches a citation tag (e.g. `[1] research_guide.pdf (82%)`). Clicking this tag opens a clean **Source Reference** modal showing the exact quoted passage and context.
 
 ### Adaptive User Memory & Private Notes
-When **User Memory & Notes** is enabled:
-* **Privacy & Isolation:** Memory is sandboxed per user and per bot. Another user chatting with the same public bot cannot see your private facts or notes.
+When **User Memory & Notes** is enabled (on by default in Agentic mode):
+* **Privacy & Isolation:** Memory is isolated per user and per bot. Another user chatting with the same public bot cannot see your private facts or notes.
+* **Designer Inspection:** Editors of the chatbot can switch between users via the **Viewing User Memory:** dropdown in **Test Bot** to review saved facts and note files (for example, during a user study). If you run a study, inform participants clearly in your consent form.
 * **Profile Attributes:** Key-value facts remembered about you (such as your topic, background, or preferences).
-* **Saved Notes & Files:** Private markdown files created during conversation. In the **Test Bot** workbench, you can expand any saved file to view its full content.
-* **User Control:** Users can delete individual memory topics (`❌`), delete specific notes files (`❌`), or wipe all memory clean using **🗑️ Reset All Memory & Files**.
+* **Saved Notes & Files:** Flat private Markdown files (`.md`) created during conversation. In the **Test Bot** workbench, you can expand any saved file to view its full content.
+* **User Control:** Users can click **🧠 Memory** in the chat bar (or use the **Test Bot** card) to delete individual memory topics (`❌`), delete specific note files (`❌`), or wipe all memory clean using **🗑️ Reset All Memory & Files**.
 
 ### Multi-Session Support
 Enabling **Multi-Session Support** allows users to maintain multiple independent chat conversations with the same bot (e.g., one thread for brainstorming, another for literature review). The bot's persistent memory and private notes remain available across all of that user's sessions.

@@ -46,6 +46,7 @@ Using these local models also offers advantages like fewer restrictions on resea
 
 ## Topics
 
+- **[AI Agents & Agentic Chatbots]({% link _Learning/LocalAI/AgenticChatbots.md %})**: How agentic chatbots use tools, the Think-and-Act loop, and persistent per-user memory—explained for beginners.
 - **[Model Categories]({% link _Learning/LocalAI/Models.md %})**: Understanding the different sizes and capabilities of hosted models.
 - **[Convoscript]({% link _Learning/LocalAI/ConvoScript.md %})**: Understanding how the ConvoScript library works for scripting chatbots.
 

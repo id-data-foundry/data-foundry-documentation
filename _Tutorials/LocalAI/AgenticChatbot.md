@@ -10,7 +10,10 @@ has_toc: true
 
 In this hands-on tutorial, you will build a personal **Design Research Study Companion** powered by an agentic local AI model. 
 
-Unlike a standard chatbot that simply produces an immediate text reply, your agentic companion will use a **"Think-and-Act" loop**: it will actively reason about your questions, search project reference documents only when needed, remember important facts about you across conversation sessions, and save private research notes directly to markdown files.
+Unlike a standard chatbot that simply produces an immediate text reply, your agentic companion will use a **"Think-and-Act" loop**: it will actively reason about your questions, search project reference documents only when needed, remember important facts about you across conversation sessions, and save private research notes directly to Markdown files.
+
+{: .info}
+Want the big picture behind agents, tools, and memory? Read **[AI Agents: How Agentic Chatbots Work]({% link _Learning/LocalAI/AgenticChatbots.md %})** anytime.
 
 ---
 
@@ -33,13 +36,9 @@ Unlike a standard chatbot that simply produces an immediate text reply, your age
 4. Enter a name for your bot: `Design Study Companion`.
 5. Click **Create chatbot**.
 
-You will arrive at the chatbot configuration page. Look for the **Chatbot Engine Mode** card near the top:
+You will arrive at the chatbot configuration page. Look for the **Chatbot Engine Mode** card near the top and click the switch from **Standard** to **Agentic**.
 
-```
-Standard  [—●]  Agentic
-```
-
-Click the switch to set it to **Agentic**. The interface will automatically update to display the agentic settings and the `AGENTS.md` configuration card.
+The page will update to show the **Agentic mode** card and the **🤖 Agent Guidelines & Memory Configuration (`AGENTS.md`)** card below. In the **Agentic mode** card, check that **User Memory & Notes** is set to **Enabled** (it is on by default for new bots), then click **Save Settings**.
 
 ---
 
@@ -63,7 +62,7 @@ Your goal is to help students explore user-centered design ideas, review project
 and organize their research plans.
 ```
 
-5. Click **Save AGENTS.md**. A green confirmation badge will appear. Changes are hot-reloaded immediately!
+5. Click **Save AGENTS.md**. A green confirmation message will appear (`✓ AGENTS.md saved and agent reloaded!`). Changes are applied right away!
 
 ---
 
@@ -113,7 +112,7 @@ Click **Submit user prompt** (or press Enter).
 
 **What happens?**
 * The bot greets you and acknowledges your research focus.
-* Notice the **🧠 Live User Memory & Notes** card at the top! It automatically reloads via HTMX to show your new facts:
+* Notice the **🧠 Live User Memory & Notes** card at the top! It updates automatically to show your new facts:
   * `user_name`: Jordan
   * `research_topic`: smart haptic feedback vests for cyclists
 * Expand the **🤖 Assistant Activity & Tool Trace** under the reply to see that the bot proactively called `update_user_memory`.
@@ -165,8 +164,8 @@ The bot will effortlessly recall your name (Jordan), your project topic (smart h
 
 Congratulations! You have built and tested an autonomous agentic chatbot in Data Foundry. You learned how:
 * The **Think-and-Act loop** allows the bot to search documents and manage memory dynamically.
-* `AGENTS.md` provides hot-reloaded operational guidelines for customizing persona and behavior.
+* `AGENTS.md` provides instant operational guidelines for customizing persona and behavior.
 * Knowledge base documents provide grounded source citations with clickable passage previews.
-* Sandboxed user memory creates personalized, continuous research experiences while preserving privacy.
+* Private per-user memory creates personalized, continuous research experiences while protecting privacy.
 
-To explore further customization options, tuning parameters, and API integration, check out the **[Designing Custom Chatbots]({% link _Guides/LocalAI/Chatbots.md %})** How-To Guide.
+**Ready for more?** Try the **[Advanced: Diary Study Companion]({% link _Tutorials/LocalAI/DiaryStudyCompanion.md %})** tutorial to design custom rules, structured logs, and participant testing, or explore the **[Designing Custom Chatbots]({% link _Guides/LocalAI/Chatbots.md %})** guide and **[AI Agents: How Agentic Chatbots Work]({% link _Learning/LocalAI/AgenticChatbots.md %})**.

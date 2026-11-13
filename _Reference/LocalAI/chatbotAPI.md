@@ -30,7 +30,21 @@ Authorization: Bearer df-abcdef1234567890...
 ### Chat and Memory Isolation
 
 * **Chat Isolation:** To keep conversation history separate between users, generate and provide a unique `conversationId` (e.g. UUID) for each user thread. Conversation turns and transcripts are strictly scoped by chatbot and conversation ID.
-* **Memory Isolation:** In Agentic mode, provide the `user` parameter when calling with a shared Project API Key or Dataset API Token. DataFoundry sandboxes each end-user's profile facts and note files in a dedicated, collision-free directory. User A cannot read, overwrite, or access User B's memories.
+* **Memory Isolation:** In Agentic mode, provide the `user` parameter when calling with a Project/User API Key or Dataset API Token. Data Foundry isolates each end-user's profile facts and note files in a separate per-user directory so User A cannot read, overwrite, or access User B's memories.
+
+#### Identity & Memory Support
+
+| Token / Identity | Conversation History | Persistent User Memory & Notes |
+| :--- | :---: | :---: |
+| **Project / User API Key** (with `user` parameter) | Yes | **Yes** (isolated per `user`) |
+| **Project / User API Key** (no `user` parameter) | Yes | **Yes** (scoped to the key owner) |
+| **Dataset API Token** (with `user` parameter) | Yes | **Yes** (isolated per `user`) |
+| **Dataset API Token** (no `user` parameter) | Yes | **No** (no individual user identity) |
+| **Study Participation Token** | Yes | **No** (not supported yet; passing `user` returns `403`) |
+
+### Rate Limits
+
+API requests are rate-limited per caller identity (and per `user` value when provided). Exceeding the burst limit returns HTTP `429 Too Many Requests` (`Rate limit exceeded`).
 
 ### Python Example:
 
