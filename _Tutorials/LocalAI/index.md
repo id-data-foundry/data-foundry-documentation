@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Local AI 101
-parent: Tutorials
 nav_order: 3
 has_children: true
 has_toc: false

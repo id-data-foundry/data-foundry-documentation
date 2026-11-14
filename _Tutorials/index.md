@@ -14,8 +14,6 @@ These tutorials are practical, step-by-step guides designed to help you accompli
 
 - **[Starboard Notebooks]({% link _Tutorials/DataVisualisationTutorial.md %})**: Data is most powerful when you can see it. This lesson teaches you how to use Starboard, an interactive notebook environment, to analyze and visualize your data. You'll learn the practical steps to query your datasets, clean the data, and create insightful plots directly within Data Foundry.
 
-{% comment %}
-- **[Data Foundry AI]({% link _Tutorials/LocalAI/index.md %})**: Ready to explore the power of AI? This tutorial provides a step-by-step walkthrough for building your very own AI-powered chatbot. You will learn how to create a web interface and connect it to one of Data Foundry's hosted AI models, giving you a practical introduction to creating intelligent applications.
-{% endcomment %}
+- **[Local AI 101]({% link _Tutorials/LocalAI/index.md %})**: Ready to explore the power of Data Foundry's hosted AI models? Start with our beginner tutorial on building your first agentic chatbot, then continue to the full Diary Study Companion tutorial to design custom rules, memory, and reference documents.
 
 - **[Asking for help]({% link _Tutorials/AskingForHelp.md %})**: Sooner or later, everyone gets stuck. This essential tutorial teaches you the practical, step-by-step process of how to effectively ask for support. By following these guidelines, you will learn a crucial skill that helps our support team understand your problem quickly and get you back on track.
