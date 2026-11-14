@@ -42,7 +42,7 @@ The ESP32-s3 that we are using has the labeling of each pin underneath the pin i
 
 ## Prepare Laptop
 ### Computer
-Before we start, we have to make sure your computer is ready to follow the tutorial. To work with microcontrollers on Data Foundry, you will need to use a chromium webbrowser like; Brave, DuckDuckGo, Opera or Chrome. Additionally if you are running windows, [make sure to install the following drivers.](https://github.com/nodemcu/nodemcu-devkit/tree/master/Drivers)
+Before we start, we have to make sure your computer is ready to follow the tutorial. To work with microcontrollers on Data Foundry, you will need to use a desktop browser with Web Serial support, such as Chrome, Edge, Brave, Opera, or Firefox (151+). Additionally if you are running windows, [make sure to install the following drivers.](https://github.com/nodemcu/nodemcu-devkit/tree/master/Drivers)
 
 ### WiFi
 You will also require wireless internet access. Because we are using an ESP microcontroller, you have to make sure your WiFi router has 2.4ghz enabled. For most routers this is enabled by default, but if this not the case this could be the reason your ESP32 can't connect to the internet later on.

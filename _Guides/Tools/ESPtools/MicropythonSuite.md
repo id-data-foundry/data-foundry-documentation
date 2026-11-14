@@ -12,7 +12,7 @@ For projects using ESP32 microcontrollers, Data Foundry provides a suite of web-
 
 ## Web Flasher
 
-The Web Flasher allows you to install MicroPython firmware directly from your browser (Chrome/Edge required for WebSerial support) without installing any local software like `esptool`.
+The Web Flasher allows you to install MicroPython firmware directly from your browser (desktop Chrome, Edge, or Firefox 151+ required for WebSerial support) without installing any local software like `esptool`.
 
 1.  Connect your ESP32 via USB.
 2.  Go to **Tools > ESP Tools**.
