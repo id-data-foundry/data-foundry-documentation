@@ -1139,12 +1139,34 @@ const foundry = {
     loadingElementSelector,
     onPartial = (text) => {},
     onFinal = (text) => {},
+    onError = (err) => {},
+    onStateChange = (state) => {},
     logging = true,
   }) {
     server = foundry.resolveServer(server);
+    let currentState = "";
+    function setState(nextState) {
+      if (currentState === nextState) return;
+      currentState = nextState;
+      try {
+        onStateChange(nextState);
+      } catch (e) {}
+    }
+
     if (!api_token) {
-      console.error("No API key provided for transcribeLive.");
-      return;
+      const err = new Error("No API key provided for transcribeLive.");
+      console.error(err.message);
+      try {
+        onError(err);
+      } catch (e) {}
+      setState("closed");
+      throw err;
+    }
+
+    if (window.df_stopLive) {
+      try {
+        window.df_stopLive();
+      } catch (e) {}
     }
 
     let loadingElement;
@@ -1165,8 +1187,60 @@ const foundry = {
     let mediaStream = null;
     let processor = null;
     let fullTranscription = "";
+    let closed = false;
+    let settled = false;
+    let errorReported = false;
+
+    function reportError(err) {
+      if (errorReported) return;
+      errorReported = true;
+      const normalized = err instanceof Error ? err : new Error(err && err.message ? err.message : String(err || "Streaming STT error"));
+      try {
+        onError(normalized);
+      } catch (e) {}
+    }
+
+    function stopLiveInternal() {
+      if (closed) {
+        return fullTranscription;
+      }
+      closed = true;
+      setState("stopping");
+
+      if (processor) {
+        try { processor.disconnect(); } catch (e) {}
+        processor = null;
+      }
+      if (audioContext) {
+        try { audioContext.close(); } catch (e) {}
+        audioContext = null;
+      }
+      if (mediaStream) {
+        mediaStream.getTracks().forEach((t) => t.stop());
+        mediaStream = null;
+      }
+      if (ws) {
+        try {
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ action: "stop" }));
+            ws.close();
+          } else if (ws.readyState === WebSocket.CONNECTING) {
+            ws.close();
+          }
+        } catch (e) {}
+        ws = null;
+      }
+      loadingElement && loadingElement.setAttribute("aria-busy", "false");
+      window.df_liveSession = null;
+      window.df_stopLive = null;
+      setState("closed");
+      return fullTranscription;
+    }
+
+    window.df_stopLive = stopLiveInternal;
 
     try {
+      setState("connecting");
       if (logging) console.log("transcribeLive: Connecting to real-time STT WebSocket:", wsUrl);
       ws = new WebSocket(wsUrl);
 
@@ -1183,12 +1257,20 @@ const foundry = {
               },
             });
 
+            if (closed) {
+              mediaStream.getTracks().forEach((t) => t.stop());
+              mediaStream = null;
+              settled = true;
+              resolve(null);
+              return;
+            }
+
             audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: sampleRate });
             const source = audioContext.createMediaStreamSource(mediaStream);
             processor = audioContext.createScriptProcessor(2048, 1, 1);
 
             processor.onaudioprocess = (e) => {
-              if (ws.readyState !== WebSocket.OPEN) return;
+              if (!ws || ws.readyState !== WebSocket.OPEN) return;
               const inputData = e.inputBuffer.getChannelData(0);
 
               // Convert Float32 to 16-bit linear PCM
@@ -1219,10 +1301,17 @@ const foundry = {
             window.df_liveSession = {
               stop: stopLiveInternal,
             };
+            setState("listening");
+            settled = true;
             resolve(window.df_liveSession);
           } catch (micErr) {
             console.error("Microphone access failed:", micErr);
-            reject(micErr);
+            reportError(micErr);
+            stopLiveInternal();
+            if (!settled) {
+              settled = true;
+              reject(micErr);
+            }
           }
         };
 
@@ -1248,48 +1337,47 @@ const foundry = {
                 const rEl = document.querySelector(resultElementSelector);
                 if (rEl) rEl.insertAdjacentText("beforeend", data.text + " ");
               }
+            } else if (data.type === "error" || data.error) {
+              const msg = data.message || (typeof data.error === "string" ? data.error : data.error.message) || "Streaming STT error";
+              reportError(new Error(msg));
             }
           } catch (err) {
             console.error("Error parsing live STT message:", err);
           }
         };
 
-        ws.onerror = (err) => {
-          console.error("Live STT WebSocket error:", err);
-          reject(err);
+        ws.onerror = () => {
+          const wsErr = new Error("Live STT WebSocket connection failed");
+          console.error("Live STT WebSocket error:", wsErr);
+          reportError(wsErr);
+          stopLiveInternal();
+          if (!settled) {
+            settled = true;
+            reject(wsErr);
+          }
+        };
+
+        ws.onclose = (event) => {
+          if (!settled) {
+            const reason = event && event.reason ? `: ${event.reason}` : "";
+            const code = event && event.code ? ` (code ${event.code})` : "";
+            const closeErr = new Error(`Live STT WebSocket closed${code}${reason}`);
+            reportError(closeErr);
+            stopLiveInternal();
+            settled = true;
+            reject(closeErr);
+          } else {
+            stopLiveInternal();
+          }
         };
       });
 
-      function stopLiveInternal() {
-        if (processor) {
-          try { processor.disconnect(); } catch (e) {}
-          processor = null;
-        }
-        if (audioContext) {
-          try { audioContext.close(); } catch (e) {}
-          audioContext = null;
-        }
-        if (mediaStream) {
-          mediaStream.getTracks().forEach((t) => t.stop());
-          mediaStream = null;
-        }
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          try {
-            ws.send(JSON.stringify({ action: "stop" }));
-            ws.close();
-          } catch (e) {}
-        }
-        ws = null;
-        loadingElement && loadingElement.setAttribute("aria-busy", "false");
-        window.df_liveSession = null;
-        return fullTranscription;
-      }
-
-      window.df_stopLive = stopLiveInternal;
       return await sessionPromise;
     } catch (err) {
-      loadingElement && loadingElement.setAttribute("aria-busy", "false");
+      reportError(err);
+      stopLiveInternal();
       console.error("transcribeLive error:", err);
+      throw err;
     }
   },
 

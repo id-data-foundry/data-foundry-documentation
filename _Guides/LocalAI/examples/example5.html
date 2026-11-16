@@ -28,19 +28,20 @@
             href="/assets/stylesheets/picoCSS/pico.jade.min.css"
         />
         <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
-        <script src="/assets/javascripts/hark.bundle.js"></script>
     </head>
     <body>
         <main class="container">
             <h1>Example 5: Audio to Text Transcription</h1>
 
             <p>
-                DataFoundry offers dual Speech-to-Text capabilities: sub-100ms real-time live streaming via Sherpa-ONNX, and longform high-accuracy batch audio file transcription via Parakeet TDT / Whisper.
+                DataFoundry offers sub-100ms real-time live microphone streaming speech-to-text via Sherpa-ONNX.
+                For longform batch transcription of audio or video files (with model selection and diarization), use the built-in
+                <a href="/tools/transcribe" target="_blank" rel="noopener">DataFoundry Transcription Tool</a>.
             </p>
 
             <article>
                 <header>
-                    <strong>1. Real-Time Streaming Transcription (Live Microphone)</strong>
+                    <strong>Real-Time Streaming Transcription (Live Microphone)</strong>
                 </header>
                 <p>
                     Click <strong>Start Streaming</strong> and speak into your microphone. Words are transcribed with sub-100ms latency directly over a persistent WebSocket connection.
@@ -54,23 +55,6 @@
                     <div id="streamFinalResult" style="font-size: 1.1rem; margin-top: 0.25rem;"></div>
                     <div style="margin-top: 0.5rem;"><small style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-color);">Interim Partial:</small></div>
                     <div id="streamPartialResult" style="color: var(--primary); font-style: italic;"></div>
-                </div>
-            </article>
-
-            <article>
-                <header>
-                    <strong>2. Batch File Transcription (Longform Audio)</strong>
-                </header>
-                <p>
-                    Select an audio file (.wav, .mp3, .m4a) to upload for high-accuracy batch transcription with model selection and diarization.
-                </p>
-                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-                    <input type="file" id="audioFile" accept="audio/*" style="margin-bottom: 0;" />
-                    <button id="transcribeFileBtn" style="width: auto; margin-bottom: 0;">Transcribe File</button>
-                </div>
-                <div style="background: rgba(0,0,0,0.03); border: 1px solid var(--muted-border-color); border-radius: 6px; padding: 1rem; min-height: 80px;">
-                    <div><small style="text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-color);">File Transcript:</small></div>
-                    <div id="fileResult" style="font-size: 1.1rem; margin-top: 0.25rem;"></div>
                 </div>
             </article>
 
@@ -100,7 +84,20 @@
                                     streamPartialResult.innerText = "";
                                 },
                                 onStateChange: (state) => {
-                                    streamStatus.innerText = state === "listening" ? "Listening..." : state;
+                                    if (state === "connecting") {
+                                        streamStatus.innerText = "Connecting...";
+                                    } else if (state === "listening") {
+                                        streamStatus.innerText = "Listening...";
+                                    } else if (state === "stopping") {
+                                        streamStatus.innerText = "Stopping...";
+                                    } else if (state === "closed") {
+                                        streaming = false;
+                                        streamBtn.innerText = "Start Streaming";
+                                        streamPartialResult.innerText = "";
+                                        if (!streamStatus.innerText.startsWith("Error:")) {
+                                            streamStatus.innerText = "Stopped";
+                                        }
+                                    }
                                 },
                                 onError: (err) => {
                                     console.error("Streaming STT error:", err);
@@ -111,34 +108,17 @@
                             console.error(e);
                             streaming = false;
                             streamBtn.innerText = "Start Streaming";
-                            streamStatus.innerText = "Failed to start";
+                            if (!streamStatus.innerText.startsWith("Error:")) {
+                                streamStatus.innerText = "Failed to start";
+                            }
                         }
                     } else {
                         streaming = false;
                         streamBtn.innerText = "Start Streaming";
                         streamStatus.innerText = "Stopped";
+                        streamPartialResult.innerText = "";
                         await foundry.stopLive();
                     }
-                });
-
-                const fileBtn = document.querySelector("#transcribeFileBtn");
-                const fileInput = document.querySelector("#audioFile");
-                const fileResult = document.querySelector("#fileResult");
-
-                fileBtn.addEventListener("click", async () => {
-                    if (!fileInput.files || fileInput.files.length === 0) {
-                        alert("Please select an audio file first.");
-                        return;
-                    }
-                    fileResult.innerText = "Transcribing file...";
-                    const text = await foundry.transcribeFile({
-                        server: "",
-                        api_token: "YOUR_API_KEY",
-                        file: fileInput.files[0],
-                        resultElementSelector: "#fileResult",
-                        loadingElementSelector: "#fileResult"
-                    });
-                    fileResult.innerText = text || "(No speech detected)";
                 });
             </script>
         </main>
