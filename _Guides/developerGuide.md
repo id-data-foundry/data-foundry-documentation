@@ -157,7 +157,7 @@ Data Foundry supports structured dataset types tailored to specific design resea
 *   **[Media Datasets]({% link _Guides/Datasets/Media/MediaDataset.md %})**: Image, video, and binary asset storage with metadata.
 *   **[Diary Datasets]({% link _Guides/Datasets/Diary/DiaryDataset.md %})**: Longitudinal diary studies and qualitative logs.
 *   **[Annotation Datasets]({% link _Guides/Datasets/Annotation/AnnotationDataset.md %})**: Labels, bounding annotations, and metadata tagging.
-*   **[Existing & External Datasets]({% link _Guides/Datasets/Existing/ExistingData.md %})**: Import external datasets and CSV data into Data Foundry.
+*   **[Files Dataset]({% link _Guides/Datasets/Files/FilesData.md %})**: Upload, manage, and host files in Data Foundry.
 
 ---
 

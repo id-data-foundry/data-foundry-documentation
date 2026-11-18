@@ -9,7 +9,7 @@ plugins:
   - jekyll-redirect-from
 
 color_scheme: df
-url: https://data-foundry.net
+url: DATAFOUNDRYBASEURL
 
 # this is the output directory for the internal build
 destination: ../dist/documentation

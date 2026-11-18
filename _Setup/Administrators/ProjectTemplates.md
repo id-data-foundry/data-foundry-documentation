@@ -20,15 +20,15 @@ To create a new template, follow this structure:
 ```text
 dist/templates/
 └── [TemplateName]/              <-- This becomes the template name in the UI
-    ├── [DatasetNameA]/          <-- A "COMPLETE" dataset will be created with this name
+    ├── [DatasetNameA]/          <-- A Files ("COMPLETE") dataset will be created with this name
     │   ├── data.csv             <-- Files to be pre-loaded into the dataset
     │   └── documentation.pdf
-    └── [DatasetNameB]/          <-- Another "COMPLETE" dataset
+    └── [DatasetNameB]/          <-- Another Files ("COMPLETE") dataset
         └── initial_config.json
 ```
 
 ### Dataset Creation
-- **Dataset Type:** Every folder inside a template directory is automatically created as a **COMPLETE** dataset. 
+- **Dataset Type:** Every folder inside a template directory is automatically created as a **Files** (`COMPLETE`) dataset. 
 - **Files:** All files located directly inside a dataset folder are copied into the newly created dataset in the Data Foundry project.
 - **Database Records:** For every file copied, a corresponding record is added to the dataset's database table so they appear immediately in the file list.
 

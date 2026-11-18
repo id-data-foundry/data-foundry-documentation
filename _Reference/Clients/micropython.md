@@ -81,10 +81,10 @@ entity_dataset_token = "<your_entity_dataset_token>"
 </details>
 
 <details markdown="1">
-<summary><b>Existing Dataset</b></summary>
+<summary><b>Files Dataset</b></summary>
 
 ##### main.py
-After having successfully set up the connection to your Data Foundry instance, the following code allows you to set up a data foundry connection to an existing dataset
+After having successfully set up the connection to your Data Foundry instance, the following code allows you to set up a data foundry connection to a files dataset
 ```python
 ```
 

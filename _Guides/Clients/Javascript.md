@@ -61,7 +61,7 @@ To import the OOCSI library, you have again two choices:
 
 #### Option 1: Use library on Data Foundry
 
-Direct link to the library, from within the instance (this is great if you use an existing dataset for your website).
+Direct link to the library, from within the instance (this is great if you use a files dataset for your website).
 Note that this works only if the page is hosted on Data Foundry.
 
 ```html
