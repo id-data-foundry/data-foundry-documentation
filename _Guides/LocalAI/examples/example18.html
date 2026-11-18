@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 18: Sketch to Image</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+        <style>
+            #sketchpad {
+                border: 2px solid var(--pico-muted-border-color, #ccc);
+                border-radius: 8px;
+                background: #fff;
+                cursor: crosshair;
+                touch-action: none;
+                width: 100%;
+                max-width: 512px;
+                aspect-ratio: 1 / 1;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 18: sketch to image</h1>
+
+            <p>
+                Draw a quick sketch on the canvas and turn it into a rendered
+                image using a prompt. The <code>&lt;canvas&gt;</code> element
+                is passed directly to <code>foundry.imageToImage</code>.
+            </p>
+
+            <div class="grid">
+                <div>
+                    <canvas id="sketchpad" width="512" height="512"></canvas>
+                    <button
+                        id="clearBtn"
+                        type="button"
+                        class="secondary outline"
+                        style="margin-top: 0.5rem;"
+                    >
+                        Clear Sketch
+                    </button>
+                </div>
+                <div>
+                    <label for="prompt">Prompt</label>
+                    <textarea id="prompt" rows="5">Photorealistic studio product photograph of a minimalist desk lamp made of brushed aluminum and warm oak wood, soft studio lighting</textarea>
+
+                    <button id="submitBtn">Generate from Sketch</button>
+
+                    <details>
+                        <summary>Extra settings</summary>
+                        <label for="strength">
+                            Strength: <span id="strengthValue">0.75</span>
+                        </label>
+                        <input
+                            type="range"
+                            id="strength"
+                            min="0.1"
+                            max="1.0"
+                            step="0.05"
+                            value="0.75"
+                        />
+                        <small>
+                            Higher values (0.7&ndash;0.85) work best when
+                            turning rough line sketches into realistic renders.
+                        </small>
+                    </details>
+                </div>
+            </div>
+
+            <hr />
+
+            <p>
+                <img
+                    id="result"
+                    src=""
+                    alt="Generated image from sketch"
+                    style="max-width: 100%; border-radius: 8px;"
+                />
+            </p>
+
+            <script type="module">
+                const canvas = document.querySelector("#sketchpad");
+                const ctx = canvas.getContext("2d");
+                const clearBtn = document.querySelector("#clearBtn");
+                const strengthInput = document.querySelector("#strength");
+                const strengthValue = document.querySelector("#strengthValue");
+                const submitBtn = document.querySelector("#submitBtn");
+
+                let drawing = false;
+
+                function resetCanvas() {
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+
+                function getCanvasPoint(event) {
+                    const rect = canvas.getBoundingClientRect();
+                    return {
+                        x: ((event.clientX - rect.left) * canvas.width) / rect.width,
+                        y: ((event.clientY - rect.top) * canvas.height) / rect.height,
+                    };
+                }
+
+                resetCanvas();
+
+                canvas.addEventListener("pointerdown", (e) => {
+                    drawing = true;
+                    canvas.setPointerCapture(e.pointerId);
+                    const pt = getCanvasPoint(e);
+                    ctx.beginPath();
+                    ctx.moveTo(pt.x, pt.y);
+                });
+
+                canvas.addEventListener("pointermove", (e) => {
+                    if (!drawing) return;
+                    const pt = getCanvasPoint(e);
+                    ctx.lineWidth = 4;
+                    ctx.lineCap = "round";
+                    ctx.lineJoin = "round";
+                    ctx.strokeStyle = "#111111";
+                    ctx.lineTo(pt.x, pt.y);
+                    ctx.stroke();
+                });
+
+                canvas.addEventListener("pointerup", () => {
+                    drawing = false;
+                });
+
+                canvas.addEventListener("pointercancel", () => {
+                    drawing = false;
+                });
+
+                clearBtn.addEventListener("click", resetCanvas);
+
+                strengthInput.addEventListener("input", () => {
+                    strengthValue.textContent = strengthInput.value;
+                });
+
+                // Submit canvas and prompt directly to imageToImage
+                submitBtn.addEventListener("click", async () => {
+                    submitBtn.setAttribute("disabled", "true");
+
+                    const prompt = document.querySelector("#prompt").value;
+                    const strength = parseFloat(strengthInput.value);
+
+                    await foundry.imageToImage({
+                        // optional: server (ex. "https://data-foundry.net")
+                        server: "",
+                        // generate your own API token on Data Foundry
+                        api_token: "YOUR_API_KEY",
+                        // select the model (e.g. "default", "image-to-image", or specific model ID)
+                        model: "default",
+                        // pass the HTML <canvas> element directly
+                        image: canvas,
+                        // description of the desired rendered output
+                        prompt: prompt,
+                        // transformation strength (0.0 - 1.0)
+                        strength: strength,
+                        // display result in the #result <img> element
+                        resultElementSelector: "#result",
+                        // show loading spinner on the submit button
+                        loadingElementSelector: "#submitBtn",
+                        // no logging on console needed
+                        logging: false,
+                    });
+
+                    submitBtn.removeAttribute("disabled");
+                });
+            </script>
+        </main>
+    </body>
+</html>

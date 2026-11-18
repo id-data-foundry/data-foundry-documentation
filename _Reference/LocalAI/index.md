@@ -19,6 +19,7 @@ The Reference section of this documentation contains all relevant information on
 - **[Structured Output & Tools]({% link _Reference/LocalAI/StructuredOutputAndTools.md %})**: Detailed guide on JSON schemas and tool calling.
 - **[Text‑to‑Text]({% link _Reference/LocalAI/AIAPI.md %})**: Example and usage of chat completions.
 - **[Text‑to‑Image]({% link _Reference/LocalAI/text-to-image.md %})**: Example and usage for image generation.
+- **[Image‑to‑Image]({% link _Reference/LocalAI/image-to-image.md %})**: Example and usage for transforming images with prompts.
 - **[Text‑to‑Speech]({% link _Reference/LocalAI/text-to-speech.md %})**: Example and usage for text to speech.
 - **[Speech‑to‑Text]({% link _Reference/LocalAI/speech-to-text.md %})**: Example and usage for speech recognition.
 - **[Image‑to‑Text]({% link _Reference/LocalAI/image-to-text.md %})**: Example and usage for OCR.

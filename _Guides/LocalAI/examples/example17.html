@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+    <head>
+        <!--
+   *
+   * Local AI examples
+   *
+   * Copyright (c) 2024-2026 Mathias Funk
+   *
+   * Licensed under the Apache License, Version 2.0 (the "License");
+   * you may not use this file except in compliance with the License.
+   * You may obtain a copy of the License at
+   *
+   *     https://www.apache.org/licenses/LICENSE-2.0
+   *
+   * Unless required by applicable law or agreed to in writing, software
+   * distributed under the License is distributed on an "AS IS" BASIS,
+   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   * See the License for the specific language governing permissions and
+   * limitations under the License.
+   *
+  -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Local AI Example 17: Image to Image</title>
+        <link
+            rel="stylesheet"
+            href="/assets/stylesheets/picoCSS/pico.jade.min.css"
+        />
+        <script src="/assets/javascripts/local-ai/latest/local-ai.min.js"></script>
+    </head>
+    <body>
+        <main class="container">
+            <h1>Example 17: image to image</h1>
+
+            <p>
+                Transform an existing image using a text prompt. Use the sample
+                photo below or upload your own image, then describe how you
+                would like to change it.
+            </p>
+
+            <div class="grid">
+                <div>
+                    <label for="imageInput">Input image (optional upload)</label>
+                    <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/png,image/jpeg,image/webp"
+                    />
+                    <img
+                        id="preview"
+                        src="../../../assets/images/examples/coffee-cup.jpg"
+                        alt="Sample coffee cup on a wooden table"
+                        style="max-width: 100%; border-radius: 8px;"
+                    />
+                </div>
+                <div>
+                    <label for="prompt">Prompt</label>
+                    <textarea id="prompt" rows="5">Place a cute young cat sitting inside the coffee cup on the table, photorealistic, warm morning light</textarea>
+
+                    <button id="submitBtn">Transform Image</button>
+
+                    <details>
+                        <summary>Extra settings</summary>
+                        <label for="strength">
+                            Strength: <span id="strengthValue">0.7</span>
+                        </label>
+                        <input
+                            type="range"
+                            id="strength"
+                            min="0.1"
+                            max="1.0"
+                            step="0.05"
+                            value="0.7"
+                        />
+                        <small>
+                            Lower values stay closer to the input image; higher
+                            values allow stronger changes.
+                        </small>
+                    </details>
+                </div>
+            </div>
+
+            <hr />
+
+            <p>
+                <img
+                    id="result"
+                    src=""
+                    alt="Transformed image from AI request"
+                    style="max-width: 100%; border-radius: 8px;"
+                />
+            </p>
+
+            <script type="module">
+                const imageInput = document.querySelector("#imageInput");
+                const previewImg = document.querySelector("#preview");
+                const strengthInput = document.querySelector("#strength");
+                const strengthValue = document.querySelector("#strengthValue");
+                const submitBtn = document.querySelector("#submitBtn");
+                let objectUrl = null;
+
+                // Preview uploaded image when selected
+                imageInput.addEventListener("change", () => {
+                    const file = imageInput.files[0];
+                    if (file) {
+                        if (objectUrl) {
+                            URL.revokeObjectURL(objectUrl);
+                        }
+                        objectUrl = URL.createObjectURL(file);
+                        previewImg.src = objectUrl;
+                    }
+                });
+
+                // Update strength label
+                strengthInput.addEventListener("input", () => {
+                    strengthValue.textContent = strengthInput.value;
+                });
+
+                // Submit image and prompt
+                submitBtn.addEventListener("click", async () => {
+                    submitBtn.setAttribute("disabled", "true");
+
+                    const prompt = document.querySelector("#prompt").value;
+                    const strength = parseFloat(strengthInput.value);
+                    // Use the uploaded file if provided, otherwise use the preview <img> element directly
+                    const imageSource = imageInput.files[0] || previewImg;
+
+                    await foundry.imageToImage({
+                        // optional: server (ex. "https://data-foundry.net")
+                        server: "",
+                        // generate your own API token on Data Foundry
+                        api_token: "YOUR_API_KEY",
+                        // select the model (e.g. "default", "image-to-image", or specific model ID)
+                        model: "default",
+                        // input image (File, Blob, <img>, <canvas>, Data URL, or URL)
+                        image: imageSource,
+                        // transformation prompt
+                        prompt: prompt,
+                        // transformation strength (0.0 - 1.0)
+                        strength: strength,
+                        // display result in the #result <img> element
+                        resultElementSelector: "#result",
+                        // show loading spinner on the submit button
+                        loadingElementSelector: "#submitBtn",
+                        // no logging on console needed
+                        logging: false,
+                    });
+
+                    submitBtn.removeAttribute("disabled");
+                });
+            </script>
+        </main>
+    </body>
+</html>

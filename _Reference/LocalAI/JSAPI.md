@@ -236,6 +236,57 @@ In this example:
 - The loading indicator is shown on an element with the ID `#loading-indicator`.
 - The generated image is displayed in an `<img>` element with the ID `#result-image`.
 
+### foundry.imageToImage({...})
+
+**Description:**
+
+The `imageToImage` function is an asynchronous JavaScript function that transforms an existing input image based on a text prompt using the Data Foundry image-to-image endpoint (`/v1/images/edits`). It accepts `File`, `Blob`, `HTMLImageElement`, `HTMLCanvasElement`, Base64 Data URLs, or image URLs directly via `foundry.normalizeImageInput`, sends a `multipart/form-data` request, and returns the generated `image_url`.
+
+**Parameters:**
+
+- *`api_token` (required):* Your API key for authentication. The function will not run without this.
+- *`server` (optional):* The server URL to send the request to. Defaults to the current origin.
+- *`model` (optional):* The image model to use (e.g., `"default"`, `"image-to-image"`, `"Flux-schnell"`, or `"Flux-kontext"`). Defaults to `"default"`.
+- *`image` (required):* The source image to transform. Accepts a `File`, `Blob`, `HTMLImageElement`, `HTMLCanvasElement`, Base64 Data URL string, or image URL string.
+- *`prompt` (optional):* The text description of how to transform the image.
+- *`negativePrompt` (optional):* A description of what you do not want in the generated image. Defaults to an empty string.
+- *`strength` (optional):* Controls how much the output diverges from the input image, clamped to `0.0`–`1.0`. Defaults to `0.7` (lower values stay closer to the input; higher values allow stronger changes).
+- *`cfgScale` (optional):* A number controlling how closely the image matches the prompt. Defaults to `10`.
+- *`seed` (optional):* A number to control randomness. Defaults to `-1` (random seed).
+- *`steps` (optional):* The number of diffusion steps, clamped to `1`–`50`. Defaults to `20`.
+- *`width` and `height` (optional):* The output dimensions in pixels, clamped to `64`–`2048`. Defaults to `512`×`512`.
+- *`logging` (optional):* A boolean to enable or disable console logs. Defaults to `true`.
+- *`loadingElementSelector` (optional):* A CSS selector for an element to show a loading indicator (`aria-busy="true"`).
+- *`resultElementSelector` (optional):* A CSS selector for an `<img>` element to display the transformed image.
+
+**Returns:**
+- A `Promise` that resolves to a `string` (the generated `image_url`).
+
+**Error Handling:**
+
+- If `api_token` or `image` is missing, the function logs an error and exits early.
+- If the server response is not successful (e.g., HTTP error), an error message is logged to the console.
+- If the response contains an error message, it is displayed as an alert.
+- Ensures `aria-busy` is reset to `"false"` on the loading element when finished.
+
+**Example Usage:**
+
+```javascript
+// Transform an uploaded file, <img>, or <canvas> element
+const inputImage = document.querySelector("#my-image");
+
+const imageUrl = await foundry.imageToImage({
+  api_token: "your_api_key_here",
+  server: "{{ site.external_base_urls.datafoundryurl }}",
+  model: "default",
+  image: inputImage,
+  prompt: "Place a cute young cat sitting inside the coffee cup on the table",
+  strength: 0.7,
+  loadingElementSelector: "#submit-btn",
+  resultElementSelector: "#result-image"
+});
+```
+
 ### foundry.textToSpeech({...})
 
 **Description:**
