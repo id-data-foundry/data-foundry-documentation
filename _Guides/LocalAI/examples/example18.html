@@ -78,7 +78,7 @@
                         <input
                             type="range"
                             id="strength"
-                            min="0.1"
+                            min="0.0"
                             max="1.0"
                             step="0.05"
                             value="0.75"
@@ -98,7 +98,7 @@
                     id="result"
                     src=""
                     alt="Generated image from sketch"
-                    style="max-width: 100%; border-radius: 8px;"
+                    style="display: none; max-width: 100%; border-radius: 8px;"
                 />
             </p>
 
@@ -109,6 +109,7 @@
                 const strengthInput = document.querySelector("#strength");
                 const strengthValue = document.querySelector("#strengthValue");
                 const submitBtn = document.querySelector("#submitBtn");
+                const resultImg = document.querySelector("#result");
 
                 let drawing = false;
 
@@ -167,7 +168,7 @@
                     const prompt = document.querySelector("#prompt").value;
                     const strength = parseFloat(strengthInput.value);
 
-                    await foundry.imageToImage({
+                    const imageUrl = await foundry.imageToImage({
                         // optional: server (ex. "https://data-foundry.net")
                         server: "",
                         // generate your own API token on Data Foundry
@@ -187,6 +188,10 @@
                         // no logging on console needed
                         logging: false,
                     });
+
+                    if (imageUrl) {
+                        resultImg.style.display = "block";
+                    }
 
                     submitBtn.removeAttribute("disabled");
                 });

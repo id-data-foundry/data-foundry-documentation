@@ -43,6 +43,41 @@
             #result > :last-child { margin-bottom: 0; }
             pre { white-space: pre-wrap; font-size: 0.95em; padding: 0.5rem; background-color: rgba(0,0,0,0.05); }
             code { font-size: 0.95em; }
+
+            /* Styles from Example 13 (Token Usage) */
+            .usage-info {
+                background-color: #f4f4f4;
+                padding: 1rem;
+                border-radius: 8px;
+                margin-top: 1rem;
+                font-family: monospace;
+            }
+            .energy-estimate {
+                color: #2e7d32;
+                font-weight: bold;
+            }
+
+            /* Styles from Example 16 (Streaming cursor) */
+            .streaming::after {
+                content: '▊';
+                animation: blink 1s steps(2, start) infinite;
+            }
+            @keyframes blink {
+                to { visibility: hidden; }
+            }
+
+            /* Styles from Example 18 (Sketchpad canvas) */
+            #sketchpad {
+                border: 2px solid var(--pico-muted-border-color, #ccc);
+                border-radius: 8px;
+                background: #fff;
+                cursor: crosshair;
+                touch-action: none;
+                width: 100%;
+                max-width: 512px;
+                aspect-ratio: 1 / 1;
+                display: block;
+            }
         </style>
     </head>
     <body>

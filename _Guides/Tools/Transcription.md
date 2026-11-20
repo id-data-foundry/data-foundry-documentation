@@ -8,7 +8,7 @@ has_children: true
 
 # Interview Transcription
 
-Data Foundry offers a built-in tool for transcribing audio and video files, powered by OpenAI's Whisper model running locally on our servers. This ensures your data remains private and secure within the Data Foundry environment.
+Data Foundry offers a built-in tool for transcribing audio and video files using speech-to-text models running locally on our servers. This ensures your data remains private and secure within the Data Foundry environment.
 
 ## How to use it
 

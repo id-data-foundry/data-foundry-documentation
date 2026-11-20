@@ -57,9 +57,18 @@
             src="{{ include.src }}"
             width="100%"
             frameborder="0"
+            allow="microphone; camera; autoplay; clipboard-write"
             onload="
-                this.style.height =
-                    this.contentWindow.document.body.scrollHeight + 'px'
+                const iframe = this;
+                const updateHeight = () => {
+                    if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body) {
+                        iframe.style.height = (iframe.contentWindow.document.body.scrollHeight + 24) + 'px';
+                    }
+                };
+                updateHeight();
+                if (typeof ResizeObserver !== 'undefined' && iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.body) {
+                    new ResizeObserver(updateHeight).observe(iframe.contentWindow.document.body);
+                }
             "
         ></iframe>
     </div>

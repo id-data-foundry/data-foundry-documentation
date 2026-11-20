@@ -79,7 +79,7 @@
                 <legend>Select Models</legend>
                 <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                     <div>
-                        <input type="checkbox" name="model" value="phi-2-chat" id="phi-2-chat" checked>
+                        <input type="checkbox" name="model" value="phi-2-chat" id="phi-2-chat">
                         <label for="phi-2-chat" title="phi-2-chat">Phi-2</label>
                     </div>
                     <div>
@@ -91,7 +91,7 @@
                         <label for="phi-4" title="LocalAI-functioncall-phi-4-v0.3">Phi-4</label>
                     </div>
                     <div>
-                        <input type="checkbox" name="model" value="hermes-2-pro-llama-3-8b" id="hermes-2-pro" checked>
+                        <input type="checkbox" name="model" value="hermes-2-pro-llama-3-8b" id="hermes-2-pro">
                         <label for="hermes-2-pro" title="hermes-2-pro-llama-3-8b">Hermes 2 Pro Llama 3 8b</label>
                     </div>
                     <div>
@@ -104,7 +104,7 @@
             <div class="grid" style="grid-template-columns: 1fr 1.5fr 2fr;">
                  <div>
                     <label for="iterations">Iterations</label>
-                    <input type="number" id="iterations" name="iterations" value="5" min="1" max="10">
+                    <input type="number" id="iterations" name="iterations" value="2" min="1" max="10">
                 </div>
                 <div>
                     <label for="fontSizeSlider">Zoom: <span id="fontSizeVal">85%</span></label>
@@ -132,15 +132,18 @@
 
                     try {
                         const rawModels = await foundry.models("YOUR_API_KEY");
-                        console.log(rawModels)
+                        const modelList = Array.isArray(rawModels)
+                            ? rawModels
+                            : (rawModels && Array.isArray(rawModels.data) ? rawModels.data : []);
 
-                        // Filter to only include models with the "📄" emoji in their type attribute
-                        const models = (rawModels || []).filter(model => model.type && model.type.includes("📄"));
+                        // Filter to only include text/chat models
+                        const models = modelList.filter(
+                            model => !model.type || model.type.includes("📄") || model.type.toLowerCase().includes("text") || model.type.toLowerCase().includes("chat")
+                        );
 
                         if (models && models.length > 0) {
                             modelsGrid.innerHTML = '';
-                            const defaultChecked = [];
-                            models.forEach(model => {
+                            models.forEach((model) => {
                                 const div = document.createElement('div');
                                 const input = document.createElement('input');
                                 input.type = 'checkbox';
@@ -148,9 +151,6 @@
                                 input.value = model.id;
                                 const sanitizedId = "model-" + model.id.replace(/[^a-zA-Z0-9-_]/g, '');
                                 input.id = sanitizedId;
-                                if (defaultChecked.includes(model.id)) {
-                                    input.checked = true;
-                                }
 
                                 const label = document.createElement('label');
                                 label.htmlFor = sanitizedId;

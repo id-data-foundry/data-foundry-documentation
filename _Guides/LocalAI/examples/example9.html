@@ -56,8 +56,12 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                 </p>
             </div>
 
-            <progress aria-busy="false"></progress>
-            <audio id="result"></audio>
+            <div id="resultText" style="margin-top: 1rem;"></div>
+            <audio
+                id="result"
+                controls
+                style="width: 100%; margin-top: 1rem; display: none;"
+            ></audio>
 
             <script type="module">
                 // listen to button clicks and handle them
@@ -68,13 +72,16 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                         document
                             .querySelector("#submitBtn")
                             .setAttribute("disabled", true);
+                        const resultTextEl = document.querySelector("#resultText");
+                        resultTextEl.innerText = "";
 
                         // retrieve prompt
                         const prompt = document.querySelector("#prompt").value;
 
                         // send request
                         let translated = await foundry.textToText({
-                            // optional: server (ex. "https://data-foundry.net
+                            // optional: server (ex. "https://data-foundry.net")
+                            server: "",
                             // generate your own API token on Data Foundry
                             api_token: "YOUR_API_KEY",
                             // select the model (e.g. "translate", "default", or a specific model ID)
@@ -88,27 +95,38 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
                                         prompt,
                                 },
                             ],
+                            loadingElementSelector: "#submitBtn",
                             // no logging on console needed
                             logging: false,
                         });
 
-                        // send translation request
-                        await foundry.textToSpeech({
-                            // optional: server (ex. "https://data-foundry.net")
-                            server: "",
-                            // generate your own API token on Data Foundry
-                            api_token: "YOUR_API_KEY",
-                            // submit the prompt
-                            prompt: translated,
-                            // choose a voice from: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md
-                            voice: "im_nicola",
-                            // fill results in the HTML element with the id "result"
-                            resultElementSelector: "#result",
-                            // loading indicator in result element
-                            loadingElementSelector: "#result",
-                            // no logging on console needed
-                            logging: false,
-                        });
+                        if (translated) {
+                            resultTextEl.innerHTML = marked.parse(translated);
+
+                            // send speech generation request
+                            await foundry.textToSpeech({
+                                // optional: server (ex. "https://data-foundry.net")
+                                server: "",
+                                // generate your own API token on Data Foundry
+                                api_token: "YOUR_API_KEY",
+                                // submit the prompt
+                                prompt: translated,
+                                language: "it",
+                                // choose a voice from: https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md
+                                voice: "im_nicola",
+                                // fill results in the HTML element with the id "result"
+                                resultElementSelector: "#result",
+                                // loading indicator on submit button
+                                loadingElementSelector: "#submitBtn",
+                                // no logging on console needed
+                                logging: false,
+                            });
+
+                            const audioEl = document.querySelector("#result");
+                            if (audioEl && audioEl.src) {
+                                audioEl.style.display = "block";
+                            }
+                        }
 
                         // enable submit button again
                         document

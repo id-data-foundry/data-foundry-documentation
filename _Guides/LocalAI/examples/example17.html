@@ -68,7 +68,7 @@
                         <input
                             type="range"
                             id="strength"
-                            min="0.1"
+                            min="0.0"
                             max="1.0"
                             step="0.05"
                             value="0.7"
@@ -88,7 +88,7 @@
                     id="result"
                     src=""
                     alt="Transformed image from AI request"
-                    style="max-width: 100%; border-radius: 8px;"
+                    style="display: none; max-width: 100%; border-radius: 8px;"
                 />
             </p>
 
@@ -98,6 +98,7 @@
                 const strengthInput = document.querySelector("#strength");
                 const strengthValue = document.querySelector("#strengthValue");
                 const submitBtn = document.querySelector("#submitBtn");
+                const resultImg = document.querySelector("#result");
                 let objectUrl = null;
 
                 // Preview uploaded image when selected
@@ -126,7 +127,7 @@
                     // Use the uploaded file if provided, otherwise use the preview <img> element directly
                     const imageSource = imageInput.files[0] || previewImg;
 
-                    await foundry.imageToImage({
+                    const imageUrl = await foundry.imageToImage({
                         // optional: server (ex. "https://data-foundry.net")
                         server: "",
                         // generate your own API token on Data Foundry
@@ -146,6 +147,10 @@
                         // no logging on console needed
                         logging: false,
                     });
+
+                    if (imageUrl) {
+                        resultImg.style.display = "block";
+                    }
 
                     submitBtn.removeAttribute("disabled");
                 });

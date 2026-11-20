@@ -11,13 +11,11 @@ DataFoundry provides two complementary Speech-to-Text (STT) services designed fo
 
 1. **Real-Time Streaming STT (`foundry.transcribeLive`)**:
    - **Protocol:** Persistent WebSocket connection (`/v1/audio/transcriptions/stream`).
-   - **Backend:** Sherpa-ONNX streaming Zipformer engine (`tools/services/ai/stt-realtime`, default port 8093).
    - **Latency:** Sub-100ms interim partial hypotheses as words are spoken.
    - **Use cases:** Live dictation, voice conversational agents, interactive prototypes, speech command interfaces.
 
 2. **Longform Batch Transcription (`foundry.transcribeFile` or HTTP POST `/v1/audio/transcriptions`)**:
    - **Protocol:** HTTP POST multipart file upload.
-   - **Backend:** Parakeet TDT / Whisper service (`tools/services/ai/stt`, default port 8092).
    - **Features:** High-accuracy transcription of long audio recordings (.wav, .mp3, .m4a), speaker diarization (`diarization=true`), and monotonic segment timestamps.
    - **Use cases:** Recorded interviews, audio lectures, meeting transcripts, podcast analysis.
 
@@ -130,7 +128,7 @@ The classic `soundToText` function acts as a backwards-compatible dispatcher:
 </html>
 ```
 
-### Python Example:
+### Python Example (Batch File Upload):
 
 You can transcribe an audio file by sending a `POST` request to `/v1/audio/transcriptions` with `multipart/form-data`:
 
@@ -171,6 +169,73 @@ if response.status_code == 200:
     print("Transcription:", result.get("text"))
 else:
     print(f"Error {response.status_code}:", response.text)
+```
+
+### Python Example (Real-Time Streaming):
+
+For low-latency streaming over WebSocket (`/v1/audio/transcriptions/stream`), send JSON text frames containing base64-encoded 16-bit mono PCM audio chunks (`{"audio": "<base64>", "sample_rate": 16000}`), and finish with `{"action": "stop"}` to flush the final words:
+
+[Download Streaming Python Script]({% link assets/files/speech-to-text/transcribe_stream.py %}){: .btn .btn-green download="transcribe_stream.py"}
+
+```bash
+# Install dependencies (sounddevice is only needed for --mic live capture)
+pip install websockets sounddevice
+
+# Stream a 16-bit PCM WAV file in real time
+python transcribe_stream.py recording.wav --token YOUR_API_TOKEN --realtime
+
+# Stream live audio from your microphone (press Ctrl+C to stop and flush)
+python transcribe_stream.py --mic --token YOUR_API_TOKEN
+```
+
+```python
+import asyncio
+import base64
+import json
+import wave
+import websockets
+
+api_key = "df-abcdef1234567890abcdef1234567890abcdef123456789="
+server_url = "{{ site.external_base_urls.datafoundryurl }}"
+ws_url = (
+    server_url.replace("https://", "wss://")
+    .replace("http://", "ws://")
+    .rstrip("/")
+    + "/v1/audio/transcriptions/stream"
+)
+
+async def stream_wav(wav_path: str):
+    headers = {"Authorization": f"Bearer {api_key}"}
+    with wave.open(wav_path, "rb") as wf:
+        sample_rate = wf.getframerate()
+        chunk_frames = int(sample_rate * 0.128)  # ~128ms chunks (16-bit mono PCM)
+
+        async with websockets.connect(ws_url, additional_headers=headers) as ws:
+            await ws.send(json.dumps({"action": "start", "sample_rate": sample_rate}))
+
+            async def receive():
+                async for msg in ws:
+                    event = json.loads(msg)
+                    if event.get("type") == "partial":
+                        print(f"\r[partial] {event.get('text', '')}", end="", flush=True)
+                    elif event.get("type") == "final":
+                        print(f"\n[final]   {event.get('text', '')}", flush=True)
+
+            recv_task = asyncio.create_task(receive())
+            while True:
+                pcm = wf.readframes(chunk_frames)
+                if not pcm:
+                    break
+                await ws.send(json.dumps({
+                    "audio": base64.b64encode(pcm).decode("ascii"),
+                    "sample_rate": sample_rate,
+                }))
+                await asyncio.sleep(0.128)
+
+            await ws.send(json.dumps({"action": "stop"}))
+            await asyncio.wait_for(recv_task, timeout=3.0)
+
+asyncio.run(stream_wav("recording.wav"))
 ```
 
 ### Command Line Example:

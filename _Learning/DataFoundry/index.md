@@ -60,7 +60,7 @@ Analyze and manage your data without leaving the browser.
 ### Integrated AI Services
 Harness the power of AI directly within your projects.
 *   **AI API:** Access locally-hosted models through a unified API.
-*   **Creative Intelligence:** Utilize Text-to-Speech, Speech-to-Text (Whisper), and Large Language Models (LLMs) for creative and analytical tasks.
+*   **Creative Intelligence:** Utilize Text-to-Speech, Speech-to-Text, and Large Language Models (LLMs) for creative and analytical tasks.
 
 ### Server-Side Scripting
 Run custom logic on the server. Users can write **JavaScript code** to process data streams, trigger events (e.g., sending Telegram messages), or perform complex logic without managing their own backend infrastructure.

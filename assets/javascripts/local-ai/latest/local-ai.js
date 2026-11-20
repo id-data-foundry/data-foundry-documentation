@@ -23,6 +23,139 @@ const foundry = {
     }
     return typeof document !== "undefined" && document.location ? document.location.origin : "";
   },
+  resolveImageUrl: function (imageUrl) {
+    if (!imageUrl || typeof imageUrl !== "string") {
+      return imageUrl;
+    }
+    if (typeof location !== "undefined" && location.protocol === "https:") {
+      return imageUrl.replace(/^http:\/\//i, "https://");
+    }
+    return imageUrl;
+  },
+  cleanThinkingTokens: function (text) {
+    if (typeof text !== "string" || !text) {
+      return text || "";
+    }
+    let cleaned = text;
+    if (cleaned.includes("final<|message|>")) {
+      cleaned = cleaned.substring(cleaned.indexOf("final<|message|>") + "final<|message|>".length);
+    }
+    const tags = ["think", "thought", "thinking"];
+    for (const tag of tags) {
+      const openTag = `<${tag}>`;
+      const closeTag = `</${tag}>`;
+      const lower = cleaned.toLowerCase();
+      if (lower.includes(openTag)) {
+        const completeRegex = new RegExp(`<${tag}>[\\s\\S]*?<\\/${tag}>`, "gi");
+        cleaned = cleaned.replace(completeRegex, "");
+        const unclosedRegex = new RegExp(`<${tag}>[\\s\\S]*$`, "i");
+        cleaned = cleaned.replace(unclosedRegex, "");
+      } else if (lower.includes(closeTag)) {
+        const orphanedCloseRegex = new RegExp(`^[\\s\\S]*?<\\/${tag}>`, "i");
+        cleaned = cleaned.replace(orphanedCloseRegex, "");
+      }
+    }
+    return cleaned.replace(/^\s+/, "");
+  },
+  createStreamingThinkingFilter: function () {
+    const markerPairs = [
+      { open: "<think>", close: "</think>" },
+      { open: "<thought>", close: "</thought>" },
+      { open: "<thinking>", close: "</thinking>" },
+      { open: "<|channel|>", close: "final<|message|>" },
+    ];
+    let pending = "";
+    let activeCloseMarker = null;
+    let trimLeadingAfterClose = false;
+
+    function longestPrefixSuffixLength(str, targets) {
+      const lowerStr = str.toLowerCase();
+      let maxKeep = 0;
+      for (const t of targets) {
+        const lowerTarget = t.toLowerCase();
+        const limit = Math.min(lowerStr.length, lowerTarget.length - 1);
+        for (let len = limit; len >= 1; len--) {
+          if (lowerStr.endsWith(lowerTarget.slice(0, len))) {
+            if (len > maxKeep) maxKeep = len;
+            break;
+          }
+        }
+      }
+      return maxKeep;
+    }
+
+    return {
+      push: function (chunk) {
+        if (!chunk) return "";
+        pending += chunk;
+        let output = "";
+
+        while (pending.length > 0) {
+          if (activeCloseMarker !== null) {
+            const lowerPending = pending.toLowerCase();
+            const lowerClose = activeCloseMarker.toLowerCase();
+            const closeIdx = lowerPending.indexOf(lowerClose);
+            if (closeIdx !== -1) {
+              pending = pending.slice(closeIdx + activeCloseMarker.length);
+              activeCloseMarker = null;
+              trimLeadingAfterClose = true;
+              continue;
+            }
+            const keep = longestPrefixSuffixLength(pending, [activeCloseMarker]);
+            pending = keep > 0 ? pending.slice(pending.length - keep) : "";
+            break;
+          }
+
+          if (trimLeadingAfterClose) {
+            pending = pending.replace(/^\s+/, "");
+            if (pending.length === 0) break;
+            if (!pending.startsWith("<")) {
+              trimLeadingAfterClose = false;
+            }
+          }
+
+          const lowerPending = pending.toLowerCase();
+          let earliestIdx = -1;
+          let matchedPair = null;
+          for (const pair of markerPairs) {
+            const idx = lowerPending.indexOf(pair.open.toLowerCase());
+            if (idx !== -1 && (earliestIdx === -1 || idx < earliestIdx)) {
+              earliestIdx = idx;
+              matchedPair = pair;
+            }
+          }
+
+          if (earliestIdx !== -1 && matchedPair) {
+            output += pending.slice(0, earliestIdx);
+            pending = pending.slice(earliestIdx + matchedPair.open.length);
+            activeCloseMarker = matchedPair.close;
+            continue;
+          }
+
+          const openMarkers = markerPairs.map((p) => p.open);
+          const keep = longestPrefixSuffixLength(pending, openMarkers);
+          if (keep > 0) {
+            output += pending.slice(0, pending.length - keep);
+            pending = pending.slice(pending.length - keep);
+          } else {
+            output += pending;
+            pending = "";
+          }
+          break;
+        }
+        return output;
+      },
+      flush: function () {
+        if (activeCloseMarker === null && pending.length > 0) {
+          const out = foundry.cleanThinkingTokens(pending);
+          pending = "";
+          return out;
+        }
+        pending = "";
+        return "";
+      },
+    };
+  },
   textToText: async function (options) {
     const result = await foundry.textToTextWithUsage(options);
     return result ? result.text : undefined;
@@ -121,6 +254,7 @@ const foundry = {
       if (stream) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder("utf-8");
+        const thinkingFilter = foundry.createStreamingThinkingFilter();
         let buffer = "";
 
         while (true) {
@@ -153,21 +287,22 @@ const foundry = {
               const delta = choice && (choice.delta || choice.message);
 
               if (delta && delta.content !== undefined && delta.content !== null) {
-                const content = delta.content;
+                const content = thinkingFilter.push(delta.content);
+                if (content) {
+                  // Stop loading indicator on first visible chunk
+                  if (loadingElement) {
+                    loadingElement.setAttribute("aria-busy", "false");
+                    loadingElement = null;
+                  }
 
-                // Stop loading indicator on first chunk
-                if (loadingElement) {
-                  loadingElement.setAttribute("aria-busy", "false");
-                  loadingElement = null;
-                }
-
-                chatResponse += content;
-                if (onChunk) {
-                  onChunk(content);
-                }
-                if (resultElementSelector) {
-                  const el = document.querySelector(resultElementSelector);
-                  if (el) el.insertAdjacentText('beforeend', content);
+                  chatResponse += content;
+                  if (onChunk) {
+                    onChunk(content);
+                  }
+                  if (resultElementSelector) {
+                    const el = document.querySelector(resultElementSelector);
+                    if (el) el.insertAdjacentText('beforeend', content);
+                  }
                 }
               }
               if (data.usage) {
@@ -176,6 +311,17 @@ const foundry = {
             } catch (e) {
               console.error("SSE parse error", e, dataStr);
             }
+          }
+        }
+        const trailing = thinkingFilter.flush();
+        if (trailing) {
+          chatResponse += trailing;
+          if (onChunk) {
+            onChunk(trailing);
+          }
+          if (resultElementSelector) {
+            const el = document.querySelector(resultElementSelector);
+            if (el) el.insertAdjacentText('beforeend', trailing);
           }
         }
       } else {
@@ -194,7 +340,7 @@ const foundry = {
 
         // json.content contains the generated chat response
         let message = json.choices[0].message;
-        chatResponse = message.content;
+        chatResponse = foundry.cleanThinkingTokens(message.content);
         toolCalls = message.tool_calls;
         usage = json.usage;
       }
@@ -385,16 +531,18 @@ const foundry = {
         return;
       }
 
+      const imageUrl = foundry.resolveImageUrl(json["image_url"]);
       if (logging) {
-        console.log("Generated image:", json["image_url"]);
+        console.log("Generated image:", imageUrl);
       }
 
       // If a result element has been provided (which should be an <img> element, place the result)
       if (resultElementSelector) {
-        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.src = imageUrl;
       }
 
-      return json["image_url"];
+      return imageUrl;
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error.message);
     }
@@ -480,15 +628,17 @@ const foundry = {
         return;
       }
 
+      const imageUrl = foundry.resolveImageUrl(json["image_url"]);
       if (logging) {
-        console.log("Generated image:", json["image_url"]);
+        console.log("Generated image:", imageUrl);
       }
 
       if (resultElementSelector) {
-        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.src = imageUrl;
       }
 
-      return json["image_url"];
+      return imageUrl;
     } catch (error) {
       console.error("There was a problem with image-to-image operation:", error.message);
     } finally {
@@ -587,15 +737,17 @@ const foundry = {
         return;
       }
 
+      const imageUrl = foundry.resolveImageUrl(json["image_url"]);
       if (logging) {
-        console.log("Edited image:", json["image_url"]);
+        console.log("Edited image:", imageUrl);
       }
 
       if (resultElementSelector) {
-        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.src = imageUrl;
       }
 
-      return json["image_url"];
+      return imageUrl;
     } catch (error) {
       console.error("There was a problem with image edit operation:", error.message);
     } finally {
@@ -671,15 +823,17 @@ const foundry = {
         return;
       }
 
+      const imageUrl = foundry.resolveImageUrl(json["image_url"]);
       if (logging) {
-        console.log("Variation image:", json["image_url"]);
+        console.log("Variation image:", imageUrl);
       }
 
       if (resultElementSelector) {
-        document.querySelector(resultElementSelector).src = json["image_url"].replace('http://', 'https://');
+        const el = document.querySelector(resultElementSelector);
+        if (el) el.src = imageUrl;
       }
 
-      return json["image_url"];
+      return imageUrl;
     } catch (error) {
       console.error("There was a problem with image variation operation:", error.message);
     } finally {
@@ -960,6 +1114,7 @@ const foundry = {
       if (stream) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder("utf-8");
+        const thinkingFilter = foundry.createStreamingThinkingFilter();
         let buffer = "";
 
         while (true) {
@@ -992,21 +1147,22 @@ const foundry = {
               const delta = choice && (choice.delta || choice.message);
 
               if (delta && delta.content !== undefined && delta.content !== null) {
-                const content = delta.content;
+                const content = thinkingFilter.push(delta.content);
+                if (content) {
+                  // Stop loading indicator on first visible chunk
+                  if (loadingElement) {
+                    loadingElement.setAttribute("aria-busy", "false");
+                    loadingElement = null;
+                  }
 
-                // Stop loading indicator on first chunk
-                if (loadingElement) {
-                  loadingElement.setAttribute("aria-busy", "false");
-                  loadingElement = null;
-                }
-
-                chatResponse += content;
-                if (onChunk) {
-                  onChunk(content);
-                }
-                if (resultElementSelector) {
-                  const el = document.querySelector(resultElementSelector);
-                  if (el) el.insertAdjacentText('beforeend', content);
+                  chatResponse += content;
+                  if (onChunk) {
+                    onChunk(content);
+                  }
+                  if (resultElementSelector) {
+                    const el = document.querySelector(resultElementSelector);
+                    if (el) el.insertAdjacentText('beforeend', content);
+                  }
                 }
               }
               if (data.usage) {
@@ -1015,6 +1171,17 @@ const foundry = {
             } catch (e) {
               console.error("SSE parse error", e, dataStr);
             }
+          }
+        }
+        const trailing = thinkingFilter.flush();
+        if (trailing) {
+          chatResponse += trailing;
+          if (onChunk) {
+            onChunk(trailing);
+          }
+          if (resultElementSelector) {
+            const el = document.querySelector(resultElementSelector);
+            if (el) el.insertAdjacentText('beforeend', trailing);
           }
         }
       } else {
@@ -1034,7 +1201,7 @@ const foundry = {
 
         // json.content contains the generated chat response
         let message = json.choices[0].message;
-        chatResponse = message.content;
+        chatResponse = foundry.cleanThinkingTokens(message.content);
         toolCalls = message.tool_calls;
         usage = json.usage;
       }
@@ -1134,6 +1301,9 @@ const foundry = {
     api_token,
     server = document.location.origin,
     sampleRate = 16000,
+    echoCancellation = false,
+    noiseSuppression = false,
+    autoGainControl = true,
     resultElementSelector,
     partialElementSelector,
     loadingElementSelector,
@@ -1165,7 +1335,7 @@ const foundry = {
 
     if (window.df_stopLive) {
       try {
-        window.df_stopLive();
+        await window.df_stopLive();
       } catch (e) {}
     }
 
@@ -1180,7 +1350,10 @@ const foundry = {
       wsProto = "wss:";
     }
     const host = server.replace(/^https?:\/\//, "");
-    const wsUrl = `${wsProto}//${host}/v1/audio/transcriptions/stream?token=${encodeURIComponent(api_token)}`;
+    const refererParam = (typeof location !== "undefined" && location.href)
+      ? `&referer=${encodeURIComponent(location.href)}`
+      : "";
+    const wsUrl = `${wsProto}//${host}/v1/audio/transcriptions/stream?token=${encodeURIComponent(api_token)}${refererParam}`;
 
     let ws = null;
     let audioContext = null;
@@ -1190,6 +1363,9 @@ const foundry = {
     let closed = false;
     let settled = false;
     let errorReported = false;
+    let stopPromise = null;
+    let stopResolve = null;
+    let stopTimer = null;
 
     function reportError(err) {
       if (errorReported) return;
@@ -1200,9 +1376,26 @@ const foundry = {
       } catch (e) {}
     }
 
+    function finishClose() {
+      if (stopTimer) {
+        clearTimeout(stopTimer);
+        stopTimer = null;
+      }
+      ws = null;
+      loadingElement && loadingElement.setAttribute("aria-busy", "false");
+      window.df_liveSession = null;
+      window.df_stopLive = null;
+      setState("closed");
+      if (stopResolve) {
+        const resolveFn = stopResolve;
+        stopResolve = null;
+        resolveFn(fullTranscription);
+      }
+    }
+
     function stopLiveInternal() {
       if (closed) {
-        return fullTranscription;
+        return stopPromise || Promise.resolve(fullTranscription);
       }
       closed = true;
       setState("stopping");
@@ -1219,22 +1412,28 @@ const foundry = {
         mediaStream.getTracks().forEach((t) => t.stop());
         mediaStream = null;
       }
-      if (ws) {
-        try {
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ action: "stop" }));
-            ws.close();
-          } else if (ws.readyState === WebSocket.CONNECTING) {
-            ws.close();
-          }
-        } catch (e) {}
-        ws = null;
-      }
-      loadingElement && loadingElement.setAttribute("aria-busy", "false");
-      window.df_liveSession = null;
-      window.df_stopLive = null;
-      setState("closed");
-      return fullTranscription;
+
+      stopPromise = new Promise((resolve) => {
+        stopResolve = resolve;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          const activeWs = ws;
+          try {
+            activeWs.send(JSON.stringify({ action: "stop" }));
+            stopTimer = setTimeout(() => {
+              if (activeWs.readyState === WebSocket.OPEN || activeWs.readyState === WebSocket.CONNECTING) {
+                try { activeWs.close(); } catch (e) {}
+              }
+              finishClose();
+            }, 1500);
+            return;
+          } catch (e) {}
+        } else if (ws && ws.readyState === WebSocket.CONNECTING) {
+          try { ws.close(); } catch (e) {}
+        }
+        finishClose();
+      });
+
+      return stopPromise;
     }
 
     window.df_stopLive = stopLiveInternal;
@@ -1252,8 +1451,9 @@ const foundry = {
               audio: {
                 channelCount: 1,
                 sampleRate: sampleRate,
-                echoCancellation: true,
-                noiseSuppression: true,
+                echoCancellation: echoCancellation,
+                noiseSuppression: noiseSuppression,
+                autoGainControl: autoGainControl,
               },
             });
 
@@ -1266,11 +1466,18 @@ const foundry = {
             }
 
             audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: sampleRate });
+            const actualSampleRate = audioContext.sampleRate || sampleRate;
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ action: "reset", sample_rate: actualSampleRate }));
+            }
             const source = audioContext.createMediaStreamSource(mediaStream);
             processor = audioContext.createScriptProcessor(2048, 1, 1);
 
             processor.onaudioprocess = (e) => {
-              if (!ws || ws.readyState !== WebSocket.OPEN) return;
+              if (e.outputBuffer && e.outputBuffer.getChannelData) {
+                e.outputBuffer.getChannelData(0).fill(0);
+              }
+              if (closed || !ws || ws.readyState !== WebSocket.OPEN) return;
               const inputData = e.inputBuffer.getChannelData(0);
 
               // Convert Float32 to 16-bit linear PCM
@@ -1291,7 +1498,7 @@ const foundry = {
 
               ws.send(JSON.stringify({
                 audio: base64Audio,
-                sample_rate: sampleRate,
+                sample_rate: actualSampleRate,
               }));
             };
 
@@ -1307,7 +1514,7 @@ const foundry = {
           } catch (micErr) {
             console.error("Microphone access failed:", micErr);
             reportError(micErr);
-            stopLiveInternal();
+            await stopLiveInternal();
             if (!settled) {
               settled = true;
               reject(micErr);
@@ -1366,6 +1573,8 @@ const foundry = {
             stopLiveInternal();
             settled = true;
             reject(closeErr);
+          } else if (closed) {
+            finishClose();
           } else {
             stopLiveInternal();
           }
@@ -1375,7 +1584,7 @@ const foundry = {
       return await sessionPromise;
     } catch (err) {
       reportError(err);
-      stopLiveInternal();
+      await stopLiveInternal();
       console.error("transcribeLive error:", err);
       throw err;
     }
@@ -1461,7 +1670,17 @@ const foundry = {
         },
       });
       // Wait for LocalAI response
-      return await response.json();
+      const json = await response.json();
+      if (Array.isArray(json)) {
+        return json;
+      }
+      if (json && Array.isArray(json.data)) {
+        return json.data;
+      }
+      if (json && Array.isArray(json.models)) {
+        return json.models;
+      }
+      return json;
     } catch (err) {
       console.error(err);
     }

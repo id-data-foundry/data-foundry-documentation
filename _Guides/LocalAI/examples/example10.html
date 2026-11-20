@@ -111,7 +111,12 @@ What is the culturally-appropriate choice if you can only pick one ice-cream fla
 
                     try {
                         const rawModels = await foundry.models("YOUR_API_KEY");
-                        const models = (rawModels || []).filter(model => model.type && model.type.includes("📄"));
+                        const modelList = Array.isArray(rawModels)
+                            ? rawModels
+                            : (rawModels && Array.isArray(rawModels.data) ? rawModels.data : []);
+                        const models = modelList.filter(
+                            model => !model.type || model.type.includes("📄") || model.type.toLowerCase().includes("text") || model.type.toLowerCase().includes("chat")
+                        );
                         
                         if (models && models.length > 0) {
                             selectElement.innerHTML = '';

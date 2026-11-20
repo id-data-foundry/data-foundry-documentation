@@ -486,7 +486,7 @@ console.log(result.usage.total_tokens);
 
 **Description:**
 
-The `transcribeFile` function is an asynchronous JavaScript function that submits an audio file (`.wav`, `.mp3`, `.m4a`, etc.) to the DataFoundry batch speech-to-text service (port 8092 by default) and returns the full transcribed text. It supports model selection (e.g., Parakeet TDT, Whisper), language hints, diarization, and monotonic timestamps.
+The `transcribeFile` function is an asynchronous JavaScript function that submits an audio file (`.wav`, `.mp3`, `.m4a`, etc.) to the DataFoundry batch speech-to-text endpoint (`/v1/audio/transcriptions`) and returns the full transcribed text. It supports model selection, language hints, diarization, and monotonic timestamps.
 
 **Parameters:**
 
@@ -529,14 +529,18 @@ console.log("Transcribed:", text);
 
 **Description:**
 
-The `transcribeLive` function starts low-latency real-time microphone streaming transcription via a persistent WebSocket connection (`/v1/audio/transcriptions/stream`) powered by Sherpa-ONNX (port 8093 by default). Audio is captured directly from the user's microphone as 16kHz mono Float32 / 16-bit PCM and streamed in chunks. As speech is recognized, interim partial text updates are emitted with sub-100ms latency, followed by finalized segment hypotheses.
+The `transcribeLive` function starts real-time microphone streaming transcription via a persistent WebSocket connection (`/v1/audio/transcriptions/stream`). Audio is captured directly from the user's microphone, dynamically rate-matched using the browser's `AudioContext.sampleRate`, and streamed in chunks. As speech is recognized, interim partial text updates are emitted continuously, followed by finalized word/sentence segments.
 
-Call `foundry.stopLive()` to stop streaming audio and close the WebSocket connection.
+Call `await foundry.stopLive()` to stop streaming audio, flush the final spoken words, and close the WebSocket connection.
 
 **Parameters (`foundry.transcribeLive`):**
 
 - *`api_token` (required)*: Your DataFoundry API key for authentication.
 - *`server` (optional)*: The server URL (HTTP or WS). Defaults to current page's origin.
+- *`sampleRate` (optional)*: Preferred capture sample rate in Hz (default `16000`). The actual `AudioContext.sampleRate` is always negotiated with the server automatically.
+- *`echoCancellation` (optional)*: Enable browser echo cancellation (default `false` to avoid gating speech onsets during dictation).
+- *`noiseSuppression` (optional)*: Enable browser noise suppression (default `false`).
+- *`autoGainControl` (optional)*: Enable browser auto gain control (default `true`).
 - *`onPartial` (optional)*: Callback `(text) => {}` triggered with real-time interim hypothesis as words are spoken.
 - *`onFinal` (optional)*: Callback `(text) => {}` triggered whenever an utterance segment is finalized.
 - *`onError` (optional)*: Callback `(error) => {}` triggered if a connection or microphone error occurs.

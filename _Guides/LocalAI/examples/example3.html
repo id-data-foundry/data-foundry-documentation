@@ -62,13 +62,11 @@
                         Paste some data (nothing personal or secret, please!)
                         below:
                     </p>
-                    <!-- vanilla, chocolate, mango, blueberry, cinnamon -->
-                    <textarea id="data1" rows="6"></textarea>
+                    <textarea id="data1" rows="6">vanilla, chocolate, mango, blueberry, cinnamon</textarea>
                 </div>
                 <div>
                     <p>The first prompt goes here...</p>
-                    <!-- take this list and add 10 more similar items to it -->
-                    <textarea id="prompt1" rows="6"></textarea>
+                    <textarea id="prompt1" rows="6">take this list and add 10 more similar items to it</textarea>
                 </div>
             </div>
 
@@ -79,13 +77,12 @@
 
             <div class="grid">
                 <div>
-                    <p>Output of second step</p>
+                    <p>Output of first step</p>
                     <div class="output" id="data2"></div>
                 </div>
                 <div>
                     <p>The second prompt goes here...</p>
-                    <!-- take this list and generate matching colors for each of the items -->
-                    <textarea id="prompt2" rows="6"></textarea>
+                    <textarea id="prompt2" rows="6">take this list and generate matching colors for each of the items</textarea>
                 </div>
             </div>
 
@@ -101,8 +98,7 @@
                 </div>
                 <div>
                     <p>The third prompt goes here...</p>
-                    <!-- turn the colors into CSS RGB color values like #ffeeba or #10F4bc formatted in a JSON array -->
-                    <textarea id="prompt3" rows="6"></textarea>
+                    <textarea id="prompt3" rows="6">turn the colors into CSS RGB color values like #ffeeba or #10F4bc formatted in a JSON array</textarea>
                 </div>
             </div>
 
@@ -158,7 +154,7 @@
 
                         // retrieve second data and prompt
                         let input2 =
-                            document.querySelector("#data2").value +
+                            document.querySelector("#data2").textContent +
                             "\n" +
                             document.querySelector("#prompt2").value;
 
@@ -174,7 +170,7 @@
                             messages: [{ role: "user", content: input2 }],
                             // submit the temperature of the model
                             temperature: temperature,
-                            // fill results in the HTML element with the id "data2"
+                            // fill results in the HTML element with the id "data3"
                             resultElementSelector: "#data3",
                             // loading indicator in next result element
                             loadingElementSelector: "#data3",
@@ -182,15 +178,15 @@
                             logging: false,
                         });
 
-                        // retrieve second data and prompt
+                        // retrieve third data and prompt
                         let input3 =
-                            document.querySelector("#data3").value +
+                            document.querySelector("#data3").textContent +
                             "\n" +
                             document.querySelector("#prompt3").value;
 
                         // send request
                         await foundry.textToText({
-                            // optional: server (ex. "https://data-foundry.netl")
+                            // optional: server (ex. "https://data-foundry.net")
                             server: "",
                             // generate your own API token on Data Foundry
                             api_token: "YOUR_API_KEY",
@@ -200,7 +196,7 @@
                             messages: [{ role: "user", content: input3 }],
                             // submit the temperature of the model
                             temperature: temperature,
-                            // fill results in the HTML element with the id "data2"
+                            // fill results in the HTML element with the id "result"
                             resultElementSelector: "#result",
                             // loading indicator in result element
                             loadingElementSelector: "#result",
@@ -214,15 +210,6 @@
                         resultElem.innerHTML = marked.parse(rawText);
 
                         // enable submit button again
-                        document
-                            .querySelector("#submitBtn")
-                            .removeAttribute("disabled");
-                    });
-            </script>
-        </main>
-    </body>
-</html>
-  // enable submit button again
                         document
                             .querySelector("#submitBtn")
                             .removeAttribute("disabled");

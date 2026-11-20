@@ -47,11 +47,16 @@ a dolphin with a pineapple milkshake, realistic, happy, artstation</textarea
             <br />
 
             <p>
-                <img id="result" src="" alt="Result image from AI request" />
+                <img
+                    id="result"
+                    src=""
+                    alt="Result image from AI request"
+                    style="display: none; max-width: 100%; border-radius: 8px;"
+                />
             </p>
 
             <script type="module">
-                // submit phot and prompt
+                // submit prompt
                 document
                     .querySelector("#submitBtn")
                     .addEventListener("click", async (e) => {
@@ -61,9 +66,10 @@ a dolphin with a pineapple milkshake, realistic, happy, artstation</textarea
                             .setAttribute("disabled", true);
 
                         const prompt = document.querySelector("#prompt").value;
+                        const resultImg = document.querySelector("#result");
 
                         // send request
-                        await foundry.textToImage({
+                        const imageUrl = await foundry.textToImage({
                             // optional: server (ex. "https://data-foundry.net")
                             server: "",
                             // generate your own API token on Data Foundry
@@ -73,7 +79,7 @@ a dolphin with a pineapple milkshake, realistic, happy, artstation</textarea
                             // prompt
                             prompt: prompt,
                             // negative prompt
-                            negativeprompt:
+                            negativePrompt:
                                 "abstract art, frame, ugly, multiple images",
                             // processing step (more --> slower, better quality)
                             steps: 20,
@@ -82,11 +88,15 @@ a dolphin with a pineapple milkshake, realistic, happy, artstation</textarea
                             height: 512,
                             // fill results in the HTML element with the id "result"
                             resultElementSelector: "#result",
-                            // loading indicator in result element
-                            loadingElementSelector: "#result",
+                            // loading indicator on submit button
+                            loadingElementSelector: "#submitBtn",
                             // no logging on console needed
                             logging: false,
                         });
+
+                        if (imageUrl) {
+                            resultImg.style.display = "block";
+                        }
 
                         document
                             .querySelector("#submitBtn")
