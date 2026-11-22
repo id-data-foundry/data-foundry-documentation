@@ -116,3 +116,6 @@ A Files Dataset can also serve HTML, CSS, JavaScript, and Markdown files as a li
 1. Upload an `index.html` file (and any supporting `.css`, `.js`, or media files) to your Files Dataset.
 2. Open **Configuration &rarr; Web access** on the dataset page and click **Activate web access**.
 3. Optionally choose the entry-point file (defaults to `index.html`) and open or share the generated public web link.
+
+{: .warning}
+**Editable Web Apps & Token Safety:** Files in a web-accessible dataset (including `config.json` or `.js` files) are readable by any visitor, and legacy session-based `user.js` / `researcher.js` endpoints are retired (`410 Gone`). When building an editable web app, split it into a **public read-only viewer dataset** (no `api_token`) and a **private editor dataset** (Web Access disabled) that fetches live data with `{ cache: 'no-store' }` and saves updates back to the public dataset via `POST {{ site.external_base_urls.datafoundryurl }}/api/v1/datasets/files/<PUBLIC_DATASET_ID>` with `api_token`.

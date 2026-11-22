@@ -44,6 +44,9 @@ You can use the files dataset also to host a project website for your project. H
 
 The Files Dataset provides a programmatic API for uploading and downloading files. (Legacy `/datasets/existing/...` and `/api/v1/datasets/existing/...` route aliases remain supported for backwards compatibility.)
 
+{: .warning}
+**Security for Web-Hosted Apps:** Every file inside a web-accessible Files Dataset (including `config.json` and `.js` files) can be read by anyone with the web link, and legacy cookie-based `user.js` / `researcher.js` scripts are retired (`410 Gone`). **Never store a write-capable `api_token` in a publicly shared Files Dataset** if visitors should not overwrite files. Instead, keep your public site read-only and host the editor (containing `api_token`) in a separate **private** Files Dataset with Web Access disabled that reads via `{ cache: 'no-store' }` and uploads back to the public dataset ID.
+
 ### 1. Generating an API Token
 Before using the API, you must generate a token. Open the dataset configuration in the Data Foundry GUI, navigate to the **HTTP data upload** tab, and click **Generate** next to the token field.
 

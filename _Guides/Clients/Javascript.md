@@ -61,16 +61,15 @@ To import the OOCSI library, you have again two choices:
 
 #### Option 1: Use library on Data Foundry
 
-Direct link to the library, from within the instance (this is great if you use a files dataset for your website).
-Note that this works only if the page is hosted on Data Foundry.
+Direct link to the library, from within the instance (works when served directly from the Data Foundry domain without `df.web_proxy`).
 
 ```html
 <script src="/assets/javascripts/oocsi-web.min.js"></script>
 ```
 
-#### Option 2: Use the library that is hosted externally
+#### Option 2: Use the library from any hosted or external site (including `sites.data-foundry.net`)
 
-To import OOCSI on a website hosted anywhere else you can import it from any public data foundry instance. You can use the following code snippet but make sure to insert the URL of your Data Foundry instance.
+To import OOCSI on a page served through an external web proxy (`sites.data-foundry.net`) or hosted anywhere else, use the full Data Foundry instance URL:
 
 ```html
 <script src="{{ site.external_base_urls.datafoundryurl }}/assets/javascripts/oocsi-web.min.js"></script>

@@ -91,8 +91,9 @@ Deploy full-stack web applications, participant questionnaires, and dynamic dash
     *   [Website Tracking Guide]({% link _Guides/Examples/Usecases/WebsiteTracking/index.md %}) — Collecting user interactions, clicks, and journey telemetry.
     *   [Local AI JavaScript Library]({% link _Reference/LocalAI/JSAPI.md %}) — Embed local AI capabilities in client-side web applications using `local-ai.js`.
 *   **Authentication & Access Control**:
-    *   Secure your hosted web pages and manage participant sessions using the [Participant API Reference]({% link _Reference/ParticipantAPI/index.md %}).
-    *   Supports both **Anonymous Participation** (self-sign-up via `anonymousParticipation.js`) and **Registered Participation** (token-secured access for pre-enrolled study participants).
+    *   Secure your hosted study pages and manage participant sessions using the [Participant API Reference]({% link _Reference/ParticipantAPI/index.md %}) (stateless `X-Participant-Token` header auth; works in sandboxed frames and `sites.data-foundry.net`).
+    *   Supports both **Anonymous Participation** (self-sign-up via `anonymousParticipation.js`) and **Registered Participation** (token-secured access via `#df_participant=` handoff and `participation.js`).
+    *   For dataset-level storage/uploads from hosted prototypes, use Dataset `api_token` endpoints (see the [Files Dataset Guide]({% link _Guides/Datasets/Files/FilesData.md %})) rather than the retired `user.js` / `researcher.js` APIs. Keep write tokens in a private editor dataset rather than a public viewer dataset.
 
 ---
 
