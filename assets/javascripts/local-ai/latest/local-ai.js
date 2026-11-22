@@ -1424,7 +1424,7 @@ const foundry = {
                 try { activeWs.close(); } catch (e) {}
               }
               finishClose();
-            }, 1500);
+            }, 3000);
             return;
           } catch (e) {}
         } else if (ws && ws.readyState === WebSocket.CONNECTING) {
