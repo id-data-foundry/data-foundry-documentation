@@ -8,7 +8,10 @@ has_toc: false
 
 # Participant API Reference
 
-The Participant API provides a way to read and log data specific to a participant. The API is only accessible to participants who have agreed to participate in a study and have logged into their participant landing page. They are authenticated using a participant cookie.
+The Participant API provides a way to read and log data specific to a participant. It authenticates requests via a stateless `X-Participant-Token` header (with `PLAY_SESSION` cookie fallback only on same-origin Data Foundry pages), so it works inside both sandboxed `/web/...` frames and the external web proxy (`sites.data-foundry.net`).
+
+{: .info}
+Legacy session-based user/researcher JS APIs (`/api/v1/:id/user.js` and `/api/v1/researcher.js`) are retired (`410 Gone`). Use the Participant API for study participants, or Dataset `api_token` endpoints (`/api/v1/datasets/...`) for dataset-level writes.
 
 You can find information on how to practically use the Participant API in the remote study use-case guides.
 
@@ -28,16 +31,19 @@ There are two primary ways to access the API:
 1. **Anonymous Participation**: Allows unregistered visitors to interact with the system.
 2. **Registered Participation**: Restricted to pre-registered participants.
 
+{: .warning}
+Always load the Participant API script using the full Data Foundry server URL (`{{ site.external_base_urls.datafoundryurl }}/api/v1/...`) rather than a root-relative `/api/v1/...` path when your page may be served via `df.web_proxy` (`sites.data-foundry.net`).
+
 ### Anonymous Participation
 
-If you prefer anonymous participation with an uncontrolled number of participants, you need to use the following HTML blueprint to embed the API script code. Note that this requires you to specify the project ID, in which the participants should be registered: replace the <PROJECT-ID> with the numerical project ID. A second thing you need to do is you need to set the project to allow for self-sign-up of participants. You can do this on the project page under "study management". First activate study management, then tick the box "New participants can sign-up to this project".
+If you prefer anonymous participation with an uncontrolled number of participants, embed the API script with the numerical `<PROJECT-ID>` in which participants should be registered. You also need to enable self-sign-up on the project page under **Study management** → activate study management → tick **"New participants can sign-up to this project"**.
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
     <!-- This script loads the Participant API -->
-    <script src="/api/v1/<PROJECT-ID>/anonymousParticipation.js" type="text/javascript"></script>
+    <script src="{{ site.external_base_urls.datafoundryurl }}/api/v1/<PROJECT-ID>/anonymousParticipation.js" type="text/javascript"></script>
 </head>
 <body>
     <!-- The HTML body -->
@@ -48,27 +54,34 @@ If you prefer anonymous participation with an uncontrolled number of participant
 </html>
 ```
 
-If successful, you will always have a participant present in your HTML page, because previously unregistered visitors will be automatically assigned an anonymous participant profile with their own participant ID.
+If successful, unregistered visitors are automatically assigned an anonymous participant profile and an embedded participation token (automatically stored in `localStorage` under `df_anon_token_<PROJECT-ID>` when available, so dynamic loaders can pass `?token=...` on subsequent reloads to reuse the same participant).
 
 ## Registered participation
 
-If you are running a study with a limited number of (pre-registered) participants, it is better to use the following API embedding. This ensures that you can check in your custom JavaScript code whether a registered participant is visiting the site or not. Only in the first case, the full API will be available. If the visitor is not a registered participant, accessing the API methods will result in an error.
+If you are running a study with pre-registered participants, use `participation.js`. When a participant opens a hosted study page or dashboard from their **Participant Landing Page**, Data Foundry automatically appends `#df_participant=<token>` to the URL fragment, and `participation.js` exchanges it with `/api/v1/participation/session` to hydrate `DF.participant` and `DF.device`.
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
     <!-- This script loads the Participant API -->
-    <script src="/api/v1/participation.js" type="text/javascript"></script>
+    <script src="{{ site.external_base_urls.datafoundryurl }}/api/v1/participation.js" type="text/javascript"></script>
 </head>
 <body>
     <!-- The HTML body -->
     <script type="text/javascript">
-        // Access the Participant API here
+        DF.ready(function (api) {
+            if (api.participant.id > 0) {
+                console.log("Participant ready:", api.participant.id);
+            }
+        });
     </script>
 </body>
 </html>
 ```
+
+{: .info}
+Use `DF.ready(callback)` before reading `DF.participant.id`, `DF.participant.canAddDiaryEntry`, `DF.device.canLogData`, or `DF.device.canUploadImage` if your page can be opened via a `#df_participant=` fragment from the Participant Landing Page.
 
 ## Participant-Specific API Functions
 
@@ -190,7 +203,7 @@ You can find a full example with the anonymous participation option below. Don't
 <html>
     <head>
         <!-- this script loads the anonymous Participant API -->
-        <script src="/api/v1/<PROJECT-ID>/anonymousParticipation.js" type="text/javascript"></script>
+        <script src="{{ site.external_base_urls.datafoundryurl }}/api/v1/<PROJECT-ID>/anonymousParticipation.js" type="text/javascript"></script>
     </head>
     <body>
         <!-- the HTML body -->
