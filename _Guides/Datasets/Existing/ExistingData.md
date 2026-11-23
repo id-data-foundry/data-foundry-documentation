@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Existing Dataset
+title: Files Dataset
 parent: Datasets
 nav_order: 3
 has_children: true
