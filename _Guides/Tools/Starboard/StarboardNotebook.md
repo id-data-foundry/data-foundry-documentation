@@ -8,7 +8,7 @@ has_children: true
 
 # Starboard Notebooks
 
-Starboard is an in-browser notebook environment (similar to Jupyter) that allows you to write Javascript and Python code to analyze your data directly within Data Foundry. To get started with starboard notebooks, you first need to add an existing dataset to your design project.
+Starboard is an in-browser notebook environment (similar to Jupyter) that allows you to write Javascript and Python code to analyze your data directly within Data Foundry. To get started with starboard notebooks, you first need to add an files dataset to your design project.
 
 ## Creating a Notebook
 
@@ -17,7 +17,7 @@ Starboard is an in-browser notebook environment (similar to Jupyter) that allows
 3.  Here you'll have to click **add a new notebook** after which youll get a pop-up
 4. In this popup youll have to **select a project and dataset combination** from the dropdown menu and insert a name for your new notebook.
 5. After selecting a project and inserting a notebook name you can click on submit query which will create a new notebook for you.
-6. To open your newly generated notebook you can you **select it from the list of notebooks** within the notebook tools section, *or* **open the file from the existing dataset** the notebook resides in. This will take you to starboard.
+6. To open your newly generated notebook you can you **select it from the list of notebooks** within the notebook tools section, *or* **open the file from the files dataset** the notebook resides in. This will take you to starboard.
 
 Alternatively you can follow this tutorial:
 {% include df-link.html text="Take the tour" path="/tour/starboard-tour" %}

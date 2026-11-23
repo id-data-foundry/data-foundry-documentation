@@ -43,7 +43,7 @@ Optimized for time-series data from devices, including activity labels.
 *   **Fields:** `id`, `device_id`, `ts`, `activity`, `pp1`, `pp2`, `pp3`.
 *   **Data Handling:** The contents of the stored JSON object are merged into the root object.
 
-## Existing Dataset
+## Files Dataset
 
 Used for managing collections of files (e.g., images, documents) with metadata.
 

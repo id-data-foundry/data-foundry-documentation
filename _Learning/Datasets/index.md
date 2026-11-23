@@ -52,7 +52,7 @@ Collect diary study information through our online environment or telegram integ
 
 ### File-based Datasets
 
-- **[Existing Dataset]({% link _Learning/Datasets/DatasetsOverview/existingdataset.md %})**: Upload, store, and host any file type.
+- **[Files Dataset]({% link _Learning/Datasets/DatasetsOverview/existingdataset.md %})**: Upload, store, and host any file type.
 - **[Media Dataset]({% link _Learning/Datasets/DatasetsOverview/mediadataset.md %})**: Specifically designed for uploading and storing images.
 - **[Movement Dataset]({% link _Learning/Datasets/DatasetsOverview/movementdataset.md %})**: Store movement data via GPX and XML files.
 
