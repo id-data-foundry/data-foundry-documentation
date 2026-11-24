@@ -7,7 +7,7 @@ has_toc: true
 ---
 # Image-to-Text
 
-Image‑to‑text (also called visual question answering or image captioning) turns a picture into a natural language description. This allows models to interpret and interact with real-world visual content, taking AI interactions past plain text. Data Foundry provides vision-capable models (such as LLaVA) via an OpenAI-compatible multimodal endpoint.
+Image‑to‑text (also called visual question answering or image captioning) turns a picture into a natural language description. This allows models to interpret and interact with real-world visual content, taking AI interactions past plain text. Data Foundry provides vision-capable models (via the generic `"vision"` placeholder or specific vision model IDs) over an OpenAI-compatible multimodal endpoint.
 
 [**Image-to-Text Example**]({% link _Guides/LocalAI/examples/example4.html %}){: .btn}
 
@@ -49,7 +49,7 @@ with open(image_path, "rb") as image_file:
 data_url = f"data:{mime_type};base64,{b64_image}"
 
 payload = {
-    "model": "llava-llama-3-8b-v1_1",
+    "model": "vision",
     "messages": [
         {
             "role": "user",
@@ -92,7 +92,7 @@ curl -X POST "{{ site.external_base_urls.datafoundryurl }}/v1/chat/completions" 
   -H "Authorization: Bearer df-abcdef1234567890abcdef1234567890abcdef123456789=" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "llava-llama-3-8b-v1_1",
+    "model": "vision",
     "messages": [
       {
         "role": "user",

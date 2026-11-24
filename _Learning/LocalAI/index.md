@@ -35,12 +35,12 @@ Using locally hosted AI models offers several advantages:
 - **Versatility**: Local models often have fewer restricted "guardrails," allowing for more specialized or sensitive research.
 - **Privacy**: Since models are hosted on-campus, we can ensure that data is handled with privacy in mind, according to local regulations.  
 
-We categorize our models by size to help you choose the right one:
+We categorize our models by size and capability to help you choose the right one (or simply use a generic placeholder like `default`, `text`, `coding`, `vision`, or `translate` so Data Foundry selects the configured model automatically):
 
 - **Tiny Models** (e.g., Llama 3.2 1b): Super fast and efficient. Ideal for simple tasks like text classification or basic chat.
-- **Small Models** (e.g., Phi-2, Llama 3.2 3b): A good balance of speed and reasoning. Great for general-purpose chat.
-- **Medium Models** (e.g., Qwen 8B): Capable of more complex reasoning and nuanced instructions.
-- **Large and Specialized Models**: For demanding tasks like analyzing images or processing long documents.
+- **Small Models** (e.g., Gemma 4 E4B, Hermes 2 Llama 3): A good balance of speed and reasoning. Great for general-purpose chat and quick prototyping.
+- **Medium Models** (e.g., Qwen3.5 9b, Apertus 8b, Mistral Small 3.2): Capable of more complex reasoning, multilingual tasks, tool calling, and nuanced instructions.
+- **Large and Specialized Models** (e.g., Qwen3.6 35b, Qwen3.8 27b, Gemma4 26b, OpenAI GPT OSS): For demanding tasks like multimodal vision analysis, agentic coding, or complex reasoning.
 
 Using these local models also offers advantages like fewer restrictions on research topics ("guardrails") compared to commercial services.
 

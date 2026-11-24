@@ -52,7 +52,7 @@ The `textToText` function is an asynchronous JavaScript function designed to int
 
 - *`api_token` (string, required)*: The API key for authentication. The function will not execute without this.
 - *`server` (string, optional)*: The server URL for the API. Defaults to the current document's origin.
-- *`model` (string, optional)*: The model to use for the request. Defaults to "hermes-2-pro-llama-3-8b".
+- *`model` (string, optional)*: The model to use for the request. Defaults to `"default"` (you can also use generic placeholders such as `"text"`, `"coding"`, or `"translate"`, or a specific model ID from `/tools/models`).
 - *`prompt` (string, optional)*: The text prompt to send to the model. Used if `messages` is not provided.
 - *`messages` (array, optional)*: An array of message objects (e.g., role and content) to send to the model. If not provided, the function creates a message using the `prompt`.
 - *`temperature` (number, optional)*: Controls the randomness of the model's output. Defaults to 0.9.
@@ -392,7 +392,7 @@ This function uses a large language model to process an image and generate a tex
 
 - *`api_token` (required)*: Your API key for authentication. The function will not run without this.
 - *`server` (optional)*: The server URL to send the request to. Defaults to the current page's origin.
-- *`model` (optional)*: The name of the model to use. Defaults to `"llava-llama-3-8b-v1_1"`.
+- *`model` (optional)*: The name of the model to use. Defaults to `"vision"`.
 - *`prompt` (optional)*: A text prompt to guide the model's response.
 - *`systemPrompt` (optional)*: A system-level prompt to set the context for the model.
 - *`image` (optional)*: The image to process. Can be a file or URL.
@@ -427,7 +427,7 @@ For more complex use cases where you need guaranteed JSON output or want to give
 foundry.imageToText({
   api_token: "your_api_key_here",
   server: "{{ site.external_base_urls.datafoundryurl }}",
-  model: "llava-llama-3-8b-v1_1",
+  model: "vision",
   prompt: "Describe the image",
   image: "https://example.com/image.jpg",
   temperature: 0.7,

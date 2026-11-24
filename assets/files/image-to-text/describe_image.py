@@ -11,7 +11,7 @@ Requirements:
 Usage:
     python describe_image.py photo.jpg --token YOUR_API_TOKEN
     python describe_image.py invoice.png -p "Extract all total amounts and dates from this document."
-    python describe_image.py sketch.jpg --model llava-llama-3-8b-v1_1 --max-tokens 1000
+    python describe_image.py sketch.jpg --model vision --max-tokens 1000
 """
 
 import os
@@ -44,7 +44,7 @@ def describe_image(
     prompt: str = "What do you see in this image? Describe it in detail.",
     api_token: str = "",
     server: str = "https://data-foundry.net",
-    model: str = "llava-llama-3-8b-v1_1",
+    model: str = "vision",
     max_tokens: int = 512,
     temperature: float = 0.2,
 ) -> str:
@@ -55,7 +55,7 @@ def describe_image(
         prompt: Question or instruction regarding the image
         api_token: Data Foundry AI API token
         server: Base URL of the Data Foundry instance
-        model: Vision model identifier (default: 'llava-llama-3-8b-v1_1')
+        model: Vision model identifier (default: 'vision')
         max_tokens: Maximum tokens in the generated response
         temperature: Sampling temperature (default: 0.2 for factual vision tasks)
 
@@ -135,8 +135,8 @@ def main():
     )
     parser.add_argument(
         "--model",
-        default="llava-llama-3-8b-v1_1",
-        help="Multimodal vision model (default: 'llava-llama-3-8b-v1_1')",
+        default="vision",
+        help="Multimodal vision model (default: 'vision')",
     )
     parser.add_argument(
         "--max-tokens",

@@ -105,8 +105,8 @@ To setup a connection to the Data Foundry AI tools you can initiate a LLM. You c
 # Setup a default LLM
 llm = DataFoundry.AIFoundry(aitoken)
 
-# Example of a specific LLM model and temperature
-spicy_llm = DataFoundry.AIFoundry(api_token = aitoken, model = "phi-2-chat", temperature = 2)
+# Example using a generic placeholder ("default", "text", "coding", "translate") and temperature
+spicy_llm = DataFoundry.AIFoundry(api_token = aitoken, model = "text", temperature = 2)
 ```
 
 ##### secrets.py

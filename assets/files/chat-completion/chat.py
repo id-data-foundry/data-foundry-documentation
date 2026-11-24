@@ -198,7 +198,7 @@ def main():
     parser.add_argument(
         "--model",
         default="default",
-        help="Model identifier (default: 'default', e.g. 'phi-2-dpo-7k', 'llama-3-8b')",
+        help="Model identifier (default: 'default', e.g. 'text', 'coding', 'translate', or a model ID from /tools/models)",
     )
     parser.add_argument(
         "--temperature",

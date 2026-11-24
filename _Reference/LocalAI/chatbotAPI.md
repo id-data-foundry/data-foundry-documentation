@@ -103,7 +103,7 @@ curl -X POST -H 'Content-Type: application/json' \
   "id": "chatcmpl-a1b2c3d4",
   "object": "chat.completion",
   "created": 1708012345,
-  "model": "hermes-2-pro-llama-3-8b",
+  "model": "default",
   "choices": [
     {
       "index": 0,

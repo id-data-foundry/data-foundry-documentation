@@ -49,9 +49,9 @@ The `DF.api` function returns a simplified, flat JSON object (as a string) which
 
 The Data Foundry API offers access to different models on the LocalAI server.
 
-For **LocalAI**, you can see what models your Data Foundry are running on the `/tools/models` page.
+For **LocalAI**, you can see what models your Data Foundry instance is running on the `/tools/models` page.
 [Check what models are installed]{% include df-link.html text="Check what models are installed" path="/tools/models" %}
-When this documentation was written, the `hermes-2-pro-llama-3-8b` was the default model we use for chat and completions.
+You can either omit `model` (which uses `"default"`), pass a generic placeholder (`"default"`, `"chat"`, `"text"`, `"coding"`, `"vision"`, or `"translate"`), or specify a concrete model ID from `/tools/models`.
 
 ## Chat example
 
