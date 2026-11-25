@@ -61,6 +61,3 @@ Streaming allows you to receive the AI's response in real-time as it is being ge
 
 ### [Example 17: Image to Image]({%link _Guides/LocalAI/examples/17.Image-to-Image.md %})
 Transform an existing image using a text prompt with `foundry.imageToImage`. This example starts with a ready-to-use sample photo (or your own uploaded image) and shows how the `strength` parameter controls how closely the output follows the original picture.
-
-### [Example 18: Sketch to Image]({%link _Guides/LocalAI/examples/18.Sketch-to-Image.md %})
-Turn a quick drawing into a rendered image by passing an HTML `<canvas>` directly to `foundry.imageToImage`. No manual file or Base64 conversion is needed—just sketch an idea, write a prompt, and generate.

@@ -7,10 +7,9 @@ has_toc: true
 ---
 # Image‑to‑Image
 
-Image‑to‑image transforms an existing input picture using a natural language prompt. You can use it to restyle a photograph, add elements to a scene, or turn a rough sketch into a rendered image using diffusion models running directly on the Data Foundry Local AI infrastructure.
+Image‑to‑image transforms an existing input picture using a natural language prompt. You can use it to restyle a photograph or add elements to a scene using diffusion models running directly on the Data Foundry Local AI infrastructure.
 
 [**Image-to-Image Example**]({% link _Guides/LocalAI/examples/17.Image-to-Image.md %}){: .btn}
-[**Sketch-to-Image Example**]({% link _Guides/LocalAI/examples/18.Sketch-to-Image.md %}){: .btn}
 
 ## How it works
 
@@ -81,4 +80,4 @@ curl -X POST "{{ site.external_base_urls.datafoundryurl }}/v1/images/image-to-im
 
 ### JavaScript Example:
 
-You can find interactive browser examples in the [Image-to-Image Guide]({% link _Guides/LocalAI/examples/17.Image-to-Image.md %}) and [Sketch-to-Image Guide]({% link _Guides/LocalAI/examples/18.Sketch-to-Image.md %}). For details on all JavaScript client options, see the [Data Foundry JavaScript Library reference]({% link _Reference/LocalAI/JSAPI.md %}#foundryimagetoimage).
+You can find an interactive browser example in the [Image-to-Image Guide]({% link _Guides/LocalAI/examples/17.Image-to-Image.md %}). For details on all JavaScript client options, see the [Data Foundry JavaScript Library reference]({% link _Reference/LocalAI/JSAPI.md %}#foundryimagetoimage).
